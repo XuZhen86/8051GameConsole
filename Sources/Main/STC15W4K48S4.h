@@ -197,6 +197,8 @@ sfr S4BUF       =   0x85;   //xxxx,xxxx 串口4数据寄存器
 sfr SADDR       =   0xA9;   //0000,0000 从机地址寄存器
 sfr SADEN       =   0xB9;   //0000,0000 从机地址屏蔽寄存器
 
+sfr BRT         =   0x9C;
+
 //ADC 特殊功能寄存器
 sfr ADC_CONTR   =   0xBC;   //0000,0000 A/D转换控制寄存器
 sfr ADC_RES     =   0xBD;   //0000,0000 A/D转换结果高8位
@@ -304,45 +306,45 @@ sfr PWMFDCR     =   0xf7;   //xx00,0000 PWM外部异常检测控制寄存器
 //在这里给每个2字节寄存器分配一个缓冲变量。
 //用户先用缓冲变量做运算，再一次性写入寄存器。
 //这样保证写入高8位，再写入低8位。
-volatile unsigned int  xdata PWMCxsfr   _at_ 0xfff0;
-volatile unsigned char xdata PWMCKS     _at_ 0xfff2;
-volatile unsigned int  xdata PWMC;
+// volatile unsigned int  xdata PWMCxsfr   _at_ 0xfff0;
+// volatile unsigned char xdata PWMCKS     _at_ 0xfff2;
+// volatile unsigned int  xdata PWMC;
 
-volatile unsigned int  xdata PWM2T1xsfr _at_ 0xff00;
-volatile unsigned int  xdata PWM2T2xsfr _at_ 0xff02;
-volatile unsigned char xdata PWM2CR     _at_ 0xff04;
-volatile unsigned int  xdata PWM2T1;
-volatile unsigned int  xdata PWM2T2;
+// volatile unsigned int  xdata PWM2T1xsfr _at_ 0xff00;
+// volatile unsigned int  xdata PWM2T2xsfr _at_ 0xff02;
+// volatile unsigned char xdata PWM2CR     _at_ 0xff04;
+// volatile unsigned int  xdata PWM2T1;
+// volatile unsigned int  xdata PWM2T2;
 
-volatile unsigned int  xdata PWM3T1xsfr _at_ 0xff10;
-volatile unsigned int  xdata PWM3T2xsfr _at_ 0xff12;
-volatile unsigned char xdata PWM3CR     _at_ 0xff14;
-volatile unsigned int  xdata PWM3T1;
-volatile unsigned int  xdata PWM3T2;
+// volatile unsigned int  xdata PWM3T1xsfr _at_ 0xff10;
+// volatile unsigned int  xdata PWM3T2xsfr _at_ 0xff12;
+// volatile unsigned char xdata PWM3CR     _at_ 0xff14;
+// volatile unsigned int  xdata PWM3T1;
+// volatile unsigned int  xdata PWM3T2;
 
-volatile unsigned int  xdata PWM4T1xsfr _at_ 0xff20;
-volatile unsigned int  xdata PWM4T2xsfr _at_ 0xff22;
-volatile unsigned char xdata PWM4CR     _at_ 0xff24;
-volatile unsigned int  xdata PWM4T1;
-volatile unsigned int  xdata PWM4T2;
+// volatile unsigned int  xdata PWM4T1xsfr _at_ 0xff20;
+// volatile unsigned int  xdata PWM4T2xsfr _at_ 0xff22;
+// volatile unsigned char xdata PWM4CR     _at_ 0xff24;
+// volatile unsigned int  xdata PWM4T1;
+// volatile unsigned int  xdata PWM4T2;
 
-volatile unsigned int  xdata PWM5T1xsfr _at_ 0xff30;
-volatile unsigned int  xdata PWM5T2xsfr _at_ 0xff32;
-volatile unsigned char xdata PWM5CR     _at_ 0xff34;
-volatile unsigned int  xdata PWM5T1;
-volatile unsigned int  xdata PWM5T2;
+// volatile unsigned int  xdata PWM5T1xsfr _at_ 0xff30;
+// volatile unsigned int  xdata PWM5T2xsfr _at_ 0xff32;
+// volatile unsigned char xdata PWM5CR     _at_ 0xff34;
+// volatile unsigned int  xdata PWM5T1;
+// volatile unsigned int  xdata PWM5T2;
 
-volatile unsigned int  xdata PWM6T1xsfr _at_ 0xff40;
-volatile unsigned int  xdata PWM6T2xsfr _at_ 0xff42;
-volatile unsigned char xdata PWM6CR     _at_ 0xff44;
-volatile unsigned int  xdata PWM6T1;
-volatile unsigned int  xdata PWM6T2;
+// volatile unsigned int  xdata PWM6T1xsfr _at_ 0xff40;
+// volatile unsigned int  xdata PWM6T2xsfr _at_ 0xff42;
+// volatile unsigned char xdata PWM6CR     _at_ 0xff44;
+// volatile unsigned int  xdata PWM6T1;
+// volatile unsigned int  xdata PWM6T2;
 
-volatile unsigned int  xdata PWM7T1xsfr _at_ 0xff50;
-volatile unsigned int  xdata PWM7T2xsfr _at_ 0xff52;
-volatile unsigned char xdata PWM7CR     _at_ 0xff54;
-volatile unsigned int  xdata PWM7T1;
-volatile unsigned int  xdata PWM7T2;
+// volatile unsigned int  xdata PWM7T1xsfr _at_ 0xff50;
+// volatile unsigned int  xdata PWM7T2xsfr _at_ 0xff52;
+// volatile unsigned char xdata PWM7CR     _at_ 0xff54;
+// volatile unsigned int  xdata PWM7T1;
+// volatile unsigned int  xdata PWM7T2;
 
 #endif
 
