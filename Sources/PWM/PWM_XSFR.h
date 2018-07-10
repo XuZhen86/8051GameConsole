@@ -1,3 +1,6 @@
+#ifndef __PWM_XSFR_H_
+#define __PWM_XSFR_H_
+
 //和PWM有关的2字节寄存器必须先写入高8位，再写入低8位。
 //如果直接进行+=等运算，编译器会先计算低8位再计算高8位，造成输出LED闪烁。
 //在这里给每个2字节寄存器分配一个缓冲变量。
@@ -42,3 +45,5 @@ static volatile unsigned int  xdata PWM7T2xsfr _at_ 0xff52;
 static volatile unsigned char xdata PWM7CR     _at_ 0xff54;
 static volatile unsigned int  xdata PWM7T1;
 static volatile unsigned int  xdata PWM7T2;
+
+#endif

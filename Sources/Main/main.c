@@ -7,19 +7,19 @@
 #include<Sources/InterruptRoutine/InterruptRoutine.h>
 #include<Sources/Joystick/Joystick.h>
 #include<Sources/I23LC512/I23LC512.h>
+#include<Sources/Timer/Timer4.h>
 
 #include<stdio.h>
 
-void UartInit(void){    //115200bps@22.1184MHz
-    SCON = 0x50;        //8位数据,可变波特率
-    AUXR |= 0x01;       //串口1选择定时器2为波特率发生器
-    AUXR &= 0xFB;       //定时器2时钟为Fosc/12,即12T
-    T2L = 0xFC;         //设定定时初值
-    T2H = 0xFF;         //设定定时初值
-    AUXR |= 0x10;       //启动定时器2
+void uartInit(void){
+	SCON = 0x50;		//8位数据,可变波特率
+	AUXR |= 0x01;		//串口1选择定时器2为波特率发生器
+	AUXR &= 0xFB;		//定时器2时钟为Fosc/12,即12T
+	T2L = 0xFA;		//设定定时初值
+	T2H = 0xFF;		//设定定时初值
+	AUXR |= 0x10;		//启动定时器2
     TI=1;
 }
-
 
 void main(){
     unsigned char buffer[16];
@@ -37,7 +37,7 @@ void main(){
     P4M0=0x00;
     P4M1=0x00;
 
-    UartInit();
+    uartInit();
     printf("Hello World!\n");
 
     delay(0,0,0);
@@ -48,26 +48,14 @@ void main(){
     lcd12864SpiInitialize();
     joystickInitialize();
 
-    timer4Initialize(0,0x53,0x33);  //2毫秒@22.1184MHz
+    timer4Initialize(0,1,0x7e,0x66);  //1毫秒@33.1776MHz
     timer4Start();
 
+    lcd12864CharSet(0,0,'A',1);
     lcd12864StringSet(7,0,"Hello World",1);
 
     for(address=0x0;address<0xffff;address++){
-        // delay(rand()%10,100,100);
-
-        // sprintf(buffer,"addr=%x",address);
-        // lcd12864StringSet(0,0,buffer,1);
-        // puts(buffer);
-
-        for(i=0;i<255;i++){
-            i23lc512UCharWrite(address,i);
-            j=i23lc512UCharRead(address);
-
-            if(i!=j){
-                printf("(%x,%x,%x)\n",address,(int)i,(int)j);
-            }
-        }
+        delay(rand()%2,100,100);
 
         if(address%0x100==0){
             sprintf(buffer,"addr=%x\n",address);
@@ -75,10 +63,12 @@ void main(){
             lcd12864StringSet(5,0,buffer,1);
         }
 
-        // sprintf(buffer,"x=%-4d,y=%-4d",joystickGetX(),joystickGetY());
-        // lcd12864StringSet(6,0,buffer,1);
+        sprintf(buffer,"x=%-4d,y=%-4d",joystickGetX(),joystickGetY());
+        lcd12864StringSet(6,0,buffer,1);
     }
 
-    while(delay(1,1,1)){}
+    while(delay(1,1,1)){
+
+    }
 }
 

@@ -16,5 +16,8 @@ unsigned int i23lc512UIntRead(const unsigned int address);
 unsigned int i23lc512UIntArrayRead(const unsigned int address,const unsigned int offset);
 bit i23lc512Initialize();
 
+unsigned char *i23lc512UCharSeqRead(unsigned char *destination,unsigned int address,unsigned int length);
+unsigned char *i23lc512UCharSeqWrite(unsigned char *source,unsigned int address,unsigned int length);
+unsigned int i23lc512Memset(unsigned int address,unsigned char value,unsigned int num);
 
 #endif

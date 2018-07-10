@@ -122,3 +122,65 @@ bit i23lc512Initialize(){
     // i23lc512WriteModeRegister(0x); // set operation mode, default sequential mode
     return 1;
 }
+
+unsigned char *i23lc512UCharSeqRead(unsigned char *destination,unsigned int address,unsigned int length){
+    unsigned int i;
+
+    spiSetIsOccupied(1);
+    spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+    chipSelect=0;
+
+    spiSend(READ);
+    spiSend(address>>8);
+    spiSend(address);
+    spiSeqRead(destination,length);
+
+    spiSetIsOccupied(0);
+
+    chipSelect=1;
+    return destination;
+}
+
+unsigned char *i23lc512UCharSeqWrite(unsigned char *source,unsigned int address,unsigned int length){
+    unsigned int i;
+
+    spiSetIsOccupied(1);
+    spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+    chipSelect=0;
+
+    spiSend(WRITE);
+    spiSend(address>>8);
+    spiSend(address);
+
+    for(i=0;i<length;i++){
+        spiSend(source[i]);
+    }
+
+    while(!spiTransmissionComplete());
+    chipSelect=1;
+    spiSetIsOccupied(0);
+
+    return source;
+}
+
+unsigned int i23lc512Memset(unsigned int address,unsigned char value,unsigned int length){
+    unsigned int i;
+
+    spiSetIsOccupied(1);
+    spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+    chipSelect=0;
+
+    spiSend(WRITE);
+    spiSend(address>>8);
+    spiSend(address);
+
+    for(i=0;i<length;i++){
+        spiSend(value);
+    }
+
+    while(!spiTransmissionComplete());
+    chipSelect=1;
+    spiSetIsOccupied(0);
+
+    return address;
+}

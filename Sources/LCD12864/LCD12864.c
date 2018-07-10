@@ -24,7 +24,7 @@ static unsigned char code
     CHIP_SELECT_P2M0=0x40,
     CHIP_SELECT_P2M1=0x00;
 
-static unsigned char xdata gdramBuffer[32][32][2];
+static unsigned int code GDRAM_ADDRESS=0xf7ff;
 static bit gdramNeedsFlush,gdramAccessLock=1;
 static unsigned int brightness=0x0fff;
 
@@ -80,76 +80,9 @@ void lcd12864HwReset(){
     gdramAccessLock=0;
 }
 
-void lcd12864SpiInitialize(){
-    unsigned char i,j;
-
-    chipSelect=0;
-    P2M0=CHIP_SELECT_P2M0;
-    P2M1=CHIP_SELECT_P2M1;
-
-    lcd12864HwReset();
-    lcd12864SpiSend(0,FUNCTION_SET|0x04);
-    for(i=0;i<32;i++){
-        lcd12864SpiSend2Bytes(0,SET_GDRAM_ADDR|i,SET_GDRAM_ADDR);
-        for(j=0;j<32;j+=2){
-            gdramBuffer[i][j][0]=BUFFER_INIT_VALUE;
-            gdramBuffer[i][j][1]=BUFFER_INIT_VALUE;
-            gdramBuffer[i][j+1][0]=BUFFER_INIT_VALUE;
-            gdramBuffer[i][j+1][1]=BUFFER_INIT_VALUE;
-            lcd12864SpiSend2Bytes(1,gdramBuffer[i][j][0],gdramBuffer[i][j+1][0]);
-        }
-    }
-    lcd12864SpiSend(0,FUNCTION_SET|0x04|0x02);
-
-    lcd12864PwmInitialize();
-    // lcd12864TimerInitialize();
-
-    gdramAccessLock=0;
-}
-
 void lcd12864PwmInitialize(){
     pwm3Initialize(1,1,0,0,0,brightness);    // brightness
     pwmStart();
-}
-
-// void lcd12864TimerInitialize(){
-//     timer4Initialize(1,0x3c,0xb0);  // 20 ms @ 30MHz
-//     timer4Start();
-// }
-
-void lcd12864GdramFlush(bit forceFlush){
-    unsigned char i,j;
-    bit graphicDisplayDisabled=0,addressJustBeenSent=0;
-
-    if(gdramNeedsFlush&&!gdramAccessLock){
-        for(i=0;i<32;i++){
-            for(j=0;j<32;j+=2){
-                if(forceFlush||gdramBuffer[i][j][0]!=gdramBuffer[i][j][1]||gdramBuffer[i][j+1][0]!=gdramBuffer[i][j+1][1]){
-                    if(!graphicDisplayDisabled){
-                        graphicDisplayDisabled=1;
-                        lcd12864SpiSend(0,FUNCTION_SET|0x04);
-                    }
-
-                    gdramBuffer[i][j][0]=gdramBuffer[i][j][1];
-                    gdramBuffer[i][j+1][0]=gdramBuffer[i][j+1][1];
-
-                    if(!addressJustBeenSent){
-                        lcd12864SpiSend2Bytes(0,SET_GDRAM_ADDR|i,SET_GDRAM_ADDR|j/2);
-                        addressJustBeenSent=1;
-                    }
-
-                    lcd12864SpiSend2Bytes(1,gdramBuffer[i][j][0],gdramBuffer[i][j+1][0]);
-                }else{
-                    addressJustBeenSent=0;
-                }
-            }
-        }
-
-        if(graphicDisplayDisabled){
-            lcd12864SpiSend(0,FUNCTION_SET|0x04|0x02);
-        }
-        gdramNeedsFlush=0;
-    }
 }
 
 void brightnessSet(unsigned int brightness){
@@ -164,8 +97,74 @@ unsigned int brightnessGet(){
     return brightness;
 }
 
+void lcd12864FlushAtNextUpdate(){
+    gdramNeedsFlush=1;
+}
+
+void lcd12864SpiInitialize(){
+    unsigned char i,j;
+
+    chipSelect=0;
+    P2M0=CHIP_SELECT_P2M0;
+    P2M1=CHIP_SELECT_P2M1;
+
+    lcd12864HwReset();
+    lcd12864SpiSend(0,FUNCTION_SET|0x04);
+    for(i=0;i<32;i++){
+        lcd12864SpiSend2Bytes(0,SET_GDRAM_ADDR|i,SET_GDRAM_ADDR);
+        for(j=0;j<32;j+=2){
+            lcd12864SpiSend2Bytes(1,BUFFER_INIT_VALUE,BUFFER_INIT_VALUE);
+        }
+    }
+    lcd12864SpiSend(0,FUNCTION_SET|0x04|0x02);
+
+    lcd12864PwmInitialize();
+    i23lc512Memset(GDRAM_ADDRESS,BUFFER_INIT_VALUE,32*32*2);
+
+    gdramAccessLock=0;
+}
+
+void lcd12864GdramFlush(bit forceFlush){
+    unsigned char buffer[64];
+    unsigned int i,j;
+    bit graphicDisplayDisabled=0,addressJustBeenSent=0;
+
+    if(gdramNeedsFlush&&!gdramAccessLock){
+        for(i=0;i<32;i++){
+            i23lc512UCharSeqRead(buffer,GDRAM_ADDRESS+64*i,64);
+
+            for(j=0;j<32;j+=2){
+                if(forceFlush||buffer[j+0]!=buffer[j+32]||buffer[j+1]!=buffer[j+33]){
+                    if(!graphicDisplayDisabled){
+                        graphicDisplayDisabled=1;
+                        lcd12864SpiSend(0,FUNCTION_SET|0x04);
+                    }
+
+                    buffer[j+0]=buffer[j+32];
+                    buffer[j+1]=buffer[j+33];
+
+                    if(1||!addressJustBeenSent){    // ???
+                        lcd12864SpiSend2Bytes(0,SET_GDRAM_ADDR|i,SET_GDRAM_ADDR|j/2);
+                        addressJustBeenSent=1;
+                    }
+
+                    lcd12864SpiSend2Bytes(1,buffer[j+0],buffer[j+1]);
+                }else{
+                    addressJustBeenSent=0;
+                }
+            }
+            i23lc512UCharSeqWrite(buffer,GDRAM_ADDRESS+64*i,64);
+        }
+
+        if(graphicDisplayDisabled){
+            lcd12864SpiSend(0,FUNCTION_SET|0x04|0x02);
+        }
+        gdramNeedsFlush=0;
+    }
+}
+
 void lcd12864CharSet(unsigned char row,unsigned char col,unsigned char c,bit flush){
-    unsigned char i;
+    unsigned char i,buffer[32];
     gdramAccessLock=1;
     gdramNeedsFlush|=flush;
 
@@ -175,50 +174,41 @@ void lcd12864CharSet(unsigned char row,unsigned char col,unsigned char c,bit flu
     row%=32;
 
     for(i=row;i<row+8;i++){
-        gdramBuffer[i][col/8][1]&=(0xff<<(8-col%8));
-        gdramBuffer[i][col/8][1]|=(ASCII5x8[c][i%8]>>(col%8));
+        i23lc512UCharSeqRead(buffer,GDRAM_ADDRESS+64*i+32,32);
 
-        gdramBuffer[i][col/8+1][1]&=(0xff>>(col%8));
-        gdramBuffer[i][col/8+1][1]|=(ASCII5x8[c][i%8]<<(8-col%8));
+        buffer[col/8]&=(0xff<<(8-col%8));
+        buffer[col/8]|=(ASCII5x8[c][i%8]>>(col%8));
+        buffer[col/8+1]&=(0xff>>(col%8));
+        buffer[col/8+1]|=(ASCII5x8[c][i%8]<<(8-col%8));
+
+        i23lc512UCharSeqWrite(buffer,GDRAM_ADDRESS+64*i+32,32);
     }
 
     gdramAccessLock=0;
 }
 
 void lcd12864StringSet(unsigned char row,unsigned char col,unsigned char *str,bit flush){
-    unsigned int i;
-    for(i=0;str[i];i++){
-        lcd12864CharSet(row,col+i,str[i],flush);
-    }
-}
-
-void lcd12864PixelSet(unsigned char row,unsigned char col,bit lightUp,bit flush){
+    unsigned char i,j,k,buffer[32];
     gdramAccessLock=1;
     gdramNeedsFlush|=flush;
 
-    row%=64;
-    col%=128;
+    col=col%25*5;
+    row=row%8*8;
     col+=(row>31)*128;
     row%=32;
 
-    if(lightUp){
-        gdramBuffer[row][col/8][1]|=(0x80>>col%8);
-    }else{
-        gdramBuffer[row][col/8][1]&=~(0x80>>col%8);
+    for(i=row;i<row+8;i++){
+        i23lc512UCharSeqRead(buffer,GDRAM_ADDRESS+64*i+32,32);
+        k=col;
+        for(j=0;str[j];j++){
+            buffer[k/8]&=(0xff<<(8-k%8));
+            buffer[k/8]|=(ASCII5x8[str[j]][i%8]>>(k%8));
+            buffer[k/8+1]&=(0xff>>(k%8));
+            buffer[k/8+1]|=(ASCII5x8[str[j]][i%8]<<(8-k%8));
+            k+=5;
+        }
+        i23lc512UCharSeqWrite(buffer,GDRAM_ADDRESS+64*i+32,32);
     }
 
     gdramAccessLock=0;
-}
-
-bit lcd12864PixelGet(unsigned char row,unsigned char col,bit frame){
-    row%=64;
-    col%=128;
-    col+=(row>31)*128;
-    row%=32;
-
-    return gdramBuffer[row][col/8][frame]&(0x80>>col%8)!=0;
-}
-
-void lcd12864FlushAtNextUpdate(){
-    gdramNeedsFlush=1;
 }

@@ -9,9 +9,9 @@ void spiSetIsOccupied(bit occupied);
 bit spiGetIsOccupied();
 void spiInitialize(bit cpol,bit cpha,unsigned char clkDiv);
 void spiSetup(bit cpol,bit cpha,unsigned char clkDiv);
-void spiSend(unsigned char c);
+unsigned char spiSend(unsigned char c);
 unsigned char spiRead();
+unsigned char *spiSeqRead(unsigned char *destination,unsigned int length);
 bit spiTransmissionComplete();
-// void spiSendString(unsigned char *str,unsigned char len);
 
 #endif

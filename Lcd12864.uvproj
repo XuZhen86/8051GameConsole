@@ -193,7 +193,7 @@
             <XDataHold>0</XDataHold>
             <UseOnchipRom>1</UseOnchipRom>
             <UseOnchipArithmetic>0</UseOnchipArithmetic>
-            <UseMultipleDPTR>0</UseMultipleDPTR>
+            <UseMultipleDPTR>1</UseMultipleDPTR>
             <UseOnchipXram>1</UseOnchipXram>
             <HadIRAM>1</HadIRAM>
             <HadXRAM>1</HadXRAM>
@@ -407,19 +407,9 @@
               <FilePath>.\Sources\Main\main.c</FilePath>
             </File>
             <File>
-              <FileName>PMW.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\PWM\PMW.c</FilePath>
-            </File>
-            <File>
               <FileName>SPI.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\SPI\SPI.c</FilePath>
-            </File>
-            <File>
-              <FileName>Timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Timer\Timer.c</FilePath>
             </File>
             <File>
               <FileName>Universal.c</FileName>
@@ -430,6 +420,21 @@
               <FileName>Putchar.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\Universal\Putchar.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Timer\Timer4.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Timer\Timer3.c</FilePath>
+            </File>
+            <File>
+              <FileName>PWM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\PWM\PWM.c</FilePath>
             </File>
           </Files>
         </Group>
