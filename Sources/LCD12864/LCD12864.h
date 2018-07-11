@@ -22,5 +22,6 @@ void lcd12864SpiInitialize();
 void lcd12864GdramFlush(bit forceFlush);
 void lcd12864CharSet(unsigned char row,unsigned char col,unsigned char c,bit flush);
 void lcd12864StringSet(unsigned char row,unsigned char col,unsigned char *str,bit flush);
+void lcd12864PixelSet(unsigned char row,unsigned char col,bit lightUp,bit flush);
 
 #endif

@@ -10,6 +10,7 @@
 #include<Sources/Timer/Timer4.h>
 
 #include<stdio.h>
+#include<math.h>
 
 void uartInit(void){
 	SCON = 0x50;		//8位数据,可变波特率
@@ -21,10 +22,13 @@ void uartInit(void){
     TI=1;
 }
 
+char code directionXYDelta[6][2]={
+    {0,0},{0,1},{-1,0},{0,-1},{1,0},{0,0}
+};
+
 void main(){
-    unsigned char buffer[16];
-    unsigned int address;
-    unsigned char i=0,j=0;
+    unsigned char i=31,j=63,dir;
+    int a,b;
 
     P0M0=0x00;
     P0M1=0x00;
@@ -54,21 +58,19 @@ void main(){
     lcd12864CharSet(0,0,'A',1);
     lcd12864StringSet(7,0,"Hello World",1);
 
-    for(address=0x0;address<0xffff;address++){
-        delay(rand()%2,100,100);
+    while(delay(4,9,179)){
+        dir=joystickGetDirection();
+        a=abs(joystickGetX());
+        b=abs(joystickGetY());
 
-        if(address%0x100==0){
-            sprintf(buffer,"addr=%x\n",address);
-            puts(buffer);
-            lcd12864StringSet(5,0,buffer,1);
+        if(dir){
+            lcd12864PixelSet(i,j,0,0);
+            i+=directionXYDelta[dir][0]*(a/150);
+            j+=directionXYDelta[dir][1]*(b/150);
+            lcd12864PixelSet(i,j,1,1);
         }
-
-        sprintf(buffer,"x=%-4d,y=%-4d",joystickGetX(),joystickGetY());
-        lcd12864StringSet(6,0,buffer,1);
     }
 
-    while(delay(1,1,1)){
-
-    }
+    while(delay(0,0,0));
 }
 

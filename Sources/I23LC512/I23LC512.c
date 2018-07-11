@@ -124,8 +124,6 @@ bit i23lc512Initialize(){
 }
 
 unsigned char *i23lc512UCharSeqRead(unsigned char *destination,unsigned int address,unsigned int length){
-    unsigned int i;
-
     spiSetIsOccupied(1);
     spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;

@@ -24,15 +24,15 @@ void timer4Stop(){
 }
 
 static unsigned char code
-    LCD12864_COUNTER_MAX=50,
-    ADC_COUNTER_MAX=50;
+    LCD12864_COUNTER_MAX=100,
+    ADC_COUNTER_MAX=100;
 static unsigned char
     lcd12864Counter=1,
-    // lcd12864ForceFlushCounter=1,
-    adcCounter=0;
+    adcCounter=1;
 
 static void interruptRoutine() interrupt 20{
     interruptBusyLed=1;
+    timer4Stop();
 
     adcCounter--;
     if(!adcCounter){
@@ -41,14 +41,13 @@ static void interruptRoutine() interrupt 20{
     }
 
     lcd12864Counter--;
-    // lcd12864ForceFlushCounter--;
     if(!lcd12864Counter&&!spiGetIsOccupied()){
         lcd12864Counter=LCD12864_COUNTER_MAX;
-        // lcd12864GdramFlush(!lcd12864ForceFlushCounter);
         lcd12864GdramFlush(0);
     }else if(!lcd12864Counter){
         lcd12864Counter=rand()%8+1;
     }
 
+    timer4Start();
     interruptBusyLed=0;
 }
