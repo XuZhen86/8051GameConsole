@@ -1,26 +1,18 @@
 #include"Joystick.h"
 
-static unsigned char code analogPins[2]={6,7};
+static unsigned char code analogPins[2]={6,7};  // 0=x, 1=y
 static unsigned int code calibratedValues[2]={522,513};
-static char code tolerance=10;
-
-static bit currentPin=0;   // 0=x, 1=y
+static char code tolerance=4;
 
 void joystickInitialize(){
-    adcInitialize();
-    adcInputPinSet(analogPins[currentPin]);
-}
-
-void joystickAdcToggle(){
-    adcInputPinSet(analogPins[currentPin=!currentPin]);
 }
 
 unsigned int joystickGetX(){
-    return adcResultGet(analogPins[0])-calibratedValues[0];
+    return adcGet(analogPins[0]);
 }
 
 unsigned int joystickGetY(){
-    return adcResultGet(analogPins[1])-calibratedValues[1];
+    return adcGet(analogPins[0]);
 }
 
 unsigned char joystickGetDirection(){

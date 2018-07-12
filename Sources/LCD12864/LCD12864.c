@@ -155,7 +155,7 @@ void lcd12864GdramFlush(bit forceFlush){
                         addressJustBeenSent=0;
                     }
                 }
-                i23lc512UCharSeqWrite(buffer,GDRAM_ADDRESS+64*i,64);
+                i23lc512UCharSeqWrite(buffer,GDRAM_ADDRESS+64*i,32);
             }
         }
 

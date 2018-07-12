@@ -436,6 +436,11 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\PWM\PWM.c</FilePath>
             </File>
+            <File>
+              <FileName>Pushbutton.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Pushbutton\Pushbutton.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

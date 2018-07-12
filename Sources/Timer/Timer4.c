@@ -23,22 +23,12 @@ void timer4Stop(){
     T4T3M&=~0x80;
 }
 
-static unsigned char code
-    LCD12864_COUNTER_MAX=100,
-    ADC_COUNTER_MAX=100;
-static unsigned char
-    lcd12864Counter=1,
-    adcCounter=1;
+static unsigned char code LCD12864_COUNTER_MAX=100;
+static unsigned char lcd12864Counter=1;
 
 static void interruptRoutine() interrupt 20{
     interruptBusyLed=1;
     timer4Stop();
-
-    adcCounter--;
-    if(!adcCounter){
-        adcStart();
-        adcCounter=ADC_COUNTER_MAX;
-    }
 
     lcd12864Counter--;
     if(!lcd12864Counter&&!spiGetIsOccupied()){

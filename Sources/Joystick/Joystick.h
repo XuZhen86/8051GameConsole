@@ -7,7 +7,6 @@
 #include<math.h>
 
 void joystickInitialize();
-void joystickAdcToggle();
 unsigned int joystickGetX();
 unsigned int joystickGetY();
 unsigned char joystickGetDirection();
