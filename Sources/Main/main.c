@@ -1,11 +1,12 @@
 #include<Sources/Main/STC15W4K48S4.h>
+#include<Sources/Version/Version.h>
 #include<Sources/Universal/Universal.h>
+#include<Sources/Universal/SystemClock.h>
 #include<Sources/PWM/PWM.h>
 #include<Sources/SPI/SPI.h>
 #include<Sources/LCD12864/LCD12864.h>
 #include<Sources/ADC/ADC.h>
 #include<Sources/InterruptRoutine/InterruptRoutine.h>
-#include<Sources/Joystick/Joystick.h>
 #include<Sources/I23LC512/I23LC512.h>
 #include<Sources/Timer/Timer4.h>
 #include<Sources/Pushbutton/Pushbutton.h>
@@ -44,7 +45,9 @@ void main(){
     P4M1=0x00;
 
     uartInit();
-    printf("Hello World!\n");
+    puts(COMPILE_DATE);
+    puts(COMPILE_TIME);
+    puts(uitoa(C51_VERSION,buffer));
 
     delay(0,0,0);
     interruptInitialize();
@@ -54,33 +57,24 @@ void main(){
 
     i23lc512Initialize();
     lcd12864SpiInitialize();
-    joystickInitialize();
 
     timer4Initialize(0,1,0x7e,0x66);  //1毫秒@33.1776MHz
     timer4Start();
 
-    lcd12864CharSet(0,0,'A',1);
-    lcd12864StringSet(7,0,"Hello World",1);
+    lcd12864StringSet(0,0,COMPILE_DATE);
+    lcd12864StringSet(1,0,COMPILE_TIME);
+    lcd12864StringSet(2,0,uitoa(C51_VERSION,buffer));
 
-    while(delay(4,9,179)){
-        // dir=joystickGetDirection();
-        // a=abs(joystickGetX());
-        // b=abs(joystickGetY());
-
-        // if(dir){
-        //     lcd12864PixelSet(i,j,0,0);
-        //     i+=directionXYDelta[dir][0]*(a/128);
-        //     j+=directionXYDelta[dir][1]*(b/128);
-        //     lcd12864PixelSet(i,j,1,1);
-        // }
-
-        // sprintf(buffer,"%c %c",pushbuttonGet()+'0',pushbuttonLastPressedGet()+'0');
-
+    while(lcd12864Flush(0)&&delay(15,9,179)){
         buffer[0]=pushbuttonGet()+'0';
         buffer[1]=' ';
         buffer[2]=pushbuttonLastPressedGet()+'0';
         buffer[3]=0;
-        lcd12864StringSet(1,0,buffer,1);
+
+        lcd12864StringSet(3,0,buffer);
+        lcd12864StringSet(4,0,ultoa(systemClockGet(),buffer));
+
+        puts(buffer);
     }
 
     while(delay(0,0,0));

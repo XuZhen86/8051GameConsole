@@ -23,21 +23,8 @@ void timer4Stop(){
     T4T3M&=~0x80;
 }
 
-static unsigned char code LCD12864_COUNTER_MAX=100;
-static unsigned char lcd12864Counter=1;
-
 static void interruptRoutine() interrupt 20{
     interruptBusyLed=1;
-    timer4Stop();
-
-    lcd12864Counter--;
-    if(!lcd12864Counter&&!spiGetIsOccupied()){
-        lcd12864Counter=LCD12864_COUNTER_MAX;
-        lcd12864GdramFlush(0);
-    }else if(!lcd12864Counter){
-        lcd12864Counter=rand()%8+1;
-    }
-
-    timer4Start();
+    systemClockTick();
     interruptBusyLed=0;
 }
