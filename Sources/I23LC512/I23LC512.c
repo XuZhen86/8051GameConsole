@@ -14,7 +14,7 @@ static unsigned char code
     SPI_CPHA=0,
     SPI_CLKDIV=0;
 
-sbit chipSelect=P2^5;
+sbit chipSelect=P2^6;
 
 unsigned char i23lc512WriteModeRegister(const unsigned char mode){
     spiSetIsOccupied(1);
@@ -60,7 +60,7 @@ unsigned char i23lc512UCharRead(const unsigned int address){
     spiSend(READ);
     spiSend(address>>8);
     spiSend(address);
-    buffer=spiRead();
+    buffer=spiRecv();
 
     spiSetIsOccupied(0);
 
@@ -103,9 +103,9 @@ unsigned int i23lc512UIntRead(const unsigned int address){  // ???
     spiSend(READ);
     spiSend(address>>8);
     spiSend(address);
-    buffer=spiRead();
+    buffer=spiRecv();
     buffer<<=8;
-    buffer|=spiRead();
+    buffer|=spiRecv();
 
     spiSetIsOccupied(0);
 
@@ -131,7 +131,7 @@ unsigned char *i23lc512UCharSeqRead(unsigned char *destination,unsigned int addr
     spiSend(READ);
     spiSend(address>>8);
     spiSend(address);
-    spiSeqRead(destination,length);
+    spiSeqRecv(destination,length);
 
     spiSetIsOccupied(0);
 

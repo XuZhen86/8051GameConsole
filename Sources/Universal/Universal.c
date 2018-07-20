@@ -1,12 +1,7 @@
 #include"Universal.h"
 
-sbit systemBusyLed=P2^0;
+sbit systemBusyLed=P2^5;
 bit delay(unsigned char i,unsigned char j,unsigned char k){
-    // 从用户程序软复位到ISP
-    if(P54==0){
-        IAP_CONTR = 0x60;
-    }
-
     systemBusyLed=0;
     do{
         do{

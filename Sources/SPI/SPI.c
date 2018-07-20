@@ -11,9 +11,9 @@ bit spiGetIsOccupied(){
 }
 
 void spiInitialize(bit cpol,bit cpha,unsigned char clkDiv){
-    SPSTAT=0xc0;    //清中断标志
     SPCTL=(0xd0|(0x08*cpol)|(0x04*cpha)|(0x03&clkDiv));
-    P_SW1|=0x00;
+    P_SW1|=0x04;
+    SPSTAT=0xc0;
     SPDAT=0x00;
 }
 
@@ -29,13 +29,13 @@ unsigned char spiSend(unsigned char c){
     return c;
 }
 
-unsigned char spiRead(){
+unsigned char spiRecv(){
     spiSend(0x00);
     while(!(SPSTAT&0x80));
     return SPDAT;
 }
 
-unsigned char *spiSeqRead(unsigned char *destination,unsigned int length){
+unsigned char *spiSeqRecv(unsigned char *destination,unsigned int length){
     unsigned int i;
 
     while(!(SPSTAT&0x80));

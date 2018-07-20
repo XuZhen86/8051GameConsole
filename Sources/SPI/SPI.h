@@ -10,8 +10,8 @@ bit spiGetIsOccupied();
 void spiInitialize(bit cpol,bit cpha,unsigned char clkDiv);
 void spiSetup(bit cpol,bit cpha,unsigned char clkDiv);
 unsigned char spiSend(unsigned char c);
-unsigned char spiRead();
-unsigned char *spiSeqRead(unsigned char *destination,unsigned int length);
+unsigned char spiRecv();
+unsigned char *spiSeqRecv(unsigned char *destination,unsigned int length);
 bit spiTransmissionComplete();
 
 #endif

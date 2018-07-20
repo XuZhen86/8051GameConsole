@@ -21,15 +21,15 @@ static unsigned char code
 
 static unsigned char code
     BUFFER_INIT_VALUE=0x00,
-    CHIP_SELECT_P2M0=0x40,
+    CHIP_SELECT_P2M0=0xc0,
     CHIP_SELECT_P2M1=0x00;
 
 static unsigned int code GDRAM_ADDRESS=0xf800;
-static unsigned int brightness=0x0fff;
+static unsigned int brightness=0x7fff;
 static unsigned char gdramRowDirty[4]={0,0,0,0};
 
-sbit chipSelect=P2^6;
-sbit resetSignal=P2^7;
+sbit chipSelect=P2^7;
+sbit resetSignal=P2^0;
 
 void lcd12864SpiSend(bit b,unsigned char c){
     spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
@@ -132,7 +132,7 @@ bit lcd12864Flush(bit forceFlush){
                     buffer[j+0]=buffer[j+32];
                     buffer[j+1]=buffer[j+33];
 
-                    if(!addressJustBeenSent){
+                    if(!addressJustBeenSent||forceFlush){
                         lcd12864SpiSend2Bytes(0,SET_GDRAM_ADDR|i,SET_GDRAM_ADDR|j/2);
                         addressJustBeenSent=1;
                     }

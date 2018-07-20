@@ -73,6 +73,7 @@ void main(){
 
         lcd12864StringSet(3,0,buffer);
         lcd12864StringSet(4,0,ultoa(systemClockGet(),buffer));
+        lcd12864StringSet(5,0,ultoa(systemClockGetSec(),buffer));
 
         puts(buffer);
     }

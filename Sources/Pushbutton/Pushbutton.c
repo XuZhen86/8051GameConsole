@@ -3,18 +3,20 @@
 #include<stdio.h>
 
 static unsigned char code stdValues[15]={
-    241,226,213,201,
-    189,177,166,154,
-    139,123,104,85,
-    49,32,16
+    241,225,210,195,
+    180,168,152,137,
+    120,103,87,70,
+    48,32,15
 };
-static unsigned char code tolerance=4;
+static unsigned char code tolerance=8;
 
 static unsigned char lastPressed=0;
 static bit lastPressedRead=0;
 
 unsigned char pushbuttonGet(){
-    unsigned char v=adcGet(2)>>2,i;
+    unsigned char v=adcGet(6)>>2,i;
+
+    printf("[%u]\n",(unsigned int)v);
 
     if(v==255){
         return -1;
@@ -22,6 +24,8 @@ unsigned char pushbuttonGet(){
         lastPressedRead=0;
         return lastPressed=15;
     }
+
+
 
     for(i=0;i<15;i++){
         if(stdValues[i]-tolerance<v&&v<stdValues[i]+tolerance){
