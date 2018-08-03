@@ -25,16 +25,14 @@ void systemClockTick(){
             if(sysClockMin==60){
                 sysClockMin=0;
                 sysClockHur++;
-            }
 
-            if(sysClockHur==24){
-                sysClockHur=0;
-                sysClockDay++;
+                if(sysClockHur==24){
+                    sysClockHur=0;
+                    sysClockDay++;
+                }
             }
         }
     }
-
-
 }
 
 unsigned long int systemClockGet(){

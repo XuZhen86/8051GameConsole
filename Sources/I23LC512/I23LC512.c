@@ -19,14 +19,13 @@ sbit chipSelect=P2^6;
 unsigned char i23lc512WriteModeRegister(const unsigned char mode){
     spiSetIsOccupied(1);
     spiInitialize(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
-
     chipSelect=0;
+
     spiSend(mode);
 
     while(!spiTransmissionComplete());
     chipSelect=1;
     spiSetIsOccupied(0);
-
     return mode;
 }
 
@@ -43,7 +42,6 @@ unsigned char i23lc512UCharWrite(const unsigned int address,const unsigned char 
     while(!spiTransmissionComplete());
     chipSelect=1;
     spiSetIsOccupied(0);
-
     return c;
 }
 
@@ -55,16 +53,15 @@ unsigned char i23lc512UCharRead(const unsigned int address){
     unsigned char buffer;
     spiSetIsOccupied(1);
     spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
-
     chipSelect=0;
+
     spiSend(READ);
     spiSend(address>>8);
     spiSend(address);
     buffer=spiRecv();
 
-    spiSetIsOccupied(0);
-
     chipSelect=1;
+    spiSetIsOccupied(0);
     return buffer;
 }
 
@@ -86,7 +83,6 @@ unsigned int i23lc512UIntWrite(const unsigned int address,const unsigned int i){
     while(!spiTransmissionComplete());
     chipSelect=1;
     spiSetIsOccupied(0);
-
     return i;
 }
 
@@ -98,8 +94,8 @@ unsigned int i23lc512UIntRead(const unsigned int address){  // ???
     unsigned int buffer;
     spiSetIsOccupied(1);
     spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
-
     chipSelect=0;
+
     spiSend(READ);
     spiSend(address>>8);
     spiSend(address);
@@ -107,9 +103,8 @@ unsigned int i23lc512UIntRead(const unsigned int address){  // ???
     buffer<<=8;
     buffer|=spiRecv();
 
-    spiSetIsOccupied(0);
-
     chipSelect=1;
+    spiSetIsOccupied(0);
     return buffer;
 }
 
@@ -133,9 +128,8 @@ unsigned char *i23lc512UCharSeqRead(unsigned char *destination,unsigned int addr
     spiSend(address);
     spiSeqRecv(destination,length);
 
-    spiSetIsOccupied(0);
-
     chipSelect=1;
+    spiSetIsOccupied(0);
     return destination;
 }
 
@@ -157,7 +151,6 @@ unsigned char *i23lc512UCharSeqWrite(unsigned char *source,unsigned int address,
     while(!spiTransmissionComplete());
     chipSelect=1;
     spiSetIsOccupied(0);
-
     return source;
 }
 
@@ -177,8 +170,7 @@ unsigned int i23lc512Memset(unsigned int address,unsigned char value,unsigned in
     }
 
     while(!spiTransmissionComplete());
-    chipSelect=1;
     spiSetIsOccupied(0);
-
+    chipSelect=1;
     return address;
 }

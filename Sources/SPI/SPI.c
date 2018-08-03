@@ -30,13 +30,16 @@ unsigned char spiSend(unsigned char c){
 }
 
 unsigned char spiRecv(){
-    spiSend(0x00);
+    while(!(SPSTAT&0x80));
+    SPSTAT|=0x80;
+    SPDAT=0x00;
     while(!(SPSTAT&0x80));
     return SPDAT;
 }
 
 unsigned char *spiSeqRecv(unsigned char *destination,unsigned int length){
-    unsigned int i;
+    unsigned int data i;
+    unsigned char data buffer;
 
     while(!(SPSTAT&0x80));
     SPSTAT|=0x80;
@@ -44,9 +47,10 @@ unsigned char *spiSeqRecv(unsigned char *destination,unsigned int length){
 
     for(i=0;i<length;i++){
         while(!(SPSTAT&0x80));
-        destination[i]=SPDAT;
+        buffer=SPDAT;
         SPSTAT|=0x80;
         SPDAT=0x00;
+        destination[i]=buffer;
     }
 
     return destination;

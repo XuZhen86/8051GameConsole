@@ -25,8 +25,6 @@ unsigned char pushbuttonGet(){
         return lastPressed=15;
     }
 
-
-
     for(i=0;i<15;i++){
         if(stdValues[i]-tolerance<v&&v<stdValues[i]+tolerance){
             lastPressedRead=0;

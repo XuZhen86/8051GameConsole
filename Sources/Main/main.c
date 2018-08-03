@@ -15,12 +15,12 @@
 #include<math.h>
 
 void uartInit(void){
-	SCON = 0x50;		//8位数据,可变波特率
-	AUXR |= 0x01;		//串口1选择定时器2为波特率发生器
-	AUXR &= 0xFB;		//定时器2时钟为Fosc/12,即12T
-	T2L = 0xFA;		//设定定时初值
-	T2H = 0xFF;		//设定定时初值
-	AUXR |= 0x10;		//启动定时器2
+    SCON = 0x50;        //8位数据,可变波特率
+    AUXR |= 0x01;       //串口1选择定时器2为波特率发生器
+    AUXR &= 0xFB;       //定时器2时钟为Fosc/12,即12T
+    T2L = 0xFA;         //设定定时初值
+    T2H = 0xFF;         //设定定时初值
+    AUXR |= 0x10;       //启动定时器2
     TI=1;
 }
 
@@ -65,15 +65,17 @@ void main(){
     lcd12864StringSet(1,0,COMPILE_TIME);
     lcd12864StringSet(2,0,uitoa(C51_VERSION,buffer));
 
-    while(lcd12864Flush(0)&&delay(15,9,179)){
+    while(lcd12864Flush(0)&&delay(5,9,179)){
         buffer[0]=pushbuttonGet()+'0';
         buffer[1]=' ';
         buffer[2]=pushbuttonLastPressedGet()+'0';
         buffer[3]=0;
 
         lcd12864StringSet(3,0,buffer);
-        lcd12864StringSet(4,0,ultoa(systemClockGet(),buffer));
+        lcd12864StringSet(2,8,ultoa(systemClockGet(),buffer));
         lcd12864StringSet(5,0,ultoa(systemClockGetSec(),buffer));
+
+        lcd12864CharSet(7,3,'A');
 
         puts(buffer);
     }
