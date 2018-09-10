@@ -1,13 +1,13 @@
-#ifndef __SYSTEMCLOCK_H_
-#define __SYSTEMCLOCK_H_
+#ifndef SYSTEMCLOCK_H_
+#define SYSTEMCLOCK_H_
 
-void systemClockTick();
+void systemClock_tick();
 
-unsigned long int systemClockGet();
-unsigned int systemClockGetMis();
-unsigned char systemClockGetSec();
-unsigned char systemClockGetMin();
-unsigned char systemClockGetHur();
-unsigned char systemClockGetDay();
+unsigned long int systemClock_get();
+unsigned int systemClock_mSecGet();
+unsigned char systemClock_secGet();
+unsigned char systemClock_minGet();
+unsigned char systemClock_hurGet();
+unsigned char systemClock_dayGet();
 
 #endif

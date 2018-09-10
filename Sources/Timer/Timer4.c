@@ -1,6 +1,6 @@
-#include"Timer4.h"
+#include"Sources/Timer/Timer4.h"
 
-void timer4Initialize(bit x12Mode,bit enableInterrupt,unsigned char th,unsigned char tl){
+void timer_4_initialize(bit x12Mode,bit enableInterrupt,unsigned char th,unsigned char tl){
     if(x12Mode){
         T4T3M&=~0x20;
     }else{
@@ -15,16 +15,16 @@ void timer4Initialize(bit x12Mode,bit enableInterrupt,unsigned char th,unsigned 
     T4H=tl;
 }
 
-void timer4Start(){
+void timer_4_start(){
     T4T3M|=0x80;
 }
 
-void timer4Stop(){
+void timer_4_stop(){
     T4T3M&=~0x80;
 }
 
 static void interruptRoutine() interrupt 20{
-    interruptBusyLed=1;
-    systemClockTick();
-    interruptBusyLed=0;
+    interrupt_busyLed=1;
+    systemClock_tick();
+    interrupt_busyLed=0;
 }

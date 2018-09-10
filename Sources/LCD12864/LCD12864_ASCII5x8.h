@@ -1,7 +1,7 @@
-#ifndef __LCD12864_ASCII5X8_H_
-#define __LCD12864_ASCII5X8_H_
+#ifndef LCD12864_ASCII5x8_H_
+#define LCD12864_ASCII5x8_H_
 
-static unsigned char code ASCII5x8[128][8]={
+static unsigned char code LCD12864_ASCII5x8[128][8]={
     {0x00,0x00,0x70,0x50,0x50,0x70,0x00,0x00},
     {0x00,0x00,0x70,0x50,0x50,0x70,0x00,0x00},
     {0,80,80,0,136,112,0,0},

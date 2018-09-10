@@ -1,4 +1,4 @@
-#include"Pushbutton.h"
+#include"Sources/Pushbutton/Pushbutton.h"
 
 #include<stdio.h>
 
@@ -13,8 +13,8 @@ static unsigned char code tolerance=8;
 static unsigned char lastPressed=0;
 static bit lastPressedRead=0;
 
-unsigned char pushbuttonGet(){
-    unsigned char v=adcGet(6)>>2,i;
+unsigned char pushbutton_get(){
+    unsigned char v=adc_get(6)>>2,i;
 
     printf("[%u]\n",(unsigned int)v);
 
@@ -34,10 +34,10 @@ unsigned char pushbuttonGet(){
     return -1;
 }
 
-unsigned char pushbuttonLastPressedGet(){
+unsigned char pushbutton_lastPressedGet(){
     return lastPressed;
 }
 
-bit pushbuttonLastPressedRead(){
+bit pushbutton_lastPressedRead(){
     return lastPressedRead;
 }

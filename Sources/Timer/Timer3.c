@@ -1,6 +1,6 @@
-#include"Timer3.h"
+#include"Sources/Timer/Timer3.h"
 
-void timer3Initialize(bit x12Mode,unsigned char th,unsigned char tl){
+void timer_3_initialize(bit x12Mode,unsigned char th,unsigned char tl){
     if(x12Mode){
         T4T3M&=0xFD;
     }
@@ -8,12 +8,12 @@ void timer3Initialize(bit x12Mode,unsigned char th,unsigned char tl){
     T3H=tl;
 }
 
-void timer3Start(){
+void timer_3_start(){
     IE2|=0x20;
     T4T3M|=0x08;
 }
 
-void timer3Stop(){
+void timer_3_stop(){
     T4T3M&=~0x08;
 }
 

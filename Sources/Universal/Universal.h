@@ -1,5 +1,5 @@
-#ifndef __UNIVERSAL_H_
-#define __UNIVERSAL_H_
+#ifndef UNIVERSAL_H_
+#define UNIVERSAL_H_
 
 #include<Sources/Main/STC15W4K48S4.h>
 

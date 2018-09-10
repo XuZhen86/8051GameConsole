@@ -1,35 +1,35 @@
-#include"SPI.h"
+#include"Sources/SPI/SPI.h"
 
 static bit isOccupied=0;
 
-void spiSetIsOccupied(bit o){
+void spi_isOccupiedSet(bit o){
     isOccupied=o;
 }
 
-bit spiGetIsOccupied(){
+bit spi_isOccupiedGet(){
     return isOccupied;
 }
 
-void spiInitialize(bit cpol,bit cpha,unsigned char clkDiv){
+void spi_initialize(bit cpol,bit cpha,unsigned char clkDiv){
     SPCTL=(0xd0|(0x08*cpol)|(0x04*cpha)|(0x03&clkDiv));
     P_SW1|=0x04;
     SPSTAT=0xc0;
     SPDAT=0x00;
 }
 
-void spiSetup(bit cpol,bit cpha,unsigned char clkDiv){
+void spi_setup(bit cpol,bit cpha,unsigned char clkDiv){
     while(!(SPSTAT&0x80));
     SPCTL=(0xd0|(0x08*cpol)|(0x04*cpha)|(0x03&clkDiv));
 }
 
-unsigned char spiSend(unsigned char c){
+unsigned char spi_send(unsigned char c){
     while(!(SPSTAT&0x80));
     SPSTAT|=0x80;
     SPDAT=c;
     return c;
 }
 
-unsigned char spiRecv(){
+unsigned char spi_recv(){
     while(!(SPSTAT&0x80));
     SPSTAT|=0x80;
     SPDAT=0x00;
@@ -37,7 +37,7 @@ unsigned char spiRecv(){
     return SPDAT;
 }
 
-unsigned char *spiSeqRecv(unsigned char *destination,unsigned int length){
+unsigned char *spi_seqRecv(unsigned char *destination,unsigned int length){
     unsigned int data i;
     unsigned char data buffer;
 
@@ -56,6 +56,6 @@ unsigned char *spiSeqRecv(unsigned char *destination,unsigned int length){
     return destination;
 }
 
-bit spiTransmissionComplete(){
+bit spi_transmissionCompleteGet(){
     return (SPSTAT&0x80)!=0;
 }

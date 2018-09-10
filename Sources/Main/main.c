@@ -50,32 +50,32 @@ void main(){
     puts(uitoa(C51_VERSION,buffer));
 
     delay(0,0,0);
-    interruptInitialize();
-    spiInitialize(0,0,0);
-    pwnInitialize(0,0);
-    adcInitialize(0);
+    interrupt_initialize();
+    spi_initialize(0,0,0);
+    pwn_initialize(0,0);
+    adc_initialize(0);
 
-    i23lc512Initialize();
-    lcd12864SpiInitialize();
+    i23lc512_initialize();
+    lcd12864_spi_initialize();
 
-    timer4Initialize(0,1,0x7e,0x66);  //1毫秒@33.1776MHz
-    timer4Start();
+    timer_4_initialize(0,1,0x7e,0x66);  //1毫秒@33.1776MHz
+    timer_4_start();
 
-    lcd12864StringSet(0,0,COMPILE_DATE);
-    lcd12864StringSet(1,0,COMPILE_TIME);
-    lcd12864StringSet(2,0,uitoa(C51_VERSION,buffer));
+    lcd12864_stringSet(0,0,COMPILE_DATE);
+    lcd12864_stringSet(1,0,COMPILE_TIME);
+    lcd12864_stringSet(2,0,uitoa(C51_VERSION,buffer));
 
-    while(lcd12864Flush(0)&&delay(5,9,179)){
-        buffer[0]=pushbuttonGet()+'0';
+    while(lcd12864_flush(0)&&delay(5,9,179)){
+        buffer[0]=pushbutton_get()+'0';
         buffer[1]=' ';
-        buffer[2]=pushbuttonLastPressedGet()+'0';
+        buffer[2]=pushbutton_lastPressedGet()+'0';
         buffer[3]=0;
 
-        lcd12864StringSet(3,0,buffer);
-        lcd12864StringSet(2,8,ultoa(systemClockGet(),buffer));
-        lcd12864StringSet(5,0,ultoa(systemClockGetSec(),buffer));
+        lcd12864_stringSet(3,0,buffer);
+        lcd12864_stringSet(2,8,ultoa(systemClock_get(),buffer));
+        lcd12864_stringSet(5,0,ultoa(systemClock_secGet(),buffer));
 
-        lcd12864CharSet(7,3,'A');
+        lcd12864_charSet(7,3,'A');
 
         puts(buffer);
     }

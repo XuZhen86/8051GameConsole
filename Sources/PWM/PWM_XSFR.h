@@ -1,5 +1,5 @@
-#ifndef __PWM_XSFR_H_
-#define __PWM_XSFR_H_
+#ifndef PWM_XSFR_H_
+#define PWM_XSFR_H_
 
 //和PWM有关的2字节寄存器必须先写入高8位，再写入低8位。
 //如果直接进行+=等运算，编译器会先计算低8位再计算高8位，造成输出LED闪烁。

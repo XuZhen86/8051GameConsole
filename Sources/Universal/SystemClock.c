@@ -1,4 +1,4 @@
-#include"SystemClock.h"
+#include"Sources/Universal/SystemClock.h"
 
 static unsigned long int data
     sysClock=0;
@@ -10,7 +10,7 @@ static unsigned char data
     sysClockHur=0,
     sysClockDay=0;
 
-void systemClockTick(){
+void systemClock_tick(){
     sysClock++;
     sysClockMis++;
 
@@ -35,26 +35,26 @@ void systemClockTick(){
     }
 }
 
-unsigned long int systemClockGet(){
+unsigned long int systemClock_get(){
     return sysClock;
 }
 
-unsigned int systemClockGetMis(){
+unsigned int systemClock_mSecGet(){
     return sysClockMis;
 }
 
-unsigned char systemClockGetSec(){
+unsigned char systemClock_secGet(){
     return sysClockSec;
 }
 
-unsigned char systemClockGetMin(){
+unsigned char systemClock_minGet(){
     return sysClockMin;
 }
 
-unsigned char systemClockGetHur(){
+unsigned char systemClock_hurGet(){
     return sysClockHur;
 }
 
-unsigned char systemClockGetDay(){
+unsigned char systemClock_dayGet(){
     return sysClockDay;
 }

@@ -1,4 +1,4 @@
-#include"I23LC512.h"
+#include"Sources/I23LC512/I23LC512.h"
 
 static unsigned char code
     READ=0x03,
@@ -16,161 +16,161 @@ static unsigned char code
 
 sbit chipSelect=P2^6;
 
-unsigned char i23lc512WriteModeRegister(const unsigned char mode){
-    spiSetIsOccupied(1);
-    spiInitialize(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+unsigned char i23lc512_writeModeRegister(const unsigned char mode){
+    spi_isOccupiedSet(1);
+    spi_initialize(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
 
-    spiSend(mode);
+    spi_send(mode);
 
-    while(!spiTransmissionComplete());
+    while(!spi_transmissionCompleteGet());
     chipSelect=1;
-    spiSetIsOccupied(0);
+    spi_isOccupiedSet(0);
     return mode;
 }
 
-unsigned char i23lc512UCharWrite(const unsigned int address,const unsigned char c){
-    spiSetIsOccupied(1);
-    spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+unsigned char i23lc512_uCharWrite(const unsigned int address,const unsigned char c){
+    spi_isOccupiedSet(1);
+    spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
 
-    spiSend(WRITE);
-    spiSend(address>>8);
-    spiSend(address);
-    spiSend(c);
+    spi_send(WRITE);
+    spi_send(address>>8);
+    spi_send(address);
+    spi_send(c);
 
-    while(!spiTransmissionComplete());
+    while(!spi_transmissionCompleteGet());
     chipSelect=1;
-    spiSetIsOccupied(0);
+    spi_isOccupiedSet(0);
     return c;
 }
 
-unsigned char i23lc512UCharArrayWrite(const unsigned int address,const unsigned int offset,const unsigned char c){
-    return i23lc512UCharWrite(address+offset*sizeof(unsigned char),c);
+unsigned char i23lc512_uCharArrayWrite(const unsigned int address,const unsigned int offset,const unsigned char c){
+    return i23lc512_uCharWrite(address+offset*sizeof(unsigned char),c);
 }
 
-unsigned char i23lc512UCharRead(const unsigned int address){
+unsigned char i23lc512_uCharRead(const unsigned int address){
     unsigned char buffer;
-    spiSetIsOccupied(1);
-    spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+    spi_isOccupiedSet(1);
+    spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
 
-    spiSend(READ);
-    spiSend(address>>8);
-    spiSend(address);
-    buffer=spiRecv();
+    spi_send(READ);
+    spi_send(address>>8);
+    spi_send(address);
+    buffer=spi_recv();
 
     chipSelect=1;
-    spiSetIsOccupied(0);
+    spi_isOccupiedSet(0);
     return buffer;
 }
 
-unsigned char i23lc512UCharArrayRead(const unsigned int address,const unsigned int offset){
-    return i23lc512UCharRead(address+offset*sizeof(unsigned char));
+unsigned char i23lc512_uCharArrayRead(const unsigned int address,const unsigned int offset){
+    return i23lc512_uCharRead(address+offset*sizeof(unsigned char));
 }
 
-unsigned int i23lc512UIntWrite(const unsigned int address,const unsigned int i){
-    spiSetIsOccupied(1);
-    spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+unsigned int i23lc512_uIntWrite(const unsigned int address,const unsigned int i){
+    spi_isOccupiedSet(1);
+    spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
 
-    spiSend(WRITE);
-    spiSend(address>>8);
-    spiSend(address);
-    spiSend(i>>8);
-    spiSend(i);
+    spi_send(WRITE);
+    spi_send(address>>8);
+    spi_send(address);
+    spi_send(i>>8);
+    spi_send(i);
 
-    while(!spiTransmissionComplete());
+    while(!spi_transmissionCompleteGet());
     chipSelect=1;
-    spiSetIsOccupied(0);
+    spi_isOccupiedSet(0);
     return i;
 }
 
-unsigned int i23lc512UIntArrayWrite(const unsigned int address,const unsigned int offset,const unsigned int i){
-    return i23lc512UIntWrite(address+offset*sizeof(unsigned int),i);
+unsigned int i23lc512_uIntArrayWrite(const unsigned int address,const unsigned int offset,const unsigned int i){
+    return i23lc512_uIntWrite(address+offset*sizeof(unsigned int),i);
 }
 
-unsigned int i23lc512UIntRead(const unsigned int address){  // ???
+unsigned int i23lc512_uIntRead(const unsigned int address){  // ???
     unsigned int buffer;
-    spiSetIsOccupied(1);
-    spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+    spi_isOccupiedSet(1);
+    spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
 
-    spiSend(READ);
-    spiSend(address>>8);
-    spiSend(address);
-    buffer=spiRecv();
+    spi_send(READ);
+    spi_send(address>>8);
+    spi_send(address);
+    buffer=spi_recv();
     buffer<<=8;
-    buffer|=spiRecv();
+    buffer|=spi_recv();
 
     chipSelect=1;
-    spiSetIsOccupied(0);
+    spi_isOccupiedSet(0);
     return buffer;
 }
 
-unsigned int i23lc512UIntArrayRead(const unsigned int address,const unsigned int offset){
-    return i23lc512UIntRead(address+offset*sizeof(unsigned int));
+unsigned int i23lc512_uIntArrayRead(const unsigned int address,const unsigned int offset){
+    return i23lc512_uIntRead(address+offset*sizeof(unsigned int));
 }
 
-bit i23lc512Initialize(){
+bit i23lc512_initialize(){
     chipSelect=1;
-    // i23lc512WriteModeRegister(0x); // set operation mode, default sequential mode
+    // i23lc512_writeModeRegister(0x); // set operation mode, default sequential mode
     return 1;
 }
 
-unsigned char *i23lc512UCharSeqRead(unsigned char *destination,unsigned int address,unsigned int length){
-    spiSetIsOccupied(1);
-    spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+unsigned char *i23lc512_uCharSeqRead(unsigned char *destination,unsigned int address,unsigned int length){
+    spi_isOccupiedSet(1);
+    spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
 
-    spiSend(READ);
-    spiSend(address>>8);
-    spiSend(address);
-    spiSeqRecv(destination,length);
+    spi_send(READ);
+    spi_send(address>>8);
+    spi_send(address);
+    spi_seqRecv(destination,length);
 
     chipSelect=1;
-    spiSetIsOccupied(0);
+    spi_isOccupiedSet(0);
     return destination;
 }
 
-unsigned char *i23lc512UCharSeqWrite(unsigned char *source,unsigned int address,unsigned int length){
+unsigned char *i23lc512_uCharSeqWrite(unsigned char *source,unsigned int address,unsigned int length){
     unsigned int i;
 
-    spiSetIsOccupied(1);
-    spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+    spi_isOccupiedSet(1);
+    spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
 
-    spiSend(WRITE);
-    spiSend(address>>8);
-    spiSend(address);
+    spi_send(WRITE);
+    spi_send(address>>8);
+    spi_send(address);
 
     for(i=0;i<length;i++){
-        spiSend(source[i]);
+        spi_send(source[i]);
     }
 
-    while(!spiTransmissionComplete());
+    while(!spi_transmissionCompleteGet());
     chipSelect=1;
-    spiSetIsOccupied(0);
+    spi_isOccupiedSet(0);
     return source;
 }
 
-unsigned int i23lc512Memset(unsigned int address,unsigned char value,unsigned int length){
+unsigned int i23lc512_memset(unsigned int address,unsigned char value,unsigned int length){
     unsigned int i;
 
-    spiSetIsOccupied(1);
-    spiSetup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
+    spi_isOccupiedSet(1);
+    spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
 
-    spiSend(WRITE);
-    spiSend(address>>8);
-    spiSend(address);
+    spi_send(WRITE);
+    spi_send(address>>8);
+    spi_send(address);
 
     for(i=0;i<length;i++){
-        spiSend(value);
+        spi_send(value);
     }
 
-    while(!spiTransmissionComplete());
-    spiSetIsOccupied(0);
+    while(!spi_transmissionCompleteGet());
+    spi_isOccupiedSet(0);
     chipSelect=1;
     return address;
 }

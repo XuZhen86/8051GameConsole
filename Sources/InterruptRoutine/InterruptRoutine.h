@@ -1,10 +1,10 @@
-#ifndef __INTERRUPTROUTINE_H_
-#define __INTERRUPTROUTINE_H_
+#ifndef INTERRUPTROUTINE_H_
+#define INTERRUPTROUTINE_H_
 
 #include<Sources/Main/STC15W4K48S4.h>
 
-sbit interruptBusyLed=P2^4;
+sbit interrupt_busyLed=P2^4;
 
-void interruptInitialize();
+void interrupt_initialize();
 
 #endif

@@ -1,14 +1,14 @@
-#ifndef __JOYSTICK_H_
-#define __JOYSTICK_H_
+#ifndef JOYSTICK_H_
+#define JOYSTICK_H_
 
 #include<Sources/Main/STC15W4K48S4.h>
 #include<Sources/ADC/ADC.h>
 
 #include<math.h>
 
-void joystickInitialize();
-unsigned int joystickGetX();
-unsigned int joystickGetY();
-unsigned char joystickGetDirection();
+void joystick_initialize();
+unsigned int joystick_getX();
+unsigned int joystick_getY();
+unsigned char joystick_getDirection();
 
 #endif

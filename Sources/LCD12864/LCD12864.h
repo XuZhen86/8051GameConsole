@@ -1,5 +1,5 @@
-#ifndef __LCD12864_H_
-#define __LCD12864_H_
+#ifndef LCD12864_H_
+#define LCD12864_H_
 
 #include<Sources/Main/STC15W4K48S4.h>
 #include<Sources/PWM/PWM.h>
@@ -9,17 +9,17 @@
 
 #include<stdlib.h>
 
-void lcd12864SpiSend(bit b,unsigned char c);
-void lcd12864SpiSend2Bytes(bit b,unsigned char c1,unsigned char c2);
-void lcd12864HwReset();
-void lcd12864PwmInitialize();
-void lcd12864BrightnessSet(unsigned int brightness);
-unsigned int lcd12864BrightnessGet();
+void lcd12864_spi_send(bit b,unsigned char c);
+void lcd12864_spi_send2Bytes(bit b,unsigned char c1,unsigned char c2);
+void lcd12864_hwReset();
+void lcd12864_pwmInitialize();
+void lcd12864_brightnessSet(unsigned int brightness);
+unsigned int lcd12864_brightnessGet();
 
-void lcd12864SpiInitialize();
-bit lcd12864Flush(bit forceFlush);
-void lcd12864CharSet(unsigned char row,unsigned char col,unsigned char c);
-void lcd12864StringSet(unsigned char row,unsigned char col,unsigned char *str);
-void lcd12864PixelSet(unsigned char row,unsigned char col,bit lightUp);
+void lcd12864_spi_initialize();
+bit lcd12864_flush(bit forceFlush);
+void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c);
+void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str);
+void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp);
 
 #endif

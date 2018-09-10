@@ -1,14 +1,14 @@
-#include"ADC.h"
+#include"Sources/ADC/ADC.h"
 
 static unsigned char adcSpeed=0;
 
-void adcInitialize(unsigned char speed){
+void adc_initialize(unsigned char speed){
     CLK_DIV|=0x20;  // ADC_RES[1,0]|ADC_RESL[7,0]
     ADC_CONTR=0x80;
     adcSpeed=(speed&0x03)<<5;
 }
 
-unsigned int adcGet(unsigned char channel){
+unsigned int adc_get(unsigned char channel){
     unsigned int result=0;
     channel%=8;
 

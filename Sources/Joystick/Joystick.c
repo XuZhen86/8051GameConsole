@@ -1,23 +1,23 @@
-#include"Joystick.h"
+#include"Sources/Joystick/Joystick.h"
 
 static unsigned char code analogPins[2]={6,7};  // 0=x, 1=y
 static unsigned int code calibratedValues[2]={522,513};
 static char code tolerance=4;
 
-void joystickInitialize(){
+void joystick_initialize(){
 }
 
-unsigned int joystickGetX(){
-    return adcGet(analogPins[0]);
+unsigned int joystick_getX(){
+    return adc_get(analogPins[0]);
 }
 
-unsigned int joystickGetY(){
-    return adcGet(analogPins[0]);
+unsigned int joystick_getY(){
+    return adc_get(analogPins[0]);
 }
 
-unsigned char joystickGetDirection(){
-    int x=joystickGetX(),
-        y=joystickGetY();
+unsigned char joystick_getDirection(){
+    int x=joystick_getX(),
+        y=joystick_getY();
     char c=((x>0)*0x04)|((y>0)*0x02)|((abs(x)>abs(y)*0x01));
 
     if(-tolerance<x&&x<tolerance&&-tolerance<y&&y<tolerance){

@@ -1,6 +1,6 @@
-#include"InterruptRoutine.h"
+#include"Sources/InterruptRoutine/InterruptRoutine.h"
 
-void interruptInitialize(){
+void interrupt_initialize(){
     EA=1;
-    interruptBusyLed=0;
+    interrupt_busyLed=0;
 }

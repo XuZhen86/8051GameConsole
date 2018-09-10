@@ -1,5 +1,5 @@
-#ifndef __VERSION_H_
-#define __VERSION_H_
+#ifndef VERSION_H_
+#define VERSION_H_
 
 unsigned int code C51_VERSION=__C51__;
 unsigned char code COMPILE_DATE[]="Date="__DATE__;
