@@ -24,7 +24,7 @@ static unsigned char code
     CHIP_SELECT_P2M0=0xc0,
     CHIP_SELECT_P2M1=0x00;
 
-static unsigned char code GDRAM_ADDR=0xf800;
+static unsigned int code GDRAM_ADDR=0xf800;
 
 static unsigned int brightness=0x3fff;
 static unsigned char gdramRowDirty[4]={0,0,0,0};
@@ -151,9 +151,7 @@ bit lcd12864_flush(bit forceFlush){
         lcd12864_spi_send(0,FUNCTION_SET|0x04|0x02);
     }
 
-    for(i=0;i<4;i++){
-        gdramRowDirty[i]=0;
-    }
+    memset(gdramRowDirty,0,sizeof(gdramRowDirty));
 
     return 1;
 }

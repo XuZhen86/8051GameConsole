@@ -16,7 +16,7 @@ static unsigned char code
 
 sbit chipSelect=P2^6;
 
-unsigned char i23lc512_writeModeRegister(const unsigned char mode){
+unsigned char i23lc512_writeModeRegister(unsigned char mode){
     spi_isOccupiedSet(1);
     spi_initialize(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
@@ -29,7 +29,7 @@ unsigned char i23lc512_writeModeRegister(const unsigned char mode){
     return mode;
 }
 
-unsigned char i23lc512_uCharWrite(const unsigned int address,const unsigned char c){
+unsigned char i23lc512_uCharWrite(unsigned int address,unsigned char c){
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
@@ -45,11 +45,11 @@ unsigned char i23lc512_uCharWrite(const unsigned int address,const unsigned char
     return c;
 }
 
-unsigned char i23lc512_uCharArrayWrite(const unsigned int address,const unsigned int offset,const unsigned char c){
+unsigned char i23lc512_uCharArrayWrite(unsigned int address,unsigned int offset,unsigned char c){
     return i23lc512_uCharWrite(address+offset*sizeof(unsigned char),c);
 }
 
-unsigned char i23lc512_uCharRead(const unsigned int address){
+unsigned char i23lc512_uCharRead(unsigned int address){
     unsigned char buffer;
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
@@ -65,11 +65,11 @@ unsigned char i23lc512_uCharRead(const unsigned int address){
     return buffer;
 }
 
-unsigned char i23lc512_uCharArrayRead(const unsigned int address,const unsigned int offset){
+unsigned char i23lc512_uCharArrayRead(unsigned int address,unsigned int offset){
     return i23lc512_uCharRead(address+offset*sizeof(unsigned char));
 }
 
-unsigned int i23lc512_uIntWrite(const unsigned int address,const unsigned int i){
+unsigned int i23lc512_uIntWrite(unsigned int address,unsigned int i){
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
@@ -86,11 +86,11 @@ unsigned int i23lc512_uIntWrite(const unsigned int address,const unsigned int i)
     return i;
 }
 
-unsigned int i23lc512_uIntArrayWrite(const unsigned int address,const unsigned int offset,const unsigned int i){
+unsigned int i23lc512_uIntArrayWrite(unsigned int address,unsigned int offset,unsigned int i){
     return i23lc512_uIntWrite(address+offset*sizeof(unsigned int),i);
 }
 
-unsigned int i23lc512_uIntRead(const unsigned int address){  // ???
+unsigned int i23lc512_uIntRead(unsigned int address){
     unsigned int buffer;
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
@@ -108,7 +108,7 @@ unsigned int i23lc512_uIntRead(const unsigned int address){  // ???
     return buffer;
 }
 
-unsigned int i23lc512_uIntArrayRead(const unsigned int address,const unsigned int offset){
+unsigned int i23lc512_uIntArrayRead(unsigned int address,unsigned int offset){
     return i23lc512_uIntRead(address+offset*sizeof(unsigned int));
 }
 

@@ -8,6 +8,7 @@
 #include<Sources/I23LC512/I23LC512.h>
 
 #include<stdlib.h>
+#include<string.h>
 
 void lcd12864_spi_send(bit b,unsigned char c);
 void lcd12864_spi_send2Bytes(bit b,unsigned char c1,unsigned char c2);

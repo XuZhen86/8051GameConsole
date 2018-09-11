@@ -5,15 +5,15 @@
 #include<Sources/Universal/Universal.h>
 #include<Sources/SPI/SPI.h>
 
-unsigned char i23lc512_writeModeRegister(const unsigned char mode);
-unsigned char i23lc512_uCharWrite(const unsigned int address,const unsigned char c);
-unsigned char i23lc512_uCharArrayWrite(const unsigned int address,const unsigned int offset,const unsigned char c);
-unsigned char i23lc512_uCharRead(const unsigned int address);
-unsigned char i23lc512_uCharArrayRead(const unsigned int address,const unsigned int offset);
-unsigned int i23lc512_uIntWrite(const unsigned int address,const unsigned int i);
-unsigned int i23lc512_uIntArrayWrite(const unsigned int address,const unsigned int offset,const unsigned int i);
-unsigned int i23lc512_uIntRead(const unsigned int address);
-unsigned int i23lc512_uIntArrayRead(const unsigned int address,const unsigned int offset);
+unsigned char i23lc512_writeModeRegister(unsigned char mode);
+unsigned char i23lc512_uCharWrite(unsigned int address,unsigned char c);
+unsigned char i23lc512_uCharArrayWrite(unsigned int address,unsigned int offset,unsigned char c);
+unsigned char i23lc512_uCharRead(unsigned int address);
+unsigned char i23lc512_uCharArrayRead(unsigned int address,unsigned int offset);
+unsigned int i23lc512_uIntWrite(unsigned int address,unsigned int i);
+unsigned int i23lc512_uIntArrayWrite(unsigned int address,unsigned int offset,unsigned int i);
+unsigned int i23lc512_uIntRead(unsigned int address);
+unsigned int i23lc512_uIntArrayRead(unsigned int address,unsigned int offset);
 bit i23lc512_initialize();
 
 unsigned char *i23lc512_uCharSeqRead(unsigned char *destination,unsigned int address,unsigned int length);
