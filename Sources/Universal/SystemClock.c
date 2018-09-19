@@ -1,34 +1,54 @@
 #include"Sources/Universal/SystemClock.h"
 
-static unsigned long int data
-    sysClock=0;
-static unsigned int data
-    sysClockMis=0;
-static unsigned char data
-    sysClockSec=0,
-    sysClockMin=0,
-    sysClockHur=0,
-    sysClockDay=0;
+static unsigned int data delta=0;
+
+static unsigned long int clock=0;
+static unsigned int millisecond=0;
+static unsigned char second=0,minute=0,hour=0,day=0;
+
+static bit timerIsRunning;
+static unsigned int timerRemains;
 
 void systemClock_tick(){
-    sysClock++;
-    sysClockMis++;
+    delta+=10;
+}
 
-    if(sysClockMis%1000==0){
-        sysClockMis=0;
-        sysClockSec++;
+void systemClock_flush(){
+    unsigned int data deltaCopy=delta;
+    delta=0;
 
-        if(sysClockSec==60){
-            sysClockSec=0;
-            sysClockMin++;
+    if(timerIsRunning){
+        if(timerRemains>deltaCopy){
+            timerRemains-=deltaCopy;
+        }else{
+            timerRemains=0;
+            timerIsRunning=0;
+        }
+    }
 
-            if(sysClockMin==60){
-                sysClockMin=0;
-                sysClockHur++;
+    clock+=deltaCopy;
 
-                if(sysClockHur==24){
-                    sysClockHur=0;
-                    sysClockDay++;
+    deltaCopy+=millisecond;
+    millisecond=deltaCopy%1000;
+    deltaCopy/=1000;
+
+    if(deltaCopy){
+        deltaCopy+=second;
+        second=deltaCopy%60;
+        deltaCopy/=60;
+
+        if(deltaCopy){
+            deltaCopy+=minute;
+            minute=deltaCopy%60;
+            deltaCopy/=60;
+
+            if(deltaCopy){
+                deltaCopy+=hour;
+                hour=deltaCopy%24;
+                deltaCopy/=24;
+
+                if(deltaCopy){
+                    day+=deltaCopy;
                 }
             }
         }
@@ -36,25 +56,58 @@ void systemClock_tick(){
 }
 
 unsigned long int systemClock_get(){
-    return sysClock;
+    systemClock_flush();
+    return clock;
 }
 
 unsigned int systemClock_mSecGet(){
-    return sysClockMis;
+    systemClock_flush();
+    return millisecond;
 }
 
 unsigned char systemClock_secGet(){
-    return sysClockSec;
+    systemClock_flush();
+    return second;
 }
 
 unsigned char systemClock_minGet(){
-    return sysClockMin;
+    systemClock_flush();
+    return minute;
 }
 
 unsigned char systemClock_hurGet(){
-    return sysClockHur;
+    systemClock_flush();
+    return hour;
 }
 
 unsigned char systemClock_dayGet(){
-    return sysClockDay;
+    systemClock_flush();
+    return day;
+}
+
+void systemClock_timerStart(unsigned int time){
+    puts("systemClock_timerStart()");
+    systemClock_flush();
+    timerRemains=time;
+    timerIsRunning=1;
+}
+
+void systemClock_timerPause(){
+    systemClock_flush();
+    timerIsRunning=0;
+}
+
+void systemClock_timerResume(){
+    systemClock_flush();
+    timerIsRunning=1;
+}
+void systemClock_timerCancel(){
+    systemClock_flush();
+    timerRemains=0;
+    timerIsRunning=0;
+}
+
+bit systemClock_timerIsTimeUp(){
+    systemClock_flush();
+    return !timerRemains;
 }

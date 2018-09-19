@@ -1,7 +1,7 @@
 #include"Sources/LCD12864/LCD12864.h"
 #include"Sources/LCD12864/LCD12864_ASCII5x8.h"
 
-static unsigned char code
+enum LCD12864_COMMAND{
     CLEAR=0x01,
     STANDBY=0x01,
     HOME=0x02,
@@ -12,19 +12,24 @@ static unsigned char code
     FUNCTION_SET=0x30,
     SET_CGRAM_ADDR=0x40,
     SET_DDRAM_ADDR=0x80,
-    SET_GDRAM_ADDR=0x80;
+    SET_GDRAM_ADDR=0x80
+};
 
-static unsigned char code
+enum SPI_CONFIG{
     SPI_CPOL=1,
     SPI_CPHA=1,
-    SPI_CLKDIV=3;
+    SPI_CLKDIV=3
+};
 
-static unsigned char code
+enum{
     BUFFER_INIT_VALUE=0x00,
     CHIP_SELECT_P2M0=0xc0,
-    CHIP_SELECT_P2M1=0x00;
+    CHIP_SELECT_P2M1=0x00
+};
 
-static unsigned int code GDRAM_ADDR=0xf800;
+enum{
+    GDRAM_ADDR=0xf800
+};
 
 static unsigned int brightness=0x3fff;
 static unsigned char gdramRowDirty[4]={0,0,0,0};
@@ -130,20 +135,17 @@ bit lcd12864_flush(bit forceFlush){
                         lcd12864_spi_send(0,FUNCTION_SET|0x04);
                     }
 
-                    buffer[j+0]=buffer[j+32];
-                    buffer[j+1]=buffer[j+33];
-
                     if(!addressJustBeenSent||forceFlush){
                         lcd12864_spi_send2Bytes(0,SET_GDRAM_ADDR|i,SET_GDRAM_ADDR|j/2);
                         addressJustBeenSent=1;
                     }
 
-                    lcd12864_spi_send2Bytes(1,buffer[j+0],buffer[j+1]);
+                    lcd12864_spi_send2Bytes(1,buffer[j+32],buffer[j+33]);
                 }else{
                     addressJustBeenSent=0;
                 }
             }
-            i23lc512_uCharSeqWrite(buffer,GDRAM_ADDR+64*i,32);
+            i23lc512_uCharSeqWrite(buffer+32,GDRAM_ADDR+64*i,32);
         }
     }
 
@@ -157,7 +159,7 @@ bit lcd12864_flush(bit forceFlush){
 }
 
 void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c){
-    unsigned char data buffer[2];
+    unsigned char buffer[4];
     unsigned char data i,tempChar;
 
     col=col%25*5;
@@ -171,16 +173,18 @@ void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c){
         tempChar=buffer[0];
         tempChar&=(0xff<<(8-col%8));
         tempChar|=(LCD12864_ASCII5x8[c][i%8]>>(col%8));
-        buffer[0]=tempChar;
+        buffer[2]=tempChar;
 
         tempChar=buffer[1];
         tempChar&=(0xff>>(col%8));
         tempChar|=(LCD12864_ASCII5x8[c][i%8]<<(8-col%8));
-        buffer[1]=tempChar;
+        buffer[3]=tempChar;
 
-        i23lc512_uCharSeqWrite(buffer,GDRAM_ADDR+64*i+32+col/8,2);
+        if(buffer[0]!=buffer[2]||buffer[1]!=buffer[3]){
+            i23lc512_uCharSeqWrite(buffer+2,GDRAM_ADDR+64*i+32+col/8,2);
         gdramRowDirty[i/8]|=(1<<(i%8));
     }
+}
 }
 
 void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
@@ -214,19 +218,24 @@ void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
 }
 
 void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp){
-    unsigned char buffer[32];
+    unsigned char data buffer[2];
 
     row%=64;
     col%=128;
     if(row>31){col+=128;}
     row%=32;
 
-    i23lc512_uCharSeqRead(buffer,GDRAM_ADDR+64*row+32,32);
+    buffer[0]=i23lc512_uCharRead(GDRAM_ADDR+64*row+32+col/8);
+
     if(lightUp){
-        buffer[col/8]|=(0x80>>col%8);
+        buffer[1]=buffer[0]|(0x80>>col%8);
     }else{
-        buffer[col/8]&=~(0x80>>col%8);
+        buffer[1]=buffer[0]&(~(0x80>>col%8));
     }
-    i23lc512_uCharSeqWrite(buffer,GDRAM_ADDR+64*row+32,32);
+
+    if(buffer[0]!=buffer[1]){
+        putchar('d');
+        i23lc512_uCharWrite(GDRAM_ADDR+64*row+32+col/8,buffer[1]);
     gdramRowDirty[row/8]|=(1<<(row%8));
+}
 }

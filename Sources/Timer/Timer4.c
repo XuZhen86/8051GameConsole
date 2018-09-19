@@ -11,8 +11,8 @@ void timer_4_initialize(bit x12Mode,bit enableInterrupt,unsigned char th,unsigne
     }else{
         IE2&=~0x40;
     }
-    T4L=th;
-    T4H=tl;
+    T4H=th;
+    T4L=tl;
 }
 
 void timer_4_start(){

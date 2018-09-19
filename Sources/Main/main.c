@@ -10,6 +10,7 @@
 #include<Sources/I23LC512/I23LC512.h>
 #include<Sources/Timer/Timer4.h>
 #include<Sources/Pushbutton/Pushbutton.h>
+#include<Sources/Games/Snake/Snake.h>
 
 #include<stdio.h>
 #include<math.h>
@@ -29,9 +30,8 @@ char code directionXYDelta[6][2]={
 };
 
 void main(){
-    unsigned char i=31,j=63,dir;
-    int a,b;
     unsigned char buffer[16];
+    unsigned char snakeErrorCode;
 
     P0M0=0x00;
     P0M1=0x00;
@@ -58,27 +58,48 @@ void main(){
     i23lc512_initialize();
     lcd12864_spi_initialize();
 
-    timer_4_initialize(0,1,0x7e,0x66);  //1毫秒@33.1776MHz
+    timer_4_initialize(1,1,0x93,0xd3);
     timer_4_start();
 
     lcd12864_stringSet(0,0,COMPILE_DATE);
     lcd12864_stringSet(1,0,COMPILE_TIME);
     lcd12864_stringSet(2,0,uitoa(C51_VERSION,buffer));
 
-    while(lcd12864_flush(0)&&delay(5,9,179)){
-        buffer[0]=pushbutton_get()+'0';
-        buffer[1]=' ';
-        buffer[2]=pushbutton_lastPressedGet()+'0';
-        buffer[3]=0;
+    lcd12864_flush(1);
 
-        lcd12864_stringSet(3,0,buffer);
-        lcd12864_stringSet(2,8,ultoa(systemClock_get(),buffer));
-        lcd12864_stringSet(5,0,ultoa(systemClock_secGet(),buffer));
+    // while(lcd12864_flush(0)&&delay(5,9,179)){
+    //     buffer[0]=pushbutton_numberGet()+'0';
+    //     buffer[1]=0;
+    //     // buffer[2]=pushbutton_lastPressedGet()+'0';
+    //     // buffer[3]=0;
 
-        lcd12864_charSet(7,3,'A');
+    //     lcd12864_stringSet(3,0,buffer);
+    //     lcd12864_stringSet(4,0,uitoa(systemClock_mSecGet(),buffer));
+    //     lcd12864_stringSet(5,0,uctoa(systemClock_secGet(),buffer));
+    //     lcd12864_stringSet(6,0,uctoa(systemClock_minGet(),buffer));
+    //     lcd12864_stringSet(7,0,uctoa(systemClock_hurGet(),buffer));
 
-        puts(buffer);
-    }
+    //     lcd12864_charSet(7,8,'A');
+
+    //     puts(buffer);
+    // }
+
+    // _pushbutton_directionButtonTest();
+
+    // puts("snake_initialize");
+    // puts(ultoa(systemClock_get(),buffer));
+    // snake_initialize();
+
+    // puts("snake_renewDisplay");
+    // puts(ultoa(systemClock_get(),buffer));
+    // snake_renewDisplay();
+
+    // puts("lcd12864_flush");
+    // puts(ultoa(systemClock_get(),buffer));
+    // lcd12864_flush(0);
+
+    snakeErrorCode=snake();
+    printf("snakeErrorCode=%u\n",(unsigned int)snakeErrorCode);
 
     while(delay(0,0,0));
 }

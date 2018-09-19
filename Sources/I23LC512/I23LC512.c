@@ -1,18 +1,20 @@
 #include"Sources/I23LC512/I23LC512.h"
 
-static unsigned char code
+enum I23LC512_COMMAND{
     READ=0x03,
     WRITE=0x02,
     EDIO=0x3b,
     EQIO=0x38,
     RSTIO=0xff,
     RDMR=0x05,
-    WRMR=0x01;
+    WRMR=0x01
+};
 
-static unsigned char code
+enum SPI_CONFIG{
     SPI_CPOL=0,
     SPI_CPHA=0,
-    SPI_CLKDIV=0;
+    SPI_CLKDIV=0
+};
 
 sbit chipSelect=P2^6;
 
@@ -50,7 +52,7 @@ unsigned char i23lc512_uCharArrayWrite(unsigned int address,unsigned int offset,
 }
 
 unsigned char i23lc512_uCharRead(unsigned int address){
-    unsigned char buffer;
+    unsigned char data buffer;
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
@@ -91,7 +93,7 @@ unsigned int i23lc512_uIntArrayWrite(unsigned int address,unsigned int offset,un
 }
 
 unsigned int i23lc512_uIntRead(unsigned int address){
-    unsigned int buffer;
+    unsigned int data buffer;
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
@@ -134,7 +136,7 @@ unsigned char *i23lc512_uCharSeqRead(unsigned char *destination,unsigned int add
 }
 
 unsigned char *i23lc512_uCharSeqWrite(unsigned char *source,unsigned int address,unsigned int length){
-    unsigned int i;
+    unsigned int data i;
 
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
@@ -155,7 +157,7 @@ unsigned char *i23lc512_uCharSeqWrite(unsigned char *source,unsigned int address
 }
 
 unsigned int i23lc512_memset(unsigned int address,unsigned char value,unsigned int length){
-    unsigned int i;
+    unsigned int data i;
 
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);

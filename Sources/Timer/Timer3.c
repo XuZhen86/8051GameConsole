@@ -4,8 +4,8 @@ void timer_3_initialize(bit x12Mode,unsigned char th,unsigned char tl){
     if(x12Mode){
         T4T3M&=0xFD;
     }
-    T3L=th;
-    T3H=tl;
+    T3H=th;
+    T3L=tl;
 }
 
 void timer_3_start(){
