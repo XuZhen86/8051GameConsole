@@ -2,49 +2,105 @@
 
 #include<stdio.h>
 
-static unsigned char code numberStdVal[15]={
+static unsigned char code numberStdVal[16]={
     241,225,210,195,
     180,168,152,137,
     120,103,87,70,
-    48,32,15
+    48,32,15,0
 };
-static unsigned char code directionStdVal[5]={
-    214,172,131,87,43
+static unsigned char code directionStdVal[6]={
+    214,172,131,87,43,0
 };
 
-static unsigned char code tolerance=8;
+enum{
+    TRIAL_COUNT=16,
+    TOLERANCE_NUMBER=4,
+    TOLERANCE_DIRECTION=4
+};
 
 unsigned char pushbutton_numberGet(){
-    unsigned char v=adc_get(6)>>2,i;
+    unsigned char buffer[16];
+    unsigned char data i=0,j,diff;
+    bit testPassed=0;
 
-    if(v==255){
-        return 255;
-    }else if(v==0){
-        return 15;
+    for(j=0;j<16;j++){
+        buffer[j]=0xff;
     }
 
-    for(i=0;i<15;i++){
-        if(numberStdVal[i]-tolerance<v&&v<numberStdVal[i]+tolerance){
+    while(!testPassed){
+        buffer[i++]=adc_get(6)>>2;
+        i%=16;
+
+        testPassed=1;
+        for(j=i+1;j<i+16;j++){
+            if(buffer[i]>buffer[j%16]){
+                diff=buffer[i]-buffer[j%16];
+            }else{
+                diff=buffer[j%16]-buffer[i];
+            }
+
+            if(diff>TOLERANCE_NUMBER){
+                testPassed=0;
+                break;
+            }
+        }
+    }
+
+    for(i=0;i<16;i++){
+        if(buffer[0]>numberStdVal[i]){
+            diff=buffer[0]-numberStdVal[i];
+        }else{
+            diff=numberStdVal[i]-buffer[0];
+        }
+
+        if(diff<TOLERANCE_NUMBER){
             return i;
         }
     }
+
     return 255;
 }
 
 unsigned char pushbutton_directionGet(){
-    unsigned char v=adc_get(7)>>2,i;
+    unsigned char buffer[16];
+    unsigned char data i=0,j,diff;
+    bit testPassed=0;
 
-    if(v==255){
-        return 255;
-    }else if(v==0){
-        return 5;
+    for(j=0;j<16;j++){
+        buffer[j]=0xff;
     }
 
-    for(i=0;i<5;i++){
-        if(directionStdVal[i]-tolerance<v&&v<directionStdVal[i]+tolerance){
+    while(!testPassed){
+        buffer[i++]=adc_get(7)>>2;
+        i%=16;
+
+        testPassed=1;
+        for(j=i+1;j<i+16;j++){
+            if(buffer[i]>buffer[j%16]){
+                diff=buffer[i]-buffer[j%16];
+            }else{
+                diff=buffer[j%16]-buffer[i];
+            }
+
+            if(diff>TOLERANCE_DIRECTION){
+                testPassed=0;
+                break;
+            }
+        }
+    }
+
+    for(i=0;i<6;i++){
+        if(buffer[0]>directionStdVal[i]){
+            diff=buffer[0]-directionStdVal[i];
+        }else{
+            diff=directionStdVal[i]-buffer[0];
+        }
+
+        if(diff<TOLERANCE_DIRECTION){
             return i;
         }
     }
+
     return 255;
 }
 

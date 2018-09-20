@@ -2,8 +2,9 @@
 #define PUSHBUTTON_H_
 
 #include<Sources/ADC/ADC.h>
+#include<string.h>
 
-enum{
+enum PUSHBUTTON_DIRECTIONS{
     PUSHBUTTON_DIRECTION_UP=1,
     PUSHBUTTON_DIRECTION_DOWN=4,
     PUSHBUTTON_DIRECTION_LEFT=5,

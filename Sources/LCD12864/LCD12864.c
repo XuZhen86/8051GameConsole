@@ -15,19 +15,19 @@ enum LCD12864_COMMAND{
     SET_GDRAM_ADDR=0x80
 };
 
-enum SPI_CONFIG{
+enum LCD12864_SPI_CONFIG{
     SPI_CPOL=1,
     SPI_CPHA=1,
     SPI_CLKDIV=3
 };
 
-enum{
+enum LCD12864_OTHER_CONFIG{
     BUFFER_INIT_VALUE=0x00,
     CHIP_SELECT_P2M0=0xc0,
     CHIP_SELECT_P2M1=0x00
 };
 
-enum{
+enum LCD12864_RAM_CONFIG{
     GDRAM_ADDR=0xf800
 };
 
@@ -234,8 +234,7 @@ void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp){
     }
 
     if(buffer[0]!=buffer[1]){
-        putchar('d');
         i23lc512_uCharWrite(GDRAM_ADDR+64*row+32+col/8,buffer[1]);
-    gdramRowDirty[row/8]|=(1<<(row%8));
-}
+        gdramRowDirty[row/8]|=(1<<(row%8));
+    }
 }

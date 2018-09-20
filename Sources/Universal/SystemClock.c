@@ -17,6 +17,10 @@ void systemClock_flush(){
     unsigned int data deltaCopy=delta;
     delta=0;
 
+    if(deltaCopy==0){
+        return;
+    }
+
     if(timerIsRunning){
         if(timerRemains>deltaCopy){
             timerRemains-=deltaCopy;
@@ -86,7 +90,6 @@ unsigned char systemClock_dayGet(){
 }
 
 void systemClock_timerStart(unsigned int time){
-    puts("systemClock_timerStart()");
     systemClock_flush();
     timerRemains=time;
     timerIsRunning=1;
