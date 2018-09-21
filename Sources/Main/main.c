@@ -98,6 +98,8 @@ void main(){
     // puts(ultoa(systemClock_get(),buffer));
     // lcd12864_flush(0);
 
+    snake_splashScreen();
+
     snakeErrorCode=snake();
     printf("snakeErrorCode=%u\n",(unsigned int)snakeErrorCode);
 

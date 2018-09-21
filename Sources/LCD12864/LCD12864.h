@@ -1,11 +1,11 @@
 #ifndef LCD12864_H_
 #define LCD12864_H_
 
-#include<Sources/Main/STC15W4K48S4.h>
-#include<Sources/PWM/PWM.h>
-#include<Sources/Universal/Universal.h>
-#include<Sources/SPI/SPI.h>
-#include<Sources/I23LC512/I23LC512.h>
+#include"Sources/Main/STC15W4K48S4.h"
+#include"Sources/PWM/PWM.h"
+#include"Sources/Universal/Universal.h"
+#include"Sources/SPI/SPI.h"
+#include"Sources/I23LC512/I23LC512.h"
 
 #include<stdlib.h>
 #include<string.h>
@@ -22,5 +22,6 @@ bit lcd12864_flush(bit forceFlush);
 void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c);
 void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str);
 void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp);
+void lcd12864_clear();
 
 #endif

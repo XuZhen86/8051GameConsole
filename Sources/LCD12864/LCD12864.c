@@ -182,9 +182,9 @@ void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c){
 
         if(buffer[0]!=buffer[2]||buffer[1]!=buffer[3]){
             i23lc512_uCharSeqWrite(buffer+2,GDRAM_ADDR+64*i+32+col/8,2);
-        gdramRowDirty[i/8]|=(1<<(i%8));
+            gdramRowDirty[i/8]|=(1<<(i%8));
+        }
     }
-}
 }
 
 void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
@@ -237,4 +237,12 @@ void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp){
         i23lc512_uCharWrite(GDRAM_ADDR+64*row+32+col/8,buffer[1]);
         gdramRowDirty[row/8]|=(1<<(row%8));
     }
+}
+
+void lcd12864_clear(){
+    unsigned char i;
+    for(i=0;i<32;i++){
+        i23lc512_memset(GDRAM_ADDR+64*i+32,BUFFER_INIT_VALUE,32);
+    }
+    memset(gdramRowDirty,0xff,sizeof(gdramRowDirty));
 }

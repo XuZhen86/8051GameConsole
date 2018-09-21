@@ -13,40 +13,40 @@ static unsigned char code directionStdVal[6]={
 };
 
 enum{
-    TRIAL_COUNT=16,
+    TRIAL_COUNT=8,
     TOLERANCE_NUMBER=4,
     TOLERANCE_DIRECTION=4
 };
 
 unsigned char pushbutton_numberGet(){
-    unsigned char buffer[16];
+    unsigned char buffer[TRIAL_COUNT];
     unsigned char data i=0,j,diff;
     bit testPassed=0;
 
-    for(j=0;j<16;j++){
-        buffer[j]=0xff;
+    for(j=0;j<TRIAL_COUNT;j++){
+        buffer[j]=adc_get(6)>>2;
     }
 
     while(!testPassed){
         buffer[i++]=adc_get(6)>>2;
-        i%=16;
+        i%=TRIAL_COUNT;
 
         testPassed=1;
-        for(j=i+1;j<i+16;j++){
-            if(buffer[i]>buffer[j%16]){
-                diff=buffer[i]-buffer[j%16];
+        for(j=1;j<TRIAL_COUNT;j++){
+            if(buffer[0]>buffer[j]){
+                diff=buffer[0]-buffer[j];
             }else{
-                diff=buffer[j%16]-buffer[i];
+                diff=buffer[j]-buffer[0];
             }
 
-            if(diff>TOLERANCE_NUMBER){
+            if(diff>=TOLERANCE_NUMBER){
                 testPassed=0;
                 break;
             }
         }
     }
 
-    for(i=0;i<16;i++){
+    for(i=0;i<TRIAL_COUNT;i++){
         if(buffer[0]>numberStdVal[i]){
             diff=buffer[0]-numberStdVal[i];
         }else{
@@ -58,31 +58,31 @@ unsigned char pushbutton_numberGet(){
         }
     }
 
-    return 255;
+    return PUSHBUTTON_DIRECTION_INVALID;
 }
 
 unsigned char pushbutton_directionGet(){
-    unsigned char buffer[16];
+    unsigned char buffer[TRIAL_COUNT];
     unsigned char data i=0,j,diff;
     bit testPassed=0;
 
-    for(j=0;j<16;j++){
-        buffer[j]=0xff;
+    for(j=0;j<TRIAL_COUNT;j++){
+        buffer[j]=adc_get(7)>>2;
     }
 
     while(!testPassed){
         buffer[i++]=adc_get(7)>>2;
-        i%=16;
+        i%=TRIAL_COUNT;
 
         testPassed=1;
-        for(j=i+1;j<i+16;j++){
-            if(buffer[i]>buffer[j%16]){
-                diff=buffer[i]-buffer[j%16];
+        for(j=1;j<TRIAL_COUNT;j++){
+            if(buffer[0]>buffer[j]){
+                diff=buffer[0]-buffer[j];
             }else{
-                diff=buffer[j%16]-buffer[i];
+                diff=buffer[j]-buffer[0];
             }
 
-            if(diff>TOLERANCE_DIRECTION){
+            if(diff>=TOLERANCE_DIRECTION){
                 testPassed=0;
                 break;
             }
@@ -101,7 +101,7 @@ unsigned char pushbutton_directionGet(){
         }
     }
 
-    return 255;
+    return PUSHBUTTON_DIRECTION_INVALID;
 }
 
 void _pushbutton_directionButtonTest(){
@@ -121,6 +121,8 @@ void _pushbutton_directionButtonTest(){
             puts("Right");
         }else if(i==PUSHBUTTON_DIRECTION_UP){
             puts("Up");
+        }else{
+            // puts("Invalid");
         }
     }
 }

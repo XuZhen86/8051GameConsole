@@ -20,7 +20,8 @@ unsigned int snake_mapGet(unsigned char x,unsigned char y);
 unsigned int snake_mapSet(unsigned char x,unsigned char y,unsigned int val);
 void snake_renewDisplay(bit flush);
 void snake_newFood();
-bit snake_isNextStepLethal();
+void snake_restartTick();
+void snake_splashScreen();
 
 void _snake_printMap();
 

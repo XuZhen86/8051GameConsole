@@ -5,6 +5,7 @@ enum SNAKE_DIRECTION{
     DOWN=PUSHBUTTON_DIRECTION_DOWN,
     LEFT=PUSHBUTTON_DIRECTION_LEFT,
     RIGHT=PUSHBUTTON_DIRECTION_RIGHT,
+    FORWARD=PUSHBUTTON_DIRECTION_FORWARD,
     INVALID=PUSHBUTTON_DIRECTION_INVALID
 };
 
@@ -23,7 +24,8 @@ enum SNAKE_MAP{
 
 static unsigned int
     snakeLength=0,
-    snakeTick=0;
+    snakeTick=0,
+    refreshInterval;
 
 static unsigned char
     snakeHeadX=15,
@@ -35,37 +37,19 @@ static unsigned char
     direction=LEFT;
 
 unsigned char snake(){
-    unsigned int data refreshInterval=100,tailVal;
+    unsigned int data tailVal;
     unsigned char data pressedDirection;
     char data i,j;
     bit foundTail=0;
 
-    unsigned long int lastClock=systemClock_get();
-
-    // printf("[%u, %lu]\n",(unsigned int)1,systemClock_get()-lastClock);lastClock=systemClock_get();
-
-    lcd12864_stringSet(3,0,"Waiting");lcd12864_flush(0);
-    while(pushbutton_directionGet()==INVALID);
-    lcd12864_stringSet(3,0,"Pressed");lcd12864_flush(0);
-
-    // printf("[%u, %lu]\n",(unsigned int)2,systemClock_get()-lastClock);lastClock=systemClock_get();
-    snake_initialize();
-    // printf("[%u, %lu]\n",(unsigned int)3,systemClock_get()-lastClock);lastClock=systemClock_get();
-    snake_renewDisplay(1);
-    // printf("[%u, %lu]\n",(unsigned int)4,systemClock_get()-lastClock);lastClock=systemClock_get();
-
     while(1){
-        // printf("[%u, %lu]\n",(unsigned int)5,systemClock_get()-lastClock);lastClock=systemClock_get();
         systemClock_timerStart(refreshInterval);
-        // printf("[%u, %lu]\n",(unsigned int)6,systemClock_get()-lastClock);lastClock=systemClock_get();
 
         pressedDirection=direction;
         while(!systemClock_timerIsTimeUp()){
-            // printf("[%u, %lu]\n",(unsigned int)7,systemClock_get()-lastClock);lastClock=systemClock_get();
             if(pushbutton_directionGet()!=INVALID){
                 pressedDirection=pushbutton_directionGet();
             }
-            // printf("[%u, %lu]\n",(unsigned int)8,systemClock_get()-lastClock);lastClock=systemClock_get();
         }
 
         if(pressedDirection!=direction){
@@ -74,24 +58,22 @@ unsigned char snake(){
             }
         }
 
-        if(direction==UP){
-            snakeHeadX--;
-        }else if(direction==DOWN){
-            snakeHeadX++;
-        }else if(direction==LEFT){
-            snakeHeadY--;
-        }else{
-            snakeHeadY++;
+        switch(direction){
+            case UP:snakeHeadX--;break;
+            case DOWN:snakeHeadX++;break;
+            case LEFT:snakeHeadY--;break;
+            case RIGHT:snakeHeadY++;break;
         }
 
-        if(snake_isNextStepLethal()){
+        if(snake_mapGet(snakeHeadX,snakeHeadY)!=0){
             break;
         }
 
         snake_mapSet(snakeHeadX,snakeHeadY,++snakeTick);
-        // printf("[%u]",snakeTick);
+        if(snakeTick==65534){
+            snake_restartTick();
+        }
 
-        // printf("[%u, %lu]\n",(unsigned int)9,systemClock_get()-lastClock);lastClock=systemClock_get();
         foundTail=0;
         if(snakeHeadX!=foodX||snakeHeadY!=foodY){
             tailVal=snake_mapGet(snakeTailX,snakeTailY);
@@ -113,13 +95,74 @@ unsigned char snake(){
             snakeLength++;
             snake_newFood();
         }
-        // printf("[%u, %lu]\n",(unsigned int)10,systemClock_get()-lastClock);lastClock=systemClock_get();
 
         snake_renewDisplay(1);
-        // printf("[%u, %lu]\n",(unsigned int)11,systemClock_get()-lastClock);lastClock=systemClock_get();
     }
 
     return SNAKE_EXIT_CODE_NORMAL;
+}
+
+void snake_splashScreen(){
+    unsigned char data level=6;
+    unsigned char buffer[4];
+
+    lcd12864_clear();
+    lcd12864_stringSet(2,10,"Snake");
+    lcd12864_flush(0);
+
+    snake_initialize();
+
+    lcd12864_stringSet(5,8,"Level:");
+
+    while(1){
+        refreshInterval=20*(11-level);
+        printf("[refreshInterval=%u]",refreshInterval);
+        sprintf(buffer,"%2bu",level);
+        lcd12864_stringSet(5,14,buffer);
+        lcd12864_flush(0);
+
+        while(pushbutton_directionGet()==INVALID);
+
+        if(pushbutton_directionGet()==UP){
+            level++;
+            if(level==11){
+                level=10;
+            }
+            while(pushbutton_directionGet()==UP);
+        }else if(pushbutton_directionGet()==DOWN){
+            level--;
+            if(level==0){
+                level=1;
+            }
+            while(pushbutton_directionGet()==DOWN);
+        }else if(pushbutton_directionGet()==FORWARD){
+            break;
+        }
+    }
+
+    srand(systemClock_get());
+    snake_newFood();
+
+    lcd12864_clear();
+    snake_renewDisplay(1);
+}
+
+void snake_restartTick(){
+    unsigned int data deltaTick=snake_mapGet(snakeTailX,snakeTailY);
+    unsigned char data i,j;
+    unsigned char buffer[60];
+
+    for(i=1;i<31;i++){
+        i23lc512_uCharSeqRead(buffer,MAP_ADDR+i*64+2,60);
+        for(j=1;j<31;j++){
+            if(((unsigned int*)buffer)[j]){
+                ((unsigned int*)buffer)[j]-=deltaTick;
+            }
+        }
+        i23lc512_uCharSeqWrite(buffer,MAP_ADDR+i*64+2,60);
+    }
+
+    snakeTick-=deltaTick;
 }
 
 void snake_initialize(){
@@ -143,9 +186,6 @@ void snake_initialize(){
         snake_mapSet(snakeHeadX,i,++snakeTick);
     }
     snakeLength=snakeTick;
-
-    srand(systemClock_get());
-    snake_newFood();
 }
 
 unsigned int snake_mapGet(unsigned char x,unsigned char y){
@@ -201,10 +241,6 @@ void snake_newFood(){
         foodX=rand()%32;
         foodY=rand()%32;
     }while(snake_mapGet(foodX,foodY)!=0);
-}
-
-bit snake_isNextStepLethal(){
-    return snake_mapGet(snakeHeadX,snakeHeadY)!=0;
 }
 
 void _snake_printMap(){
