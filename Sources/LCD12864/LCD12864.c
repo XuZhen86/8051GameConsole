@@ -1,3 +1,9 @@
+#include"Sources/Main/STC15W4K48S4.h"
+#include"Sources/PWM/PWM.h"
+#include"Sources/Universal/Universal.h"
+#include"Sources/SPI/SPI.h"
+#include"Sources/I23LC512/I23LC512.h"
+
 #include"Sources/LCD12864/LCD12864.h"
 #include"Sources/LCD12864/LCD12864_ASCII5x8.h"
 
@@ -119,10 +125,14 @@ void lcd12864_spi_initialize(){
     i23lc512_memset(GDRAM_ADDR,BUFFER_INIT_VALUE,32*32*2);
 }
 
+/**
+ * The commented area seals a legendary bug.
+ * Sealed by Xu Zhen @ 2018/09/25 8:34PM EDT
+ */
 bit lcd12864_flush(bit forceFlush){
     unsigned char buffer[64];
     unsigned char data i,j;
-    bit graphicDisplayDisabled=0,addressJustBeenSent=0;
+    bit graphicDisplayDisabled=0/*,addressJustBeenSent=0*/;
 
     for(i=0;i<32;i++){
         if(forceFlush||gdramRowDirty[i/8]&(1<<(i%8))){
@@ -135,15 +145,16 @@ bit lcd12864_flush(bit forceFlush){
                         lcd12864_spi_send(0,FUNCTION_SET|0x04);
                     }
 
-                    if(!addressJustBeenSent||forceFlush){
+                    /*if(forceFlush||!addressJustBeenSent){
                         lcd12864_spi_send2Bytes(0,SET_GDRAM_ADDR|i,SET_GDRAM_ADDR|j/2);
                         addressJustBeenSent=1;
-                    }
+                    }*/
 
+                    lcd12864_spi_send2Bytes(0,SET_GDRAM_ADDR|i,SET_GDRAM_ADDR|(j/2));
                     lcd12864_spi_send2Bytes(1,buffer[j+32],buffer[j+33]);
-                }else{
+                }/*else{
                     addressJustBeenSent=0;
-                }
+                }*/
             }
             i23lc512_uCharSeqWrite(buffer+32,GDRAM_ADDR+64*i,32);
         }
@@ -153,7 +164,9 @@ bit lcd12864_flush(bit forceFlush){
         lcd12864_spi_send(0,FUNCTION_SET|0x04|0x02);
     }
 
-    memset(gdramRowDirty,0,sizeof(gdramRowDirty));
+    for(i=0;i<4;i++){
+        gdramRowDirty[i]=0;
+    }
 
     return 1;
 }
@@ -190,6 +203,7 @@ void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c){
 void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
     unsigned char buffer[32];
     unsigned char data i,j,k,tempChar;
+    bit rowDirty;
 
     col=col%25*5;
     row=row%8*8;
@@ -198,22 +212,33 @@ void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
 
     for(i=row;i<row+8;i++){
         i23lc512_uCharSeqRead(buffer,GDRAM_ADDR+64*i+32,32);
+        rowDirty=0;
         k=col;
+
         for(j=0;str[j];j++){
             tempChar=buffer[k/8];
             tempChar&=(0xff<<(8-k%8));
             tempChar|=(LCD12864_ASCII5x8[str[j]][i%8]>>(k%8));
-            buffer[k/8]=tempChar;
+            if(rowDirty||tempChar!=buffer[k/8]){
+                buffer[k/8]=tempChar;
+                rowDirty=1;
+            }
 
             tempChar=buffer[k/8+1];
             tempChar&=(0xff>>(k%8));
             tempChar|=(LCD12864_ASCII5x8[str[j]][i%8]<<(8-k%8));
-            buffer[k/8+1]=tempChar;
+            if(rowDirty||tempChar!=buffer[k/8+1]){
+                buffer[k/8+1]=tempChar;
+                rowDirty=1;
+            }
 
             k+=5;
         }
-        i23lc512_uCharSeqWrite(buffer,GDRAM_ADDR+64*i+32,32);
-        gdramRowDirty[i/8]|=(1<<(i%8));
+
+        if(rowDirty){
+            i23lc512_uCharSeqWrite(buffer,GDRAM_ADDR+64*i+32,32);
+            gdramRowDirty[i/8]|=(1<<(i%8));
+        }
     }
 }
 
@@ -244,5 +269,8 @@ void lcd12864_clear(){
     for(i=0;i<32;i++){
         i23lc512_memset(GDRAM_ADDR+64*i+32,BUFFER_INIT_VALUE,32);
     }
-    memset(gdramRowDirty,0xff,sizeof(gdramRowDirty));
+
+    for(i=0;i<4;i++){
+        gdramRowDirty[i]=0xff;
+    }
 }

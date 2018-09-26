@@ -1,9 +1,6 @@
 #ifndef PUSHBUTTON_H_
 #define PUSHBUTTON_H_
 
-#include<Sources/ADC/ADC.h>
-#include<string.h>
-
 enum PUSHBUTTON_DIRECTIONS{
     PUSHBUTTON_DIRECTION_UP=1,
     PUSHBUTTON_DIRECTION_DOWN=4,
@@ -17,6 +14,6 @@ enum PUSHBUTTON_DIRECTIONS{
 unsigned char pushbutton_numberGet();
 unsigned char pushbutton_directionGet();
 
-void _pushbutton_directionButtonTest();
+// void _pushbutton_directionButtonTest();
 
 #endif

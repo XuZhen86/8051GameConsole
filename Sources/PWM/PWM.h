@@ -1,9 +1,6 @@
 #ifndef PWM_h_
 #define PWM_h_
 
-#include<Sources/Main/STC15W4K48S4.h>
-#include<Sources/InterruptRoutine/InterruptRoutine.h>
-
 void pwn_initialize(bit clkSrc,unsigned char clkDiv);
 void pwm_enable();
 void pwm_xsfrFlush();

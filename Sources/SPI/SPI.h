@@ -1,9 +1,6 @@
 #ifndef SPI_H_
 #define SPI_H_
 
-#include<Sources/Main/STC15W4K48S4.h>
-#include<stdio.h>
-
 bit spi_transmissionCompleteGet();
 void spi_isOccupiedSet(bit occupied);
 bit spi_isOccupiedGet();

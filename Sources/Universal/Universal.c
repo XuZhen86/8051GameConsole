@@ -1,3 +1,5 @@
+#include"Sources/Main/STC15W4K48S4.h"
+
 #include"Sources/Universal/Universal.h"
 
 sbit systemBusyLed=P2^5;

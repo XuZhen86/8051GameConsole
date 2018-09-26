@@ -1,5 +1,14 @@
 #include"Sources/Games/Snake/Snake.h"
 
+#include"Sources/I23LC512/I23LC512.h"
+#include"Sources/LCD12864/LCD12864.h"
+#include"Sources/Universal/SystemClock.h"
+#include"Sources/Universal/Universal.h"
+#include"Sources/Pushbutton/Pushbutton.h"
+
+#include<stdio.h>
+#include<stdlib.h>
+
 enum SNAKE_DIRECTION{
     UP=PUSHBUTTON_DIRECTION_UP,
     DOWN=PUSHBUTTON_DIRECTION_DOWN,
@@ -22,6 +31,14 @@ enum SNAKE_MAP{
     PIXEL_SIZE=2
 };
 
+enum SNAKE_LEVEL{
+    LEVEL_MIN=1,
+    LEVEL_MAX=16,
+    LEVEL_DELAY=8,
+    LEVEL_BASE=10,
+    LEVEL_DEFAULT=8
+};
+
 static unsigned int
     snakeLength=0,
     snakeTick=0,
@@ -41,6 +58,9 @@ unsigned char snake(){
     unsigned char data pressedDirection;
     char data i,j;
     bit foundTail=0;
+
+    lcd12864_stringSet(6,13,"Length");
+    lcd12864_stringSet(7,13,"Ticks");
 
     while(1){
         systemClock_timerStart(refreshInterval);
@@ -96,14 +116,14 @@ unsigned char snake(){
             snake_newFood();
         }
 
-        snake_renewDisplay(1);
+        snake_renewDisplay(0);
     }
 
     return SNAKE_EXIT_CODE_NORMAL;
 }
 
 void snake_splashScreen(){
-    unsigned char data level=6;
+    unsigned char data level=LEVEL_DEFAULT;
     unsigned char buffer[4];
 
     lcd12864_clear();
@@ -115,26 +135,32 @@ void snake_splashScreen(){
     lcd12864_stringSet(5,8,"Level:");
 
     while(1){
-        refreshInterval=20*(11-level);
+        refreshInterval=LEVEL_DELAY*(LEVEL_MAX-level)+LEVEL_BASE;
         printf("[refreshInterval=%u]",refreshInterval);
         sprintf(buffer,"%2bu",level);
         lcd12864_stringSet(5,14,buffer);
         lcd12864_flush(0);
 
-        while(pushbutton_directionGet()==INVALID);
+        while(pushbutton_directionGet()==INVALID){
+            delay(0,33,66);
+        }
 
         if(pushbutton_directionGet()==UP){
             level++;
-            if(level==11){
-                level=10;
+            if(LEVEL_MAX<level){
+                level=LEVEL_MAX;
             }
-            while(pushbutton_directionGet()==UP);
+            while(pushbutton_directionGet()==UP){
+                delay(0,33,66);
+            }
         }else if(pushbutton_directionGet()==DOWN){
             level--;
-            if(level==0){
-                level=1;
+            if(level<LEVEL_MIN){
+                level=LEVEL_MIN;
             }
-            while(pushbutton_directionGet()==DOWN);
+            while(pushbutton_directionGet()==DOWN){
+                delay(0,33,66);
+            }
         }else if(pushbutton_directionGet()==FORWARD){
             break;
         }
@@ -201,10 +227,16 @@ unsigned int snake_mapSet(unsigned char x,unsigned char y,unsigned int val){
     return i23lc512_uIntWrite(MAP_ADDR+x*64+y*2,val);
 }
 
-void snake_renewDisplay(bit flush){
+void snake_renewDisplay(bit forceFlush){
     unsigned char data i,j;
     unsigned char buffer[8];
     bit lightUp;
+
+    // display score
+    sprintf(buffer,"%5u",snakeLength);
+    lcd12864_stringSet(6,20,buffer);
+    sprintf(buffer,"%6u",snakeTick);
+    lcd12864_stringSet(7,19,buffer);
 
     // draw map
     for(i=0;i<64;i+=2){
@@ -227,13 +259,7 @@ void snake_renewDisplay(bit flush){
     lcd12864_pixelSet(foodX*2,foodY*2+1,1);
     lcd12864_pixelSet(foodX*2+1,foodY*2+1,1);
 
-    // display score
-    lcd12864_stringSet(7,13,"Length=");
-    lcd12864_stringSet(7,20,uitoa(snakeLength,buffer));
-
-    if(flush){
-        lcd12864_flush(0);
-    }
+    lcd12864_flush(forceFlush);
 }
 
 void snake_newFood(){

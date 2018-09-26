@@ -1,3 +1,7 @@
+#include"Sources/Main/STC15W4K48S4.h"
+#include"Sources/InterruptRoutine/InterruptRoutine.h"
+#include"Sources/Universal/SystemClock.h"
+
 #include"Sources/Timer/Timer4.h"
 
 void timer_4_initialize(bit x12Mode,bit enableInterrupt,unsigned char th,unsigned char tl){

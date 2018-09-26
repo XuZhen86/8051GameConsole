@@ -1,4 +1,8 @@
+#include"Sources/Main/STC15W4K48S4.h"
+#include"Sources/ADC/ADC.h"
 #include"Sources/Joystick/Joystick.h"
+
+#include<math.h>
 
 static unsigned char code analogPins[2]={6,7};  // 0=x, 1=y
 static unsigned int code calibratedValues[2]={522,513};

@@ -1,3 +1,5 @@
+#include<Sources/Main/STC15W4K48S4.h>
+
 #include"Sources/SPI/SPI.h"
 
 static bit isOccupied=0;
@@ -45,13 +47,17 @@ unsigned char *spi_seqRecv(unsigned char *destination,unsigned int length){
     SPSTAT|=0x80;
     SPDAT=0x00;
 
-    for(i=0;i<length;i++){
+    for(i=0;i<length-1;i++){
         while(!(SPSTAT&0x80));
         buffer=SPDAT;
         SPSTAT|=0x80;
         SPDAT=0x00;
         destination[i]=buffer;
     }
+
+    while(!(SPSTAT&0x80));
+    buffer=SPDAT;
+    destination[length-1]=buffer;
 
     return destination;
 }

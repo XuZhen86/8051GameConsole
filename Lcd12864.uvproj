@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Target 1</TargetName>
+      <TargetName>Target</TargetName>
       <ToolsetNumber>0x0</ToolsetNumber>
       <ToolsetName>MCS-51</ToolsetName>
       <uAC6>0</uAC6>
@@ -33,10 +33,10 @@
           <SFDFile></SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
-          <BinPath></BinPath>
+          <BinPath>C:\Keil_v5\C51\BIN\</BinPath>
           <IncludePath></IncludePath>
           <LibPath></LibPath>
-          <RegisterFilePath>STC\</RegisterFilePath>
+          <RegisterFilePath></RegisterFilePath>
           <DBRegisterFilePath>STC\</DBRegisterFilePath>
           <TargetStatus>
             <Error>0</Error>
@@ -377,74 +377,9 @@
           <GroupName>Main</GroupName>
           <Files>
             <File>
-              <FileName>ADC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\ADC\ADC.c</FilePath>
-            </File>
-            <File>
-              <FileName>I23LC512.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\I23LC512\I23LC512.c</FilePath>
-            </File>
-            <File>
-              <FileName>InterruptRoutine.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\InterruptRoutine\InterruptRoutine.c</FilePath>
-            </File>
-            <File>
-              <FileName>Joystick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Joystick\Joystick.c</FilePath>
-            </File>
-            <File>
-              <FileName>LCD12864.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\LCD12864\LCD12864.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\Main\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>SPI.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\SPI\SPI.c</FilePath>
-            </File>
-            <File>
-              <FileName>Universal.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Universal\Universal.c</FilePath>
-            </File>
-            <File>
-              <FileName>Putchar.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Universal\Putchar.c</FilePath>
-            </File>
-            <File>
-              <FileName>Timer4.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Timer\Timer4.c</FilePath>
-            </File>
-            <File>
-              <FileName>Timer3.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Timer\Timer3.c</FilePath>
-            </File>
-            <File>
-              <FileName>PWM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\PWM\PWM.c</FilePath>
-            </File>
-            <File>
-              <FileName>Pushbutton.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Pushbutton\Pushbutton.c</FilePath>
-            </File>
-            <File>
-              <FileName>SystemClock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Universal\SystemClock.c</FilePath>
             </File>
             <File>
               <FileName>STARTUP.A51</FileName>
@@ -452,9 +387,214 @@
               <FilePath>.\Sources\Main\STARTUP.A51</FilePath>
             </File>
             <File>
+              <FileName>STC15W4K48S4.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Main\STC15W4K48S4.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Games_Snake</GroupName>
+          <Files>
+            <File>
               <FileName>Snake.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\Games\Snake\Snake.c</FilePath>
+            </File>
+            <File>
+              <FileName>Snake.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Games\Snake\Snake.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ADC</GroupName>
+          <Files>
+            <File>
+              <FileName>ADC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\ADC\ADC.c</FilePath>
+            </File>
+            <File>
+              <FileName>ADC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\ADC\ADC.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>I23LC512</GroupName>
+          <Files>
+            <File>
+              <FileName>I23LC512.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\I23LC512\I23LC512.c</FilePath>
+            </File>
+            <File>
+              <FileName>I23LC512.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\I23LC512\I23LC512.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>InterruptRoutine</GroupName>
+          <Files>
+            <File>
+              <FileName>InterruptRoutine.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\InterruptRoutine\InterruptRoutine.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Joystick</GroupName>
+          <Files>
+            <File>
+              <FileName>Joystick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Joystick\Joystick.c</FilePath>
+            </File>
+            <File>
+              <FileName>Joystick.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Joystick\Joystick.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>LCD12864</GroupName>
+          <Files>
+            <File>
+              <FileName>LCD12864.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\LCD12864\LCD12864.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCD12864.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\LCD12864\LCD12864.h</FilePath>
+            </File>
+            <File>
+              <FileName>LCD12864_ASCII5x8.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\LCD12864\LCD12864_ASCII5x8.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Pushbutton</GroupName>
+          <Files>
+            <File>
+              <FileName>Pushbutton.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Pushbutton\Pushbutton.c</FilePath>
+            </File>
+            <File>
+              <FileName>Pushbutton.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Pushbutton\Pushbutton.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>PWM</GroupName>
+          <Files>
+            <File>
+              <FileName>PWM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\PWM\PWM.c</FilePath>
+            </File>
+            <File>
+              <FileName>PWM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\PWM\PWM.h</FilePath>
+            </File>
+            <File>
+              <FileName>PWM_XSFR.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\PWM\PWM_XSFR.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>SPI</GroupName>
+          <Files>
+            <File>
+              <FileName>SPI.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\SPI\SPI.c</FilePath>
+            </File>
+            <File>
+              <FileName>SPI.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\SPI\SPI.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Timer</GroupName>
+          <Files>
+            <File>
+              <FileName>Timer3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Timer\Timer3.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer3.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Timer\Timer3.h</FilePath>
+            </File>
+            <File>
+              <FileName>Timer4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Timer\Timer4.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer4.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Timer\Timer4.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Universal</GroupName>
+          <Files>
+            <File>
+              <FileName>Putchar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Universal\Putchar.c</FilePath>
+            </File>
+            <File>
+              <FileName>SystemClock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Universal\SystemClock.c</FilePath>
+            </File>
+            <File>
+              <FileName>SystemClock.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Universal\SystemClock.h</FilePath>
+            </File>
+            <File>
+              <FileName>Universal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Universal\Universal.c</FilePath>
+            </File>
+            <File>
+              <FileName>Universal.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Universal\Universal.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Version</GroupName>
+          <Files>
+            <File>
+              <FileName>Version.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Version\Version.h</FilePath>
             </File>
           </Files>
         </Group>

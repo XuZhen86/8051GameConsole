@@ -1,5 +1,9 @@
 #include"Sources/I23LC512/I23LC512.h"
 
+#include"Sources/Main/STC15W4K48S4.h"
+#include"Sources/Universal/Universal.h"
+#include"Sources/SPI/SPI.h"
+
 enum I23LC512_COMMAND{
     READ=0x03,
     WRITE=0x02,

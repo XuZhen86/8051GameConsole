@@ -1,6 +1,6 @@
-#include"Sources/Pushbutton/Pushbutton.h"
+#include"Sources/ADC/ADC.h"
 
-#include<stdio.h>
+#include"Sources/Pushbutton/Pushbutton.h"
 
 static unsigned char code numberStdVal[16]={
     241,225,210,195,
@@ -46,7 +46,7 @@ unsigned char pushbutton_numberGet(){
         }
     }
 
-    for(i=0;i<TRIAL_COUNT;i++){
+    for(i=0;i<16;i++){
         if(buffer[0]>numberStdVal[i]){
             diff=buffer[0]-numberStdVal[i];
         }else{
@@ -104,25 +104,24 @@ unsigned char pushbutton_directionGet(){
     return PUSHBUTTON_DIRECTION_INVALID;
 }
 
-void _pushbutton_directionButtonTest(){
-    unsigned char i;
-
-    while(1){
-        i=pushbutton_directionGet();
-        if(i==PUSHBUTTON_DIRECTION_BACK){
-            puts("Back");
-        }else if(i==PUSHBUTTON_DIRECTION_DOWN){
-            puts("Down");
-        }else if(i==PUSHBUTTON_DIRECTION_FORWARD){
-            puts("Forward");
-        }else if(i==PUSHBUTTON_DIRECTION_LEFT){
-            puts("Left");
-        }else if(i==PUSHBUTTON_DIRECTION_RIGHT){
-            puts("Right");
-        }else if(i==PUSHBUTTON_DIRECTION_UP){
-            puts("Up");
-        }else{
-            // puts("Invalid");
-        }
-    }
-}
+// void _pushbutton_directionButtonTest(){
+//     unsigned char i;
+//     while(1){
+//         i=pushbutton_directionGet();
+//         if(i==PUSHBUTTON_DIRECTION_BACK){
+//             puts("Back");
+//         }else if(i==PUSHBUTTON_DIRECTION_DOWN){
+//             puts("Down");
+//         }else if(i==PUSHBUTTON_DIRECTION_FORWARD){
+//             puts("Forward");
+//         }else if(i==PUSHBUTTON_DIRECTION_LEFT){
+//             puts("Left");
+//         }else if(i==PUSHBUTTON_DIRECTION_RIGHT){
+//             puts("Right");
+//         }else if(i==PUSHBUTTON_DIRECTION_UP){
+//             puts("Up");
+//         }else{
+//             // puts("Invalid");
+//         }
+//     }
+// }
