@@ -11,6 +11,7 @@
 #include<Sources/Timer/Timer4.h>
 #include<Sources/Pushbutton/Pushbutton.h>
 #include<Sources/Games/Snake/Snake.h>
+#include<Sources/Widgets/ListWidget/ListWidget.h>
 
 #include<stdio.h>
 #include<math.h>
@@ -25,14 +26,7 @@ void uartInit(void){
     TI=1;
 }
 
-char code directionXYDelta[6][2]={
-    {0,0},{0,1},{-1,0},{0,-1},{1,0},{0,0}
-};
-
-void main(){
-    unsigned char buffer[16];
-    unsigned char snakeErrorCode;
-
+void initialize(){
     P0M0=0x00;
     P0M1=0x00;
     P1M0=0x00;
@@ -45,9 +39,9 @@ void main(){
     P4M1=0x00;
 
     uartInit();
-    puts(COMPILE_DATE);
-    puts(COMPILE_TIME);
-    puts(uitoa(C51_VERSION,buffer));
+    // puts(COMPILE_DATE);
+    // puts(COMPILE_TIME);
+    // puts(uitoa(C51_VERSION,buffer));
 
     delay(0,0,0);
     interrupt_initialize();
@@ -60,49 +54,30 @@ void main(){
 
     timer_4_initialize(1,1,0x93,0xd3);
     timer_4_start();
+}
 
-    lcd12864_stringSet(0,0,COMPILE_DATE);
-    lcd12864_stringSet(1,0,COMPILE_TIME);
-    lcd12864_stringSet(2,0,uitoa(C51_VERSION,buffer));
+unsigned char code *MAIN_TITLE="Main";
+unsigned char code MAIN_ITEM_COUNT=2;
+unsigned char code *MAIN_ITEMS[]={"Snake","Version"};
 
-    lcd12864_flush(1);
+void main(){
+    initialize();
 
-    // while(lcd12864_flush(0)&&delay(5,9,179)){
-    //     buffer[0]=pushbutton_numberGet()+'0';
-    //     buffer[1]=0;
-    //     // buffer[2]=pushbutton_lastPressedGet()+'0';
-    //     // buffer[3]=0;
+    while(delay(0,0,0)){
+        switch(listWidget_selectFromList(MAIN_TITLE,MAIN_ITEMS,MAIN_ITEM_COUNT)){
+            case 0:
+                printf("[Main %bu]",0);
+                snake_splashScreen();
+                snake();
+                break;
+            case 1:
+                printf("[Main %bu]",1);
+                version_showVersion();
+                break;
 
-    //     lcd12864_stringSet(3,0,buffer);
-    //     lcd12864_stringSet(4,0,uitoa(systemClock_mSecGet(),buffer));
-    //     lcd12864_stringSet(5,0,uctoa(systemClock_secGet(),buffer));
-    //     lcd12864_stringSet(6,0,uctoa(systemClock_minGet(),buffer));
-    //     lcd12864_stringSet(7,0,uctoa(systemClock_hurGet(),buffer));
-
-    //     lcd12864_charSet(7,8,'A');
-
-    //     puts(buffer);
-    // }
-
-    // _pushbutton_directionButtonTest();
-
-    // puts("snake_initialize");
-    // puts(ultoa(systemClock_get(),buffer));
-    // snake_initialize();
-
-    // puts("snake_renewDisplay");
-    // puts(ultoa(systemClock_get(),buffer));
-    // snake_renewDisplay();
-
-    // puts("lcd12864_flush");
-    // puts(ultoa(systemClock_get(),buffer));
-    // lcd12864_flush(0);
-
-    snake_splashScreen();
-
-    snakeErrorCode=snake();
-    printf("snakeErrorCode=%u\n",(unsigned int)snakeErrorCode);
-
-    while(delay(0,0,0));
+            case 2:
+                break;
+        }
+    }
 }
 

@@ -596,6 +596,26 @@
               <FileType>5</FileType>
               <FilePath>.\Sources\Version\Version.h</FilePath>
             </File>
+            <File>
+              <FileName>Version.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Version\Version.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Widgets_ListWidget</GroupName>
+          <Files>
+            <File>
+              <FileName>ListWidget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Widgets\ListWidget\ListWidget.c</FilePath>
+            </File>
+            <File>
+              <FileName>ListWidget.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Widgets\ListWidget\ListWidget.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

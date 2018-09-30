@@ -40,18 +40,15 @@ enum SNAKE_LEVEL{
 };
 
 static unsigned int
-    snakeLength=0,
-    snakeTick=0,
+    snakeLength,
+    snakeTick,
     refreshInterval;
 
 static unsigned char
-    snakeHeadX=15,
-    snakeHeadY=15,
-    snakeTailX=15,
-    snakeTailY=19,
-    foodX,
-    foodY,
-    direction=LEFT;
+    snakeHeadX,snakeHeadY,
+    snakeTailX,snakeTailY,
+    foodX,foodY,
+    direction;
 
 unsigned char snake(){
     unsigned int data tailVal;
@@ -68,7 +65,7 @@ unsigned char snake(){
         pressedDirection=direction;
         while(!systemClock_timerIsTimeUp()){
             if(pushbutton_directionGet()!=INVALID){
-                pressedDirection=pushbutton_directionGet();
+                pressedDirection=pushbutton_lastPressedDirectionGet();
             }
         }
 
@@ -79,10 +76,18 @@ unsigned char snake(){
         }
 
         switch(direction){
-            case UP:snakeHeadX--;break;
-            case DOWN:snakeHeadX++;break;
-            case LEFT:snakeHeadY--;break;
-            case RIGHT:snakeHeadY++;break;
+            case UP:
+                snakeHeadX--;
+                break;
+            case DOWN:
+                snakeHeadX++;
+                break;
+            case LEFT:
+                snakeHeadY--;
+                break;
+            case RIGHT:
+                snakeHeadY++;
+                break;
         }
 
         if(snake_mapGet(snakeHeadX,snakeHeadY)!=0){
@@ -94,12 +99,13 @@ unsigned char snake(){
             snake_restartTick();
         }
 
-        foundTail=0;
         if(snakeHeadX!=foodX||snakeHeadY!=foodY){
+            foundTail=0;
             tailVal=snake_mapGet(snakeTailX,snakeTailY);
+
             for(i=snakeTailX-1;i<=snakeTailX+1&&!foundTail;i++){
                 for(j=snakeTailY-1;j<=snakeTailY+1&&!foundTail;j++){
-                    if(0<=i&&i<MAP_X&&0<=j&&j<MAP_Y&&snake_mapGet(i,j)==tailVal+1){
+                    if(snake_mapGet(i,j)==tailVal+1){
                         foundTail=1;
                         snake_mapSet(snakeTailX,snakeTailY,0);
                         snakeTailX=i;
@@ -119,12 +125,20 @@ unsigned char snake(){
         snake_renewDisplay(0);
     }
 
+    while(pushbutton_directionGet()==INVALID){
+        delay(0,33,66);
+    }
+    while(pushbutton_directionGet()!=INVALID){
+        delay(0,33,66);
+    }
+
     return SNAKE_EXIT_CODE_NORMAL;
 }
 
 void snake_splashScreen(){
     unsigned char data level=LEVEL_DEFAULT;
     unsigned char buffer[4];
+    bit enterGame=0;
 
     lcd12864_clear();
     lcd12864_stringSet(2,10,"Snake");
@@ -134,7 +148,7 @@ void snake_splashScreen(){
 
     lcd12864_stringSet(5,8,"Level:");
 
-    while(1){
+    while(!enterGame){
         refreshInterval=LEVEL_DELAY*(LEVEL_MAX-level)+LEVEL_BASE;
         printf("[refreshInterval=%u]",refreshInterval);
         sprintf(buffer,"%2bu",level);
@@ -145,24 +159,26 @@ void snake_splashScreen(){
             delay(0,33,66);
         }
 
-        if(pushbutton_directionGet()==UP){
-            level++;
-            if(LEVEL_MAX<level){
-                level=LEVEL_MAX;
-            }
-            while(pushbutton_directionGet()==UP){
-                delay(0,33,66);
-            }
-        }else if(pushbutton_directionGet()==DOWN){
-            level--;
-            if(level<LEVEL_MIN){
-                level=LEVEL_MIN;
-            }
-            while(pushbutton_directionGet()==DOWN){
-                delay(0,33,66);
-            }
-        }else if(pushbutton_directionGet()==FORWARD){
-            break;
+        switch(pushbutton_lastPressedDirectionGet()){
+            case UP:
+                if(LEVEL_MAX<(++level)){
+                    level=LEVEL_MAX;
+                }
+                while(pushbutton_directionGet()==UP){
+                    delay(0,33,66);
+                }
+                break;
+            case DOWN:
+                if((--level)<LEVEL_MIN){
+                    level=LEVEL_MIN;
+                }
+                while(pushbutton_directionGet()==DOWN){
+                    delay(0,33,66);
+                }
+                break;
+            case FORWARD:
+                enterGame=1;
+                break;
         }
     }
 
@@ -206,6 +222,14 @@ void snake_initialize(){
         snake_mapSet(i,0,0xffff);
         snake_mapSet(i,31,0xffff);
     }
+
+    snakeHeadX=15;
+    snakeHeadY=15;
+    snakeTailX=15;
+    snakeTailY=19;
+    direction=LEFT;
+    snakeLength=0;
+    snakeTick=0;
 
     // Put baby snake in
     for(i=snakeTailY;i>=snakeHeadY;i--){

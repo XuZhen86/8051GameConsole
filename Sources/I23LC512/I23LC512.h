@@ -15,5 +15,6 @@ bit i23lc512_initialize();
 unsigned char *i23lc512_uCharSeqRead(unsigned char *destination,unsigned int address,unsigned int length);
 unsigned char *i23lc512_uCharSeqWrite(unsigned char *source,unsigned int address,unsigned int length);
 unsigned int i23lc512_memset(unsigned int address,unsigned char value,unsigned int num);
+unsigned int i23lc512_memcpy(unsigned int destination,unsigned int source,unsigned int length);
 
 #endif

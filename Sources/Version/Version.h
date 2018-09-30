@@ -1,8 +1,10 @@
 #ifndef VERSION_H_
 #define VERSION_H_
 
-unsigned int code C51_VERSION=__C51__;
-unsigned char code COMPILE_DATE[]="Date="__DATE__;
-unsigned char code COMPILE_TIME[]="Time="__TIME__;
+void version_showVersion();
+unsigned char version_compileDateGet();
+unsigned char version_compileTimeGet();
+unsigned char version_c51VersionGet();
+unsigned char version_memModelGet();
 
 #endif

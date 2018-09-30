@@ -15,4 +15,11 @@ void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str);
 void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp);
 void lcd12864_clear();
 
+bit lcd12864_bufferStackPush();
+bit lcd12864_bufferStackPop();
+void lcd12864_bufferStackClear();
+
+// void lcd12864_rowReverse(unsigned char startRow,unsigned char endRow);
+void lcd12864_hLineSet(unsigned char row,bit lightUp);
+
 #endif

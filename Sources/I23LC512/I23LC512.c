@@ -14,7 +14,7 @@ enum I23LC512_COMMAND{
     WRMR=0x01
 };
 
-enum SPI_CONFIG{
+enum I23LC512_SPI_CONFIG{
     SPI_CPOL=0,
     SPI_CPHA=0,
     SPI_CLKDIV=0
@@ -179,4 +179,19 @@ unsigned int i23lc512_memset(unsigned int address,unsigned char value,unsigned i
     spi_isOccupiedSet(0);
     chipSelect=1;
     return address;
+}
+
+unsigned int i23lc512_memcpy(unsigned int destination,unsigned int source,unsigned int length){
+    unsigned char xdata buffer[32];
+    unsigned int data i;
+
+    for(i=0;i+32>i&&i+32<length;i+=32){
+        i23lc512_uCharSeqRead(buffer,source+i,32);
+        i23lc512_uCharSeqWrite(buffer,destination+i,32);
+    }
+
+    i23lc512_uCharSeqRead(buffer,source+i,length-i);
+    i23lc512_uCharSeqWrite(buffer,destination+i,length-i);
+
+    return destination;
 }

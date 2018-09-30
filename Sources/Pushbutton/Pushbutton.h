@@ -13,6 +13,8 @@ enum PUSHBUTTON_DIRECTIONS{
 
 unsigned char pushbutton_numberGet();
 unsigned char pushbutton_directionGet();
+unsigned char pushbutton_lastPressedNumberGet();
+unsigned char pushbutton_lastPressedDirectionGet();
 
 // void _pushbutton_directionButtonTest();
 

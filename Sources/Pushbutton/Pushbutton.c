@@ -18,6 +18,10 @@ enum{
     TOLERANCE_DIRECTION=4
 };
 
+static unsigned char
+    lastPressedNumber=PUSHBUTTON_DIRECTION_INVALID,
+    lastPressedDirection=PUSHBUTTON_DIRECTION_INVALID;
+
 unsigned char pushbutton_numberGet(){
     unsigned char buffer[TRIAL_COUNT];
     unsigned char data i=0,j,diff;
@@ -54,7 +58,7 @@ unsigned char pushbutton_numberGet(){
         }
 
         if(diff<TOLERANCE_NUMBER){
-            return i;
+            return lastPressedNumber=i;
         }
     }
 
@@ -97,11 +101,19 @@ unsigned char pushbutton_directionGet(){
         }
 
         if(diff<TOLERANCE_DIRECTION){
-            return i;
+            return lastPressedDirection=i;
         }
     }
 
     return PUSHBUTTON_DIRECTION_INVALID;
+}
+
+unsigned char pushbutton_lastPressedNumberGet(){
+    return lastPressedNumber;
+}
+
+unsigned char pushbutton_lastPressedDirectionGet(){
+    return lastPressedDirection;
 }
 
 // void _pushbutton_directionButtonTest(){
