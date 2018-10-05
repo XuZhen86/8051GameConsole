@@ -14,11 +14,11 @@ unsigned char code *ITEMS[]={
     "Date: "__DATE2__,
     "Time: "__TIME__,
     "C51: "xStringize(__C51__),
-    "Model: "xStringize(__MODEL__)
+    "Mem Model: "xStringize(__MODEL__)
 };
 
 void version_showVersion(){
-    listWidget_selectFromList(TITLE,ITEMS,ITEM_COUNT);
+    listWidget_selectFromList(TITLE,ITEMS,ITEM_COUNT,0);
 }
 
 unsigned char version_compileDateGet(){

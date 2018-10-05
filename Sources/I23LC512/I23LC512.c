@@ -97,7 +97,8 @@ unsigned int i23lc512_uIntArrayWrite(unsigned int address,unsigned int offset,un
 }
 
 unsigned int i23lc512_uIntRead(unsigned int address){
-    unsigned int data buffer;
+    unsigned char data buffer[2];
+
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
@@ -105,13 +106,13 @@ unsigned int i23lc512_uIntRead(unsigned int address){
     spi_send(READ);
     spi_send(address>>8);
     spi_send(address);
-    buffer=spi_recv();
-    buffer<<=8;
-    buffer|=spi_recv();
+
+    buffer[0]=spi_recv();
+    buffer[1]=spi_recv();
 
     chipSelect=1;
     spi_isOccupiedSet(0);
-    return buffer;
+    return *(unsigned int*)buffer;
 }
 
 unsigned int i23lc512_uIntArrayRead(unsigned int address,unsigned int offset){

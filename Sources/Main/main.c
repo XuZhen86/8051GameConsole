@@ -57,27 +57,67 @@ void initialize(){
 }
 
 unsigned char code *MAIN_TITLE="Main";
-unsigned char code MAIN_ITEM_COUNT=2;
-unsigned char code *MAIN_ITEMS[]={"Snake","Version"};
+unsigned char code MAIN_ITEM_COUNT=16;
+unsigned char code *MAIN_ITEMS[]={
+    "Snake",
+    "Brightness",
+    "Version",
+    "Item 3",
+    "Item 4",
+    "Item 5",
+    "Item 6",
+    "Item 7",
+    "Item 8",
+    "Item 9",
+    "Item 10",
+    "Item 11",
+    "Item 12",
+    "Item 13",
+    "Item 14",
+    "Item 15"
+};
 
 void main(){
     initialize();
 
     while(delay(0,0,0)){
-        switch(listWidget_selectFromList(MAIN_TITLE,MAIN_ITEMS,MAIN_ITEM_COUNT)){
+        switch(listWidget_selectFromList(MAIN_TITLE,MAIN_ITEMS,MAIN_ITEM_COUNT,0)){
             case 0:
-                printf("[Main %bu]",0);
-                snake_splashScreen();
                 snake();
                 break;
             case 1:
-                printf("[Main %bu]",1);
+                break;
+            case 2:
                 version_showVersion();
                 break;
-
-            case 2:
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+            case 11:
+                break;
+            case 12:
+                break;
+            case 13:
+                break;
+            case 14:
+                break;
+            case 15:
+                break;
+            case 16:
                 break;
         }
     }
 }
-

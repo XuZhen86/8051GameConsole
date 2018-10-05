@@ -15,6 +15,7 @@ enum SNAKE_DIRECTION{
     LEFT=PUSHBUTTON_DIRECTION_LEFT,
     RIGHT=PUSHBUTTON_DIRECTION_RIGHT,
     FORWARD=PUSHBUTTON_DIRECTION_FORWARD,
+    BACK=PUSHBUTTON_DIRECTION_BACK,
     INVALID=PUSHBUTTON_DIRECTION_INVALID
 };
 
@@ -39,6 +40,11 @@ enum SNAKE_LEVEL{
     LEVEL_DEFAULT=8
 };
 
+enum SNAKE_SPLASH_SCREEN_EXIT_CODE{
+    SNAKE_SPLASH_SCREEN_EXIT_CODE_CANCELED,
+    SNAKE_SPLASH_SCREEN_EXIT_CODE_ENTER_GAME
+};
+
 static unsigned int
     snakeLength,
     snakeTick,
@@ -51,9 +57,16 @@ static unsigned char
     direction;
 
 unsigned char snake(){
+    if(snake_splashScreen()==SNAKE_SPLASH_SCREEN_EXIT_CODE_CANCELED){
+        return SNAKE_EXIT_CODE_CANCELED;
+    }
+    return snake_gamePlay();
+}
+
+unsigned char snake_gamePlay(){
     unsigned int data tailVal;
     unsigned char data pressedDirection;
-    char data i,j;
+    unsigned char data i,j;
     bit foundTail=0;
 
     lcd12864_stringSet(6,13,"Length");
@@ -63,7 +76,7 @@ unsigned char snake(){
         systemClock_timerStart(refreshInterval);
 
         pressedDirection=direction;
-        while(!systemClock_timerIsTimeUp()){
+        while(!systemClock_timerIsTimeUp()&&delay(0,108,145)){
             if(pushbutton_directionGet()!=INVALID){
                 pressedDirection=pushbutton_lastPressedDirectionGet();
             }
@@ -105,7 +118,7 @@ unsigned char snake(){
 
             for(i=snakeTailX-1;i<=snakeTailX+1&&!foundTail;i++){
                 for(j=snakeTailY-1;j<=snakeTailY+1&&!foundTail;j++){
-                    if(snake_mapGet(i,j)==tailVal+1){
+                    if(0<i&&i<MAP_X&&0<j&&j<MAP_Y&&snake_mapGet(i,j)==tailVal+1){
                         foundTail=1;
                         snake_mapSet(snakeTailX,snakeTailY,0);
                         snakeTailX=i;
@@ -125,61 +138,49 @@ unsigned char snake(){
         snake_renewDisplay(0);
     }
 
-    while(pushbutton_directionGet()==INVALID){
-        delay(0,33,66);
-    }
-    while(pushbutton_directionGet()!=INVALID){
-        delay(0,33,66);
-    }
+    pushbutton_waitDirectionGet();
+    pushbutton_waitDirectionRelease();
 
     return SNAKE_EXIT_CODE_NORMAL;
 }
 
-void snake_splashScreen(){
+unsigned char snake_splashScreen(){
     unsigned char data level=LEVEL_DEFAULT;
     unsigned char buffer[4];
     bit enterGame=0;
 
     lcd12864_clear();
     lcd12864_stringSet(2,10,"Snake");
+    lcd12864_stringSet(5,8,"Level:");
     lcd12864_flush(0);
 
-    snake_initialize();
-
-    lcd12864_stringSet(5,8,"Level:");
+    snake_mapInitialize();
 
     while(!enterGame){
         refreshInterval=LEVEL_DELAY*(LEVEL_MAX-level)+LEVEL_BASE;
-        printf("[refreshInterval=%u]",refreshInterval);
         sprintf(buffer,"%2bu",level);
         lcd12864_stringSet(5,14,buffer);
         lcd12864_flush(0);
 
-        while(pushbutton_directionGet()==INVALID){
-            delay(0,33,66);
-        }
-
-        switch(pushbutton_lastPressedDirectionGet()){
+        switch(pushbutton_waitDirectionGet()){
             case UP:
                 if(LEVEL_MAX<(++level)){
                     level=LEVEL_MAX;
-                }
-                while(pushbutton_directionGet()==UP){
-                    delay(0,33,66);
                 }
                 break;
             case DOWN:
                 if((--level)<LEVEL_MIN){
                     level=LEVEL_MIN;
                 }
-                while(pushbutton_directionGet()==DOWN){
-                    delay(0,33,66);
-                }
                 break;
             case FORWARD:
                 enterGame=1;
                 break;
+            case BACK:
+                return SNAKE_SPLASH_SCREEN_EXIT_CODE_CANCELED;
         }
+
+        pushbutton_waitDirectionRelease();
     }
 
     srand(systemClock_get());
@@ -187,6 +188,8 @@ void snake_splashScreen(){
 
     lcd12864_clear();
     snake_renewDisplay(1);
+
+    return SNAKE_SPLASH_SCREEN_EXIT_CODE_ENTER_GAME;
 }
 
 void snake_restartTick(){
@@ -207,7 +210,7 @@ void snake_restartTick(){
     snakeTick-=deltaTick;
 }
 
-void snake_initialize(){
+void snake_mapInitialize(){
     unsigned char data i;
 
     // Clear map
@@ -288,18 +291,18 @@ void snake_renewDisplay(bit forceFlush){
 
 void snake_newFood(){
     do{
-        foodX=rand()%32;
-        foodY=rand()%32;
+        foodX=(unsigned int)rand()%30+1;
+        foodY=(unsigned int)rand()%30+1;
     }while(snake_mapGet(foodX,foodY)!=0);
 }
 
-void _snake_printMap(){
-    unsigned char i,j;
-    for(i=0;i<MAP_X;i++){
-        for(j=0;j<MAP_Y;j++){
-            printf("%04x ",snake_mapGet(i,j));
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
+// void _snake_printMap(){
+//     unsigned char i,j;
+//     for(i=0;i<MAP_X;i++){
+//         for(j=0;j<MAP_Y;j++){
+//             printf("%04x ",snake_mapGet(i,j));
+//         }
+//         printf("\n");
+//     }
+//     printf("\n");
+// }

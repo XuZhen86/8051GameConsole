@@ -209,7 +209,7 @@ void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c){
 
 void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
     unsigned char buffer[16];
-    unsigned char data i,j,k,tempChar;
+    unsigned char data i,j,k,tempChar[2];
     bit rowDirty,rowGe32=0; // row greater or equal 32
 
     col=col%25*5;
@@ -223,19 +223,23 @@ void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
         k=col;
 
         for(j=0;str[j]&&col<=k;j++){
-            tempChar=buffer[k/8-16*rowGe32];
-            tempChar&=(0xff<<(8-k%8));
-            tempChar|=(LCD12864_ASCII5x8[str[j]][i%8]>>(k%8));
-            if(rowDirty||tempChar!=buffer[k/8-16*rowGe32]){
-                buffer[k/8-16*rowGe32]=tempChar;
+            tempChar[0]=tempChar[1]=buffer[k/8-16*rowGe32];
+            tempChar[0]&=(0xff<<(8-k%8));
+            if(str[j]!=' '){
+                tempChar[0]|=(LCD12864_ASCII5x8[str[j]][i%8]>>(k%8));
+            }
+            if(tempChar[0]!=tempChar[1]){
+                buffer[k/8-16*rowGe32]=tempChar[0];
                 rowDirty=1;
             }
 
-            tempChar=buffer[k/8+1-16*rowGe32];
-            tempChar&=(0xff>>(k%8));
-            tempChar|=(LCD12864_ASCII5x8[str[j]][i%8]<<(8-k%8));
-            if(rowDirty||tempChar!=buffer[k/8+1-16*rowGe32]){
-                buffer[k/8+1-16*rowGe32]=tempChar;
+            tempChar[0]=tempChar[1]=buffer[k/8+1-16*rowGe32];
+            tempChar[0]&=(0xff>>(k%8));
+            if(str[j]!=' '){
+                tempChar[0]|=(LCD12864_ASCII5x8[str[j]][i%8]<<(8-k%8));
+            }
+            if(tempChar[0]!=tempChar[1]){
+                buffer[k/8+1-16*rowGe32]=tempChar[0];
                 rowDirty=1;
             }
 
@@ -272,7 +276,7 @@ void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp){
 }
 
 void lcd12864_clear(){
-    unsigned char i;
+    unsigned char data i;
     for(i=0;i<32;i++){
         i23lc512_memset(GDRAM_ADDR+64*i+32,BUFFER_INIT_VALUE,32);
     }
@@ -283,7 +287,7 @@ void lcd12864_clear(){
 }
 
 bit lcd12864_bufferStackPush(){
-    unsigned char i;
+    unsigned char data i;
 
     if(bufferStack==GDRAM_STACK_MAX){
         return 0;
@@ -297,7 +301,7 @@ bit lcd12864_bufferStackPush(){
 }
 
 bit lcd12864_bufferStackPop(){
-    unsigned char i;
+    unsigned char data i;
 
     if(!bufferStack){
         return 0;

@@ -9,11 +9,10 @@ void adc_initialize(unsigned char speed){
 }
 
 unsigned int adc_get(unsigned char channel){
-    unsigned int result=0;
-    channel%=8;
+    unsigned int result;
 
     P1ASF|=(1<<channel);
-    ADC_CONTR=0x88|adcSpeed|channel;
+    ADC_CONTR=0x88|adcSpeed|(channel%8);
     while(!(ADC_CONTR&0x10));
     P1ASF=0;
 

@@ -1,10 +1,7 @@
 #ifndef LISTWIDGET_H_
 #define LISTWIDGET_H_
 
-enum LISTWIDGET_EXIT_CODE{
-    LISTWIDGET_EXIT_CODE_
-};
-
-unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char code *items[],unsigned char itemCount);
+unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char code *items[],unsigned char itemCount,bit saveBuffer);
+unsigned char *listWidget_strcpySpaceExtend(unsigned char *destination,unsigned char *source);
 
 #endif
