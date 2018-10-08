@@ -186,7 +186,7 @@
         </Utilities>
         <Target51>
           <Target51Misc>
-            <MemoryModel>1</MemoryModel>
+            <MemoryModel>2</MemoryModel>
             <RTOS>0</RTOS>
             <RomSize>1</RomSize>
             <DataHold>0</DataHold>
@@ -615,6 +615,21 @@
               <FileName>ListWidget.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Widgets\ListWidget\ListWidget.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>IAP</GroupName>
+          <Files>
+            <File>
+              <FileName>IAP.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\IAP\IAP.c</FilePath>
+            </File>
+            <File>
+              <FileName>IAP.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\IAP\IAP.h</FilePath>
             </File>
           </Files>
         </Group>

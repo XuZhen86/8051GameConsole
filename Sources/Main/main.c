@@ -12,6 +12,7 @@
 #include<Sources/Pushbutton/Pushbutton.h>
 #include<Sources/Games/Snake/Snake.h>
 #include<Sources/Widgets/ListWidget/ListWidget.h>
+#include<Sources/IAP/IAP.h>
 
 #include<stdio.h>
 #include<math.h>
@@ -48,6 +49,7 @@ void initialize(){
     spi_initialize(0,0,0);
     pwn_initialize(0,0);
     adc_initialize(0);
+    iap_initialize();
 
     i23lc512_initialize();
     lcd12864_spi_initialize();

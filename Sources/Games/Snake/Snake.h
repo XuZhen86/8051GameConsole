@@ -17,6 +17,13 @@ void snake_newFood();
 void snake_restartTick();
 unsigned char snake_splashScreen();
 
+void snake_iap_read();
+void snake_iap_write();
+void snake_iap_highScoreSet(unsigned char level,unsigned int score);
+unsigned int snake_iap_highScoreGet(unsigned char level);
+void snake_iap_levelSet(unsigned char level);
+unsigned char snake_iap_levelGet();
+
 // void _snake_printMap();
 
 #endif

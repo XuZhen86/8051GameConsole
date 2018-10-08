@@ -5,6 +5,7 @@
 #include"Sources/Universal/SystemClock.h"
 #include"Sources/Universal/Universal.h"
 #include"Sources/Pushbutton/Pushbutton.h"
+#include"Sources/IAP/IAP.h"
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -23,7 +24,11 @@ enum SNAKE_RAM_CONFIG{
     MAP_ADDR=0x0000,
     MAP_SIZE=2048,
     MAP_DIRTY_ADDR=MAP_ADDR+MAP_SIZE,
-    MAP_DIRTY_SIZE=128
+    MAP_DIRTY_SIZE=128,
+    HSCORE_ADDR=MAP_DIRTY_ADDR+MAP_DIRTY_SIZE,
+    HSCORE_SIZE=32,
+    LEVEL_ADDR=HSCORE_ADDR+HSCORE_SIZE,
+    LEVEL_SIZE=1
 };
 
 enum SNAKE_MAP{
@@ -40,27 +45,50 @@ enum SNAKE_LEVEL{
     LEVEL_DEFAULT=8
 };
 
+enum SNAKE_IAP_CONFIG{
+    IAP_SECTOR=1,
+    IAP_HSCORE_OFFSET=0,
+    IAP_HSCORE_SIZE=32,
+    IAP_LEVEL_OFFSET=IAP_HSCORE_OFFSET+IAP_HSCORE_SIZE,
+    IAP_LEVEL_SIZE=1
+};
+
+enum SNAKE_SCORE{
+    SCORE_MAX=1024
+};
+
 enum SNAKE_SPLASH_SCREEN_EXIT_CODE{
     SNAKE_SPLASH_SCREEN_EXIT_CODE_CANCELED,
     SNAKE_SPLASH_SCREEN_EXIT_CODE_ENTER_GAME
 };
 
 static unsigned int
-    snakeLength,
+    snakeLength,snakeLengthHigh,
     snakeTick,
     refreshInterval;
 
 static unsigned char
+    level,
     snakeHeadX,snakeHeadY,
     snakeTailX,snakeTailY,
     foodX,foodY,
     direction;
 
 unsigned char snake(){
-    if(snake_splashScreen()==SNAKE_SPLASH_SCREEN_EXIT_CODE_CANCELED){
-        return SNAKE_EXIT_CODE_CANCELED;
+    unsigned char returnVal;
+
+    snake_iap_read();
+    while(1){
+        if(snake_splashScreen()==SNAKE_SPLASH_SCREEN_EXIT_CODE_CANCELED){
+            returnVal=SNAKE_EXIT_CODE_CANCELED;
+            break;
+        }else{
+            snake_gamePlay();
+        }
+        snake_iap_write();
     }
-    return snake_gamePlay();
+
+    return returnVal;
 }
 
 unsigned char snake_gamePlay(){
@@ -69,6 +97,7 @@ unsigned char snake_gamePlay(){
     unsigned char data i,j;
     bit foundTail=0;
 
+    lcd12864_stringSet(5,13,"High");
     lcd12864_stringSet(6,13,"Length");
     lcd12864_stringSet(7,13,"Ticks");
 
@@ -132,20 +161,26 @@ unsigned char snake_gamePlay(){
             }
         }else{
             snakeLength++;
+            if(snakeLength>snakeLengthHigh){
+                snakeLengthHigh=snakeLength;
+            }
             snake_newFood();
         }
 
         snake_renewDisplay(0);
     }
 
-    pushbutton_waitDirectionGet();
-    pushbutton_waitDirectionRelease();
+    snake_iap_highScoreSet(level,snakeLengthHigh);
+
+    do{
+        pushbutton_waitDirectionGet();
+        pushbutton_waitDirectionRelease();
+    }while(pushbutton_lastPressedDirectionGet()!=FORWARD&&pushbutton_lastPressedDirectionGet()!=BACK);
 
     return SNAKE_EXIT_CODE_NORMAL;
 }
 
 unsigned char snake_splashScreen(){
-    unsigned char data level=LEVEL_DEFAULT;
     unsigned char buffer[4];
     bit enterGame=0;
 
@@ -155,6 +190,7 @@ unsigned char snake_splashScreen(){
     lcd12864_flush(0);
 
     snake_mapInitialize();
+    level=snake_iap_levelGet();
 
     while(!enterGame){
         refreshInterval=LEVEL_DELAY*(LEVEL_MAX-level)+LEVEL_BASE;
@@ -182,6 +218,9 @@ unsigned char snake_splashScreen(){
 
         pushbutton_waitDirectionRelease();
     }
+
+    snake_iap_levelSet(level);
+    snakeLengthHigh=snake_iap_highScoreGet(level);
 
     srand(systemClock_get());
     snake_newFood();
@@ -260,6 +299,8 @@ void snake_renewDisplay(bit forceFlush){
     bit lightUp;
 
     // display score
+    sprintf(buffer,"%5u",snakeLengthHigh);
+    lcd12864_stringSet(5,20,buffer);
     sprintf(buffer,"%5u",snakeLength);
     lcd12864_stringSet(6,20,buffer);
     sprintf(buffer,"%6u",snakeTick);
@@ -294,6 +335,50 @@ void snake_newFood(){
         foodX=(unsigned int)rand()%30+1;
         foodY=(unsigned int)rand()%30+1;
     }while(snake_mapGet(foodX,foodY)!=0);
+}
+
+void snake_iap_read(){
+    unsigned char i;
+
+    iap_sectorRead(IAP_SECTOR);
+    for(i=0;i<LEVEL_MAX;i++){
+        i23lc512_uIntWrite(HSCORE_ADDR+i*2,iap_uIntGet(IAP_HSCORE_OFFSET+i*2));
+    }
+}
+
+void snake_iap_write(){
+    unsigned char i;
+
+    for(i=0;i<LEVEL_MAX;i++){
+        iap_uIntSet(IAP_HSCORE_OFFSET+i*2,i23lc512_uIntRead(HSCORE_ADDR+i*2));
+    }
+    iap_sectorWrite(IAP_SECTOR);
+}
+
+void snake_iap_highScoreSet(unsigned char level,unsigned int score){
+    i23lc512_uIntWrite(HSCORE_ADDR+level%LEVEL_MAX*2,score);
+}
+
+unsigned int snake_iap_highScoreGet(unsigned char level){
+    unsigned int score=i23lc512_uIntRead(HSCORE_ADDR+level%LEVEL_MAX*2);
+    if(score<SCORE_MAX){
+        return score;
+    }else{
+        return 0;
+    }
+}
+
+void snake_iap_levelSet(unsigned char level){
+    i23lc512_uCharWrite(LEVEL_ADDR,level%LEVEL_MAX);
+}
+
+unsigned char snake_iap_levelGet(){
+    unsigned char level=i23lc512_uCharRead(LEVEL_ADDR);
+    if(LEVEL_MIN<level&&level<LEVEL_MAX){
+        return level;
+    }else{
+        return 8;
+    }
 }
 
 // void _snake_printMap(){
