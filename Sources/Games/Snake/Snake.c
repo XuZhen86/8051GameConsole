@@ -94,12 +94,10 @@ unsigned char snake(){
 unsigned char snake_gamePlay(){
     unsigned int data tailVal;
     unsigned char data pressedDirection;
-    unsigned char data i,j;
-    bit foundTail=0;
 
-    lcd12864_stringSet(5,13,"High");
-    lcd12864_stringSet(6,13,"Length");
-    lcd12864_stringSet(7,13,"Ticks");
+    lcd12864_stringSet(5,11,"High");
+    lcd12864_stringSet(6,11,"Length");
+    lcd12864_stringSet(7,11,"Ticks");
 
     while(1){
         systemClock_timerStart(refreshInterval);
@@ -142,21 +140,21 @@ unsigned char snake_gamePlay(){
         }
 
         if(snakeHeadX!=foodX||snakeHeadY!=foodY){
-            foundTail=0;
-            tailVal=snake_mapGet(snakeTailX,snakeTailY);
+            tailVal=snake_mapGet(snakeTailX,snakeTailY)+1;
 
-            for(i=snakeTailX-1;i<=snakeTailX+1&&!foundTail;i++){
-                for(j=snakeTailY-1;j<=snakeTailY+1&&!foundTail;j++){
-                    if(0<i&&i<MAP_X&&0<j&&j<MAP_Y&&snake_mapGet(i,j)==tailVal+1){
-                        foundTail=1;
-                        snake_mapSet(snakeTailX,snakeTailY,0);
-                        snakeTailX=i;
-                        snakeTailY=j;
-                    }
-                }
-            }
-
-            if(!foundTail){
+            if(snake_mapGet(snakeTailX-1,snakeTailY)==tailVal){
+                snake_mapSet(snakeTailX,snakeTailY,0);
+                snakeTailX--;
+            }else if(snake_mapGet(snakeTailX+1,snakeTailY)==tailVal){
+                snake_mapSet(snakeTailX,snakeTailY,0);
+                snakeTailX++;
+            }else if(snake_mapGet(snakeTailX,snakeTailY-1)==tailVal){
+                snake_mapSet(snakeTailX,snakeTailY,0);
+                snakeTailY--;
+            }else if(snake_mapGet(snakeTailX,snakeTailY+1)==tailVal){
+                snake_mapSet(snakeTailX,snakeTailY,0);
+                snakeTailY++;
+            }else{
                 return SNAKE_EXIT_CODE_UNEXPECTED_TAIL_DATA;
             }
         }else{
@@ -185,8 +183,8 @@ unsigned char snake_splashScreen(){
     bit enterGame=0;
 
     lcd12864_clear();
-    lcd12864_stringSet(2,10,"Snake");
-    lcd12864_stringSet(5,8,"Level:");
+    lcd12864_stringSet(2,8,"Snake");
+    lcd12864_stringSet(5,6,"Level:");
     lcd12864_flush(0);
 
     snake_mapInitialize();
@@ -195,7 +193,7 @@ unsigned char snake_splashScreen(){
     while(!enterGame){
         refreshInterval=LEVEL_DELAY*(LEVEL_MAX-level)+LEVEL_BASE;
         sprintf(buffer,"%2bu",level);
-        lcd12864_stringSet(5,14,buffer);
+        lcd12864_stringSet(5,12,buffer);
         lcd12864_flush(0);
 
         switch(pushbutton_waitDirectionGet()){
@@ -299,12 +297,12 @@ void snake_renewDisplay(bit forceFlush){
     bit lightUp;
 
     // display score
-    sprintf(buffer,"%5u",snakeLengthHigh);
-    lcd12864_stringSet(5,20,buffer);
-    sprintf(buffer,"%5u",snakeLength);
-    lcd12864_stringSet(6,20,buffer);
-    sprintf(buffer,"%6u",snakeTick);
-    lcd12864_stringSet(7,19,buffer);
+    sprintf(buffer,"%4u",snakeLengthHigh);
+    lcd12864_stringSet(5,17,buffer);
+    sprintf(buffer,"%4u",snakeLength);
+    lcd12864_stringSet(6,17,buffer);
+    sprintf(buffer,"%5u",snakeTick);
+    lcd12864_stringSet(7,16,buffer);
 
     // draw map
     for(i=0;i<64;i+=2){
@@ -369,12 +367,12 @@ unsigned int snake_iap_highScoreGet(unsigned char level){
 }
 
 void snake_iap_levelSet(unsigned char level){
-    i23lc512_uCharWrite(LEVEL_ADDR,level%LEVEL_MAX);
+    i23lc512_uCharWrite(LEVEL_ADDR,level);
 }
 
 unsigned char snake_iap_levelGet(){
     unsigned char level=i23lc512_uCharRead(LEVEL_ADDR);
-    if(LEVEL_MIN<level&&level<LEVEL_MAX){
+    if(LEVEL_MIN<=level&&level<=LEVEL_MAX){
         return level;
     }else{
         return 8;

@@ -20,7 +20,7 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
     lcd12864_clear();
 
     lcd12864_charSet(0,0,'<');
-    lcd12864_stringSet(0,(25-strlen(title))/2,title);
+    lcd12864_stringSet(0,(21-strlen(title))/2,title);
     lcd12864_hLineSet(7,1);
 
     for(i=0;i<itemCount&&i<7;i++){

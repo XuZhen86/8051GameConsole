@@ -6,7 +6,7 @@
 #include"Sources/Universal/SystemClock.h"
 
 #include"Sources/LCD12864/LCD12864.h"
-#include"Sources/LCD12864/LCD12864_ASCII5x8.h"
+#include"Sources/LCD12864/LCD12864_ASCII6x8.h"
 
 #include<stdio.h>
 
@@ -182,7 +182,7 @@ void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c){
     unsigned char buffer[4];
     unsigned char data i,tempChar;
 
-    col=col%25*5;
+    col=col%21*6;
     row=row%8*8;
     if(row>31){col+=128;}
     row%=32;
@@ -192,12 +192,12 @@ void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c){
 
         tempChar=buffer[0];
         tempChar&=(0xff<<(8-col%8));
-        tempChar|=(LCD12864_ASCII5x8[c][i%8]>>(col%8));
+        tempChar|=(LCD12864_ASCII6x8[c][i%8]>>(col%8));
         buffer[2]=tempChar;
 
         tempChar=buffer[1];
         tempChar&=(0xff>>(col%8));
-        tempChar|=(LCD12864_ASCII5x8[c][i%8]<<(8-col%8));
+        tempChar|=(LCD12864_ASCII6x8[c][i%8]<<(8-col%8));
         buffer[3]=tempChar;
 
         if(buffer[0]!=buffer[2]||buffer[1]!=buffer[3]){
@@ -212,7 +212,7 @@ void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
     unsigned char data i,j,k,tempChar[2];
     bit rowDirty,rowGe32=0; // row greater or equal 32
 
-    col=col%25*5;
+    col=col%21*6;
     row=row%8*8;
     if(row>31){col+=128;rowGe32=1;}
     row%=32;
@@ -226,7 +226,7 @@ void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
             tempChar[0]=tempChar[1]=buffer[k/8-16*rowGe32];
             tempChar[0]&=(0xff<<(8-k%8));
             if(str[j]!=' '){
-                tempChar[0]|=(LCD12864_ASCII5x8[str[j]][i%8]>>(k%8));
+                tempChar[0]|=(LCD12864_ASCII6x8[str[j]][i%8]>>(k%8));
             }
             if(tempChar[0]!=tempChar[1]){
                 buffer[k/8-16*rowGe32]=tempChar[0];
@@ -236,14 +236,14 @@ void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
             tempChar[0]=tempChar[1]=buffer[k/8+1-16*rowGe32];
             tempChar[0]&=(0xff>>(k%8));
             if(str[j]!=' '){
-                tempChar[0]|=(LCD12864_ASCII5x8[str[j]][i%8]<<(8-k%8));
+                tempChar[0]|=(LCD12864_ASCII6x8[str[j]][i%8]<<(8-k%8));
             }
             if(tempChar[0]!=tempChar[1]){
                 buffer[k/8+1-16*rowGe32]=tempChar[0];
                 rowDirty=1;
             }
 
-            k+=5;
+            k+=6;
         }
 
         if(rowDirty){

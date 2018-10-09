@@ -186,7 +186,7 @@
         </Utilities>
         <Target51>
           <Target51Misc>
-            <MemoryModel>2</MemoryModel>
+            <MemoryModel>1</MemoryModel>
             <RTOS>0</RTOS>
             <RomSize>1</RomSize>
             <DataHold>0</DataHold>
@@ -480,6 +480,11 @@
               <FileName>LCD12864_ASCII5x8.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\LCD12864\LCD12864_ASCII5x8.h</FilePath>
+            </File>
+            <File>
+              <FileName>LCD12864_ASCII6x8.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\LCD12864\LCD12864_ASCII6x8.h</FilePath>
             </File>
           </Files>
         </Group>
