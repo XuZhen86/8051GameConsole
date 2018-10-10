@@ -5,6 +5,8 @@
 #include"Sources/Universal/Universal.h"
 #include"Sources/Widgets/ListWidget/ListWidget.h"
 
+#include<stdlib.h>
+
 #define xStringize(s) stringize(s)
 #define stringize(s) #s
 
@@ -18,7 +20,7 @@ unsigned char code *ITEMS[]={
 };
 
 void version_showVersion(){
-    listWidget_selectFromList(TITLE,ITEMS,ITEM_COUNT,0);
+    listWidget_selectFromList(TITLE,ITEMS,ITEM_COUNT,NULL,0);
 }
 
 unsigned char version_compileDateGet(){

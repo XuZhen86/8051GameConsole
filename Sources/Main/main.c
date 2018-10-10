@@ -79,11 +79,15 @@ unsigned char code *MAIN_ITEMS[]={
     "Item 15"
 };
 
+void slotCurrentItemChanged(unsigned char item){
+    printf("[main slotCurrentItemChanged %bu]\n",item);
+}
+
 void main(){
     initialize();
 
     while(delay(0,0,0)){
-        switch(listWidget_selectFromList(MAIN_TITLE,MAIN_ITEMS,MAIN_ITEM_COUNT,0)){
+        switch(listWidget_selectFromList(MAIN_TITLE,MAIN_ITEMS,MAIN_ITEM_COUNT,slotCurrentItemChanged,0)){
             case 0:
                 snake();
                 break;

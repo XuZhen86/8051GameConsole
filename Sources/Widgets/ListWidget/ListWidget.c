@@ -10,7 +10,7 @@ enum{
     BUFFER_SIZE=25
 };
 
-unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char code *items[],unsigned char itemCount,bit saveBuffer){
+unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char code *items[],unsigned char itemCount,void (*sigCurrentItemChanged)(unsigned char item),bit saveBuffer){
     unsigned char data i,selectedRow=0,selectedItem=0;
     unsigned char buffer[BUFFER_SIZE];
 
@@ -89,6 +89,10 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
                 pushbutton_waitDirectionRelease();
                 lcd12864_flush(0);
                 return itemCount;
+        }
+
+        if(sigCurrentItemChanged!=NULL){
+            sigCurrentItemChanged(selectedItem);
         }
 
         pushbutton_waitDirectionRelease();
