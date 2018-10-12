@@ -4,6 +4,7 @@
 #include"Sources/SPI/SPI.h"
 #include"Sources/I23LC512/I23LC512.h"
 #include"Sources/Universal/SystemClock.h"
+#include"Sources/Widgets/InputDialog/InputDialog.h"
 
 #include"Sources/LCD12864/LCD12864.h"
 #include"Sources/LCD12864/LCD12864_ASCII6x8.h"
@@ -42,8 +43,8 @@ enum LCD12864_RAM_CONFIG{
     GDRAM_STACK_MAX=6
 };
 
-static unsigned int brightness=0x3fff;
-static unsigned char gdramRowDirty[4]={0,0,0,0};
+static unsigned int brightness=0x4000;
+static unsigned char idata gdramRowDirty[4]={0,0,0,0};
 static unsigned char bufferStack=0;
 
 sbit chipSelect=P2^7;
@@ -98,7 +99,12 @@ void lcd12864_pwmInitialize(){
     pwm_start();
 }
 
+void lcd12864_brightnessLevelSet(unsigned char level){
+    lcd12864_brightnessSet(level%16*0x800);
+}
+
 void lcd12864_brightnessSet(unsigned int b){
+    b%=0x8000;
     if(b==0){
         b=1;
     }
@@ -108,6 +114,15 @@ void lcd12864_brightnessSet(unsigned int b){
 
 unsigned int lcd12864_brightnessGet(){
     return brightness;
+}
+
+void lcd12864_brightness(){
+    unsigned char bNew,bOld=brightness/0x800;
+
+    bNew=inputDialog_getUChar("Brightness",bOld,0,16,1,lcd12864_brightnessLevelSet,1);
+    if(bNew==16){
+        lcd12864_brightnessLevelSet(bOld);
+    }
 }
 
 void lcd12864_spi_initialize(){
@@ -276,7 +291,7 @@ void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp){
 }
 
 void lcd12864_clear(){
-    unsigned char data i;
+    unsigned char idata i;
     for(i=0;i<32;i++){
         i23lc512_memset(GDRAM_ADDR+64*i+32,BUFFER_INIT_VALUE,32);
     }
@@ -287,7 +302,7 @@ void lcd12864_clear(){
 }
 
 bit lcd12864_bufferStackPush(){
-    unsigned char data i;
+    unsigned char i;
 
     if(bufferStack==GDRAM_STACK_MAX){
         return 0;
@@ -301,7 +316,7 @@ bit lcd12864_bufferStackPush(){
 }
 
 bit lcd12864_bufferStackPop(){
-    unsigned char data i;
+    unsigned char i;
 
     if(!bufferStack){
         return 0;

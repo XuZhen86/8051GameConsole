@@ -7,6 +7,8 @@ void lcd12864_hwReset();
 void lcd12864_pwmInitialize();
 void lcd12864_brightnessSet(unsigned int brightness);
 unsigned int lcd12864_brightnessGet();
+void lcd12864_brightness();
+void lcd12864_brightnessLevelSet(unsigned char level);
 
 void lcd12864_spi_initialize();
 bit lcd12864_flush(bit forceFlush);

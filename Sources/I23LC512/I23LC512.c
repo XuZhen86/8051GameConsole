@@ -56,7 +56,7 @@ unsigned char i23lc512_uCharArrayWrite(unsigned int address,unsigned int offset,
 }
 
 unsigned char i23lc512_uCharRead(unsigned int address){
-    unsigned char data buffer;
+    unsigned char idata buffer;
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
     chipSelect=0;
@@ -97,7 +97,7 @@ unsigned int i23lc512_uIntArrayWrite(unsigned int address,unsigned int offset,un
 }
 
 unsigned int i23lc512_uIntRead(unsigned int address){
-    unsigned char data buffer[2];
+    unsigned char idata buffer[2];
 
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
@@ -141,7 +141,7 @@ unsigned char *i23lc512_uCharSeqRead(unsigned char *destination,unsigned int add
 }
 
 unsigned char *i23lc512_uCharSeqWrite(unsigned char *source,unsigned int address,unsigned int length){
-    unsigned int data i;
+    unsigned int idata i;
 
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
@@ -162,7 +162,7 @@ unsigned char *i23lc512_uCharSeqWrite(unsigned char *source,unsigned int address
 }
 
 unsigned int i23lc512_memset(unsigned int address,unsigned char value,unsigned int length){
-    unsigned int data i;
+    unsigned int idata i;
 
     spi_isOccupiedSet(1);
     spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
@@ -183,8 +183,8 @@ unsigned int i23lc512_memset(unsigned int address,unsigned char value,unsigned i
 }
 
 unsigned int i23lc512_memcpy(unsigned int destination,unsigned int source,unsigned int length){
-    unsigned char xdata buffer[32];
-    unsigned int data i;
+    unsigned char buffer[32];
+    unsigned int idata i;
 
     for(i=0;i+32>i&&i+32<length;i+=32){
         i23lc512_uCharSeqRead(buffer,source+i,32);

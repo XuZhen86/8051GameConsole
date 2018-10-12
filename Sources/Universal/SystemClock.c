@@ -2,12 +2,12 @@
 
 static unsigned int data delta=0;
 
-static unsigned long int clock=0;
-static unsigned int millisecond=0;
+static unsigned long int data clock=0;
+static unsigned int data millisecond=0;
 static unsigned char second=0,minute=0,hour=0,day=0;
 
 static bit timerIsRunning;
-static unsigned int timerRemains;
+static unsigned int data timerRemains;
 
 void systemClock_tick(){
     delta+=10;

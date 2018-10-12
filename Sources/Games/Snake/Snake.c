@@ -92,8 +92,8 @@ unsigned char snake(){
 }
 
 unsigned char snake_gamePlay(){
-    unsigned int data tailVal;
-    unsigned char data pressedDirection;
+    unsigned int tailVal;
+    unsigned char pressedDirection;
 
     lcd12864_stringSet(5,11,"High");
     lcd12864_stringSet(6,11,"Length");
@@ -230,8 +230,8 @@ unsigned char snake_splashScreen(){
 }
 
 void snake_restartTick(){
-    unsigned int data deltaTick=snake_mapGet(snakeTailX,snakeTailY);
-    unsigned char data i,j;
+    unsigned int deltaTick=snake_mapGet(snakeTailX,snakeTailY);
+    unsigned char i,j;
     unsigned char buffer[60];
 
     for(i=1;i<31;i++){
@@ -248,7 +248,7 @@ void snake_restartTick(){
 }
 
 void snake_mapInitialize(){
-    unsigned char data i;
+    unsigned char i;
 
     // Clear map
     i23lc512_memset(MAP_ADDR,0,MAP_SIZE);
@@ -292,7 +292,7 @@ unsigned int snake_mapSet(unsigned char x,unsigned char y,unsigned int val){
 }
 
 void snake_renewDisplay(bit forceFlush){
-    unsigned char data i,j;
+    unsigned char i,j;
     unsigned char buffer[8];
     bit lightUp;
 

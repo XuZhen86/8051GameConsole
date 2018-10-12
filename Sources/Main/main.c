@@ -13,6 +13,7 @@
 #include<Sources/Games/Snake/Snake.h>
 #include<Sources/Widgets/ListWidget/ListWidget.h>
 #include<Sources/IAP/IAP.h>
+#include<Sources/Widgets/InputDialog/InputDialog.h>
 
 #include<stdio.h>
 #include<math.h>
@@ -64,7 +65,7 @@ unsigned char code *MAIN_ITEMS[]={
     "Snake",
     "Brightness",
     "Version",
-    "Item 3",
+    "Input Dialog",
     "Item 4",
     "Item 5",
     "Item 6",
@@ -83,6 +84,10 @@ void slotCurrentItemChanged(unsigned char item){
     printf("[main slotCurrentItemChanged %bu]\n",item);
 }
 
+void slotUCharValueChanged(unsigned char uChar){
+    printf("[main slotUCharValueChanged %bu]",uChar);
+}
+
 void main(){
     initialize();
 
@@ -92,11 +97,13 @@ void main(){
                 snake();
                 break;
             case 1:
+                lcd12864_brightness();
                 break;
             case 2:
                 version_showVersion();
                 break;
             case 3:
+                inputDialog_getUChar("Input Dialog",8,0,128,20,slotUCharValueChanged,1);
                 break;
             case 4:
                 break;
