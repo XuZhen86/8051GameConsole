@@ -55,8 +55,7 @@ void initialize(){
     i23lc512_initialize();
     lcd12864_spi_initialize();
 
-    timer_4_initialize(1,1,0x93,0xd3);
-    timer_4_start();
+    systemClock_initialize();
 }
 
 unsigned char code *MAIN_TITLE="Main";
@@ -97,7 +96,7 @@ void main(){
                 snake();
                 break;
             case 1:
-                lcd12864_brightness();
+                lcd12864_brightnessAdjust();
                 break;
             case 2:
                 version_showVersion();

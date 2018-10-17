@@ -5,6 +5,7 @@
 #include"Sources/I23LC512/I23LC512.h"
 #include"Sources/Universal/SystemClock.h"
 #include"Sources/Widgets/InputDialog/InputDialog.h"
+#include"Sources/IAP/IAP.h"
 
 #include"Sources/LCD12864/LCD12864.h"
 #include"Sources/LCD12864/LCD12864_ASCII6x8.h"
@@ -43,7 +44,12 @@ enum LCD12864_RAM_CONFIG{
     GDRAM_STACK_MAX=6
 };
 
-static unsigned int brightness=0x4000;
+enum LCD12864_IAP_CONFIG{
+    IAP_SECTOR=0,
+    IAP_BRIGHTNESS_OFFSET=0,
+    IAP_BRIGHTNESS_SIZE=2
+};
+
 static unsigned char idata gdramRowDirty[4]={0,0,0,0};
 static unsigned char bufferStack=0;
 
@@ -94,35 +100,56 @@ void lcd12864_hwReset(){
     delayBusy(1,146,229);
 }
 
-void lcd12864_pwmInitialize(){
-    pwm_3_initialize(1,1,0,0,0,brightness);
+void lcd12864_pwm_initialize(){
+    pwm_3_initialize(1,1,0,0,0,lcd12864_iap_brightnessRawGet());
     pwm_start();
 }
 
+void lcd12864_brightnessAdjust(){
+    unsigned char levelNew,levelOld=lcd12864_brightnessLevelGet();
+
+    levelNew=inputDialog_getUChar("Brightness",levelOld,0,16,1,lcd12864_brightnessLevelSet,1);
+    if(levelNew==16){
+        lcd12864_brightnessLevelSet(levelOld);
+    }else if(levelNew!=levelOld){
+        lcd12864_iap_write();
+    }
+}
+
+unsigned char lcd12864_brightnessLevelGet(){
+    return lcd12864_iap_brightnessRawGet()/0x800;
+}
+
 void lcd12864_brightnessLevelSet(unsigned char level){
-    lcd12864_brightnessSet(level%16*0x800);
+    lcd12864_iap_brightnessRawSet(level%16*0x800);
 }
 
-void lcd12864_brightnessSet(unsigned int b){
-    b%=0x8000;
-    if(b==0){
-        b=1;
+void lcd12864_iap_read(){
+    iap_sectorRead(IAP_SECTOR);
+}
+
+void lcd12864_iap_write(){
+    iap_sectorWrite(IAP_SECTOR);
+}
+
+unsigned int lcd12864_iap_brightnessRawGet(){
+    unsigned int brightnessRaw=iap_uIntGet(IAP_BRIGHTNESS_OFFSET);
+    if(brightnessRaw==0xffff){
+        iap_uIntSet(IAP_BRIGHTNESS_OFFSET,0x4000);
+        return 0x4000;
     }
-    brightness=b;
-    pwm_3_timerValueSet(0,b);
+    return brightnessRaw;
 }
 
-unsigned int lcd12864_brightnessGet(){
-    return brightness;
-}
-
-void lcd12864_brightness(){
-    unsigned char bNew,bOld=brightness/0x800;
-
-    bNew=inputDialog_getUChar("Brightness",bOld,0,16,1,lcd12864_brightnessLevelSet,1);
-    if(bNew==16){
-        lcd12864_brightnessLevelSet(bOld);
+unsigned int lcd12864_iap_brightnessRawSet(unsigned int brightnessRaw){
+    brightnessRaw%=0x8000;
+    if(brightnessRaw==0){
+        brightnessRaw=1;
     }
+
+    iap_uIntSet(IAP_BRIGHTNESS_OFFSET,brightnessRaw);
+    pwm_3_timerValueSet(0,brightnessRaw);
+    return brightnessRaw;
 }
 
 void lcd12864_spi_initialize(){
@@ -142,7 +169,8 @@ void lcd12864_spi_initialize(){
     }
     lcd12864_spi_send(0,FUNCTION_SET|0x04|0x02);
 
-    lcd12864_pwmInitialize();
+    lcd12864_iap_read();
+    lcd12864_pwm_initialize();
     // i23lc512_memset(GDRAM_ADDR,BUFFER_INIT_VALUE,32*32*2);
     i23lc512_memset(GDRAM_STACK_ADDR,BUFFER_INIT_VALUE,0x2000);
 }

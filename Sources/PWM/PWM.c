@@ -35,9 +35,9 @@ void pwm_3_initialize(bit initVolt,bit portSelect,bit t1Intr,bit t2Intr,unsigned
         // Output P21/P45 | En interr | En t2 interr | En t1 interr
 }
 
-void pwm_3_timerValueSet(unsigned int t1InitV,unsigned int t2InitV){
-    PWM3T1=t1InitV;
-    PWM3T2=t2InitV;
+void pwm_3_timerValueSet(unsigned int t1V,unsigned int t2V){
+    PWM3T1=t1V;
+    PWM3T2=t2V;
     pwm_xsfrFlush();
 }
 
@@ -48,9 +48,9 @@ void pwm_4_initialize(bit initVolt,bit portSelect,bit t1Intr,bit t2Intr,unsigned
     PWM4CR=portSelect*0x08|0x04|t2Intr*0x02|t1Intr*0x01;
 }
 
-void pwm_4_timerValueSet(unsigned int t1InitV,unsigned int t2InitV){
-    PWM4T1=t1InitV;
-    PWM4T2=t2InitV;
+void pwm_4_timerValueSet(unsigned int t1V,unsigned int t2V){
+    PWM4T1=t1V;
+    PWM4T2=t2V;
     pwm_xsfrFlush();
 }
 
@@ -62,9 +62,9 @@ void pwm_5_initialize(bit initVolt,bit portSelect,bit t1Intr,bit t2Intr,unsigned
         // Output P23/P42 | En interr | En t2 interr | En t1 interr
 }
 
-void pwm_5_timerValueSet(unsigned int t1InitV,unsigned int t2InitV){
-    PWM5T1=t1InitV;
-    PWM5T2=t2InitV;
+void pwm_5_timerValueSet(unsigned int t1V,unsigned int t2V){
+    PWM5T1=t1V;
+    PWM5T2=t2V;
     pwm_xsfrFlush();
 }
 

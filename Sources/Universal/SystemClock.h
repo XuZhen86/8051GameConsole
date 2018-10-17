@@ -1,6 +1,8 @@
 #ifndef SYSTEMCLOCK_H_
 #define SYSTEMCLOCK_H_
 
+void systemClock_initialize();
+
 void systemClock_tick();
 void systemClock_flush();
 

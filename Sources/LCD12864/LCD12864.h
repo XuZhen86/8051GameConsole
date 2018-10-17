@@ -4,11 +4,16 @@
 void lcd12864_spi_send(bit b,unsigned char c);
 void lcd12864_spi_send2Bytes(bit b,unsigned char c1,unsigned char c2);
 void lcd12864_hwReset();
-void lcd12864_pwmInitialize();
-void lcd12864_brightnessSet(unsigned int brightness);
-unsigned int lcd12864_brightnessGet();
-void lcd12864_brightness();
+void lcd12864_pwm_initialize();
+
+void lcd12864_brightnessAdjust();
+unsigned char lcd12864_brightnessLevelGet();
 void lcd12864_brightnessLevelSet(unsigned char level);
+
+void lcd12864_iap_read();
+void lcd12864_iap_write();
+unsigned int lcd12864_iap_brightnessRawGet();
+unsigned int lcd12864_iap_brightnessRawSet(unsigned int brightness);
 
 void lcd12864_spi_initialize();
 bit lcd12864_flush(bit forceFlush);

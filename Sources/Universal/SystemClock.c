@@ -1,3 +1,5 @@
+#include"Sources/Timer/Timer4.h"
+
 #include"Sources/Universal/SystemClock.h"
 
 static unsigned int data delta=0;
@@ -9,8 +11,20 @@ static unsigned char second=0,minute=0,hour=0,day=0;
 static bit timerIsRunning;
 static unsigned int data timerRemains;
 
+enum SYSTEMCLOCK_TIMER_4_CONFIG{
+    X12MODE=0,
+    TH=0x7e,
+    TL=0x66,
+    TICK_INTERVAL=1
+};
+
+void systemClock_initialize(){
+    timer_4_initialize(X12MODE,1,TH,TL);
+    timer_4_start();
+}
+
 void systemClock_tick(){
-    delta+=10;
+    delta+=TICK_INTERVAL;
 }
 
 void systemClock_flush(){
@@ -32,23 +46,19 @@ void systemClock_flush(){
 
     clock+=deltaCopy;
 
-    deltaCopy+=millisecond;
-    millisecond=deltaCopy%1000;
+    millisecond=(deltaCopy+millisecond)%1000;
     deltaCopy/=1000;
 
     if(deltaCopy){
-        deltaCopy+=second;
-        second=deltaCopy%60;
+        second=(deltaCopy+second)%60;
         deltaCopy/=60;
 
         if(deltaCopy){
-            deltaCopy+=minute;
-            minute=deltaCopy%60;
+            minute=(deltaCopy+minute)%60;
             deltaCopy/=60;
 
             if(deltaCopy){
-                deltaCopy+=hour;
-                hour=deltaCopy%24;
+                hour=(deltaCopy+hour)%24;
                 deltaCopy/=24;
 
                 if(deltaCopy){
@@ -104,6 +114,7 @@ void systemClock_timerResume(){
     systemClock_flush();
     timerIsRunning=1;
 }
+
 void systemClock_timerCancel(){
     systemClock_flush();
     timerRemains=0;

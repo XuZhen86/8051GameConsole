@@ -1,4 +1,5 @@
 #include"Sources/Version/Version.h"
+#include"Sources/Version/VersionNumbers.h"
 
 #include"Sources/LCD12864/LCD12864.h"
 #include"Sources/Pushbutton/Pushbutton.h"
@@ -11,12 +12,13 @@
 #define stringize(s) #s
 
 unsigned char code *TITLE="Version";
-unsigned char code ITEM_COUNT=4;
+unsigned char code ITEM_COUNT=5;
 unsigned char code *ITEMS[]={
-    "Date: "__DATE2__,
-    "Time: "__TIME__,
-    "C51: "xStringize(__C51__),
-    "Mem Model: "xStringize(__MODEL__)
+    "Ver  "VERSION_NUMBER,
+    "Date "__DATE2__,
+    "Time "__TIME__,
+    "C51  "xStringize(__C51__),
+    "Mem  "xStringize(__MODEL__)
 };
 
 void version_showVersion(){

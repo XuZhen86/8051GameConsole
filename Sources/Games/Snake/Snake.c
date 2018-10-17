@@ -109,6 +109,11 @@ unsigned char snake_gamePlay(){
             }
         }
 
+        if(pressedDirection==BACK||pressedDirection==FORWARD){
+            snake_gamePause();
+            pressedDirection=direction;
+        }
+
         if(pressedDirection!=direction){
             if(((direction==UP||direction==DOWN)&&(pressedDirection==LEFT||pressedDirection==RIGHT))||((direction==LEFT||direction==RIGHT)&&(pressedDirection==UP||pressedDirection==DOWN))){
                 direction=pressedDirection;
@@ -178,8 +183,32 @@ unsigned char snake_gamePlay(){
     return SNAKE_EXIT_CODE_NORMAL;
 }
 
+void snake_gamePause(){
+    unsigned char i,j;
+
+    lcd12864_bufferStackPush();
+    for(i=2;i<62;i+=2){
+        for(j=2;j<62;j+=2){
+            lcd12864_pixelSet(i,j,0);
+            lcd12864_pixelSet(i+1,j,0);
+            lcd12864_pixelSet(i,j+1,0);
+            lcd12864_pixelSet(i+1,j+1,0);
+        }
+    }
+    lcd12864_stringSet(3,2,"Paused");
+    lcd12864_flush(0);
+
+    do{
+        pushbutton_waitDirectionGet();
+        pushbutton_waitDirectionRelease();
+    }while(pushbutton_lastPressedDirectionGet()!=FORWARD&&pushbutton_lastPressedDirectionGet()!=BACK);
+
+    lcd12864_bufferStackPop();
+    lcd12864_flush(0);
+}
+
 unsigned char snake_splashScreen(){
-    unsigned char buffer[4];
+    unsigned char buffer[8],bufferLength;
     bit enterGame=0;
 
     lcd12864_clear();
@@ -192,7 +221,16 @@ unsigned char snake_splashScreen(){
 
     while(!enterGame){
         refreshInterval=LEVEL_DELAY*(LEVEL_MAX-level)+LEVEL_BASE;
-        sprintf(buffer,"%2bu",level);
+
+        bufferLength=sprintf(buffer,"%2bu ",level);
+        if(level==LEVEL_MAX){
+            buffer[bufferLength-1]=0x19;
+        }else if(level==LEVEL_MIN){
+            buffer[bufferLength-1]=0x18;
+        }else{
+            buffer[bufferLength-1]=0x12;
+        }
+
         lcd12864_stringSet(5,12,buffer);
         lcd12864_flush(0);
 

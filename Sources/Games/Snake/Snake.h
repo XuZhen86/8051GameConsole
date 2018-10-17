@@ -9,6 +9,7 @@ enum SNAKE_EXIT_CODE{
 
 unsigned char snake();
 unsigned char snake_gamePlay();
+void snake_gamePause();
 void snake_mapInitialize();
 unsigned int snake_mapGet(unsigned char x,unsigned char y);
 unsigned int snake_mapSet(unsigned char x,unsigned char y,unsigned int val);

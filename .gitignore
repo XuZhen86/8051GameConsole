@@ -2,3 +2,4 @@ Lcd12864.uvgui.*
 *.xlsx
 .vscode
 Build
+*.exe
