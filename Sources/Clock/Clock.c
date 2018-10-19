@@ -1,33 +1,27 @@
-#include"Sources/Timer/Timer4.h"
+#include"Sources/Timer/Timer.h"
 
-#include"Sources/Universal/SystemClock.h"
+#include"Sources/Clock/Clock.h"
+#include"Sources/Clock/ClockConfig.h"
 
 static unsigned int data delta=0;
 
-static unsigned long int data clock=0;
-static unsigned int data millisecond=0;
+static unsigned long int idata clock=0;
+static unsigned int idata millisecond=0;
 static unsigned char second=0,minute=0,hour=0,day=0;
 
 static bit timerIsRunning;
 static unsigned int data timerRemains;
 
-enum SYSTEMCLOCK_TIMER_4_CONFIG{
-    X12MODE=0,
-    TH=0x7e,
-    TL=0x66,
-    TICK_INTERVAL=1
-};
-
-void systemClock_initialize(){
-    timer_4_initialize(X12MODE,1,TH,TL);
-    timer_4_start();
+void clock_initialize(){
+    timer0_setup(TH,TL,0,X12,1,1);
+    timer0_start();
 }
 
-void systemClock_tick(){
+void clock_tick() interrupt 1{
     delta+=TICK_INTERVAL;
 }
 
-void systemClock_flush(){
+void clock_flush(){
     unsigned int data deltaCopy=delta;
     delta=0;
 
@@ -69,59 +63,59 @@ void systemClock_flush(){
     }
 }
 
-unsigned long int systemClock_get(){
-    systemClock_flush();
+unsigned long int clock_get(){
+    clock_flush();
     return clock;
 }
 
-unsigned int systemClock_mSecGet(){
-    systemClock_flush();
+unsigned int clock_mSecGet(){
+    clock_flush();
     return millisecond;
 }
 
-unsigned char systemClock_secGet(){
-    systemClock_flush();
+unsigned char clock_secGet(){
+    clock_flush();
     return second;
 }
 
-unsigned char systemClock_minGet(){
-    systemClock_flush();
+unsigned char clock_minGet(){
+    clock_flush();
     return minute;
 }
 
-unsigned char systemClock_hurGet(){
-    systemClock_flush();
+unsigned char clock_hurGet(){
+    clock_flush();
     return hour;
 }
 
-unsigned char systemClock_dayGet(){
-    systemClock_flush();
+unsigned char clock_dayGet(){
+    clock_flush();
     return day;
 }
 
-void systemClock_timerStart(unsigned int time){
-    systemClock_flush();
+void clock_timerStart(unsigned int time){
+    clock_flush();
     timerRemains=time;
     timerIsRunning=1;
 }
 
-void systemClock_timerPause(){
-    systemClock_flush();
+void clock_timerPause(){
+    clock_flush();
     timerIsRunning=0;
 }
 
-void systemClock_timerResume(){
-    systemClock_flush();
+void clock_timerResume(){
+    clock_flush();
     timerIsRunning=1;
 }
 
-void systemClock_timerCancel(){
-    systemClock_flush();
+void clock_timerCancel(){
+    clock_flush();
     timerRemains=0;
     timerIsRunning=0;
 }
 
-bit systemClock_timerIsTimeUp(){
-    systemClock_flush();
-    return !timerRemains;
+bit clock_timerIsTimeUp(){
+    clock_flush();
+    return timerRemains==0;
 }

@@ -2,7 +2,7 @@
 
 #include"Sources/XRAM/XRAM.h"
 #include"Sources/LCD12864/LCD12864.h"
-#include"Sources/Universal/SystemClock.h"
+#include"Sources/Clock/Clock.h"
 #include"Sources/Universal/Universal.h"
 #include"Sources/Pushbutton/Pushbutton.h"
 #include"Sources/IAP/IAP.h"
@@ -100,10 +100,10 @@ unsigned char snake_gamePlay(){
     lcd12864_stringSet(7,11,"Ticks");
 
     while(1){
-        systemClock_timerStart(refreshInterval);
+        clock_timerStart(refreshInterval);
 
         pressedDirection=direction;
-        while(!systemClock_timerIsTimeUp()&&delay(0,108,145)){
+        while(!clock_timerIsTimeUp()&&delay(0,108,145)){
             if(pushbutton_directionGet()!=INVALID){
                 pressedDirection=pushbutton_lastPressedDirectionGet();
             }
@@ -258,7 +258,7 @@ unsigned char snake_splashScreen(){
     snake_iap_levelSet(level);
     snakeLengthHigh=snake_iap_highScoreGet(level);
 
-    srand(systemClock_get());
+    srand(clock_get());
     snake_newFood();
 
     lcd12864_clear();

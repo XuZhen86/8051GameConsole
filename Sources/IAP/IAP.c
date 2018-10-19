@@ -1,6 +1,5 @@
 #include"Sources/Main/STC15W4K48S4.h"
 #include"Sources/XRAM/XRAM.h"
-#include"Sources/Universal/SystemClock.h"
 
 #include"Sources/IAP/IAP.h"
 
@@ -110,25 +109,3 @@ unsigned int iap_uIntGet(unsigned int offset){
 unsigned int iap_uIntSet(unsigned int offset,unsigned int i){
     return xRam_uIntWrite(BUFFER_ADDR+offset%512,i);
 }
-
-// void _iap_sectorTest(unsigned char sector){
-//     unsigned int i;
-//     unsigned char c;
-//     srand(systemClock_get());
-
-//     sector%=SECTOR_MAX;
-
-//     iap_sectorRead(0);
-//     c=rand();
-//     printf("[c=%02bx]\n",c);
-//     for(i=0;i<16;i++){
-//         iap_uCharSet(i,c);
-//     }
-//     iap_sectorWrite(0);
-//     // iap_sectorErase(0);
-
-//     iap_sectorRead(0);
-//     for(i=0;i<32;i++){
-//         printf("[%u %02bx]\n",i,iap_uCharGet(i));
-//     }
-// }

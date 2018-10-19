@@ -424,16 +424,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>InterruptRoutine</GroupName>
-          <Files>
-            <File>
-              <FileName>InterruptRoutine.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\InterruptRoutine\InterruptRoutine.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Joystick</GroupName>
           <Files>
             <File>
@@ -522,45 +512,20 @@
           <GroupName>Timer</GroupName>
           <Files>
             <File>
-              <FileName>Timer3.c</FileName>
+              <FileName>Timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\Timer\Timer3.c</FilePath>
+              <FilePath>.\Sources\Timer\Timer.c</FilePath>
             </File>
             <File>
-              <FileName>Timer3.h</FileName>
+              <FileName>Timer.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Sources\Timer\Timer3.h</FilePath>
-            </File>
-            <File>
-              <FileName>Timer4.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Timer\Timer4.c</FilePath>
-            </File>
-            <File>
-              <FileName>Timer4.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Timer\Timer4.h</FilePath>
+              <FilePath>.\Sources\Timer\Timer.h</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Universal</GroupName>
           <Files>
-            <File>
-              <FileName>Putchar.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Universal\Putchar.c</FilePath>
-            </File>
-            <File>
-              <FileName>SystemClock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Universal\SystemClock.c</FilePath>
-            </File>
-            <File>
-              <FileName>SystemClock.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Universal\SystemClock.h</FilePath>
-            </File>
             <File>
               <FileName>Universal.c</FileName>
               <FileType>1</FileType>
@@ -696,6 +661,41 @@
               <FileName>XRAMConfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\XRAM\XRAMConfig.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Serial</GroupName>
+          <Files>
+            <File>
+              <FileName>Serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Serial\Serial.c</FilePath>
+            </File>
+            <File>
+              <FileName>Serial.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Serial\Serial.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Clock</GroupName>
+          <Files>
+            <File>
+              <FileName>Clock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Clock\Clock.c</FilePath>
+            </File>
+            <File>
+              <FileName>Clock.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Clock\Clock.h</FilePath>
+            </File>
+            <File>
+              <FileName>ClockConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Clock\ClockConfig.h</FilePath>
             </File>
           </Files>
         </Group>

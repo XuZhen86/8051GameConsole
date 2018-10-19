@@ -1,32 +1,21 @@
 #include<Sources/Main/STC15W4K48S4.h>
 #include<Sources/Version/Version.h>
 #include<Sources/Universal/Universal.h>
-#include<Sources/Universal/SystemClock.h>
+#include<Sources/Clock/Clock.h>
 #include<Sources/PWM/PWM.h>
 #include<Sources/SPI/SPI.h>
 #include<Sources/LCD12864/LCD12864.h>
 #include<Sources/ADC/ADC.h>
-#include<Sources/InterruptRoutine/InterruptRoutine.h>
 #include<Sources/XRAM/XRAM.h>
-#include<Sources/Timer/Timer4.h>
 #include<Sources/Pushbutton/Pushbutton.h>
 #include<Sources/Games/Snake/Snake.h>
 #include<Sources/Widgets/ListWidget/ListWidget.h>
 #include<Sources/IAP/IAP.h>
 #include<Sources/Widgets/InputDialog/InputDialog.h>
+#include<Sources/Serial/Serial.h>
 
 #include<stdio.h>
 #include<math.h>
-
-void uartInit(void){
-    SCON = 0x50;        //8位数据,可变波特率
-    AUXR |= 0x01;       //串口1选择定时器2为波特率发生器
-    AUXR &= 0xFB;       //定时器2时钟为Fosc/12,即12T
-    T2L = 0xFA;         //设定定时初值
-    T2H = 0xFF;         //设定定时初值
-    AUXR |= 0x10;       //启动定时器2
-    TI=1;
-}
 
 void initialize(){
     P0M0=0x00;
@@ -40,22 +29,19 @@ void initialize(){
     P4M0=0x00;
     P4M1=0x00;
 
-    uartInit();
-    // puts(COMPILE_DATE);
-    // puts(COMPILE_TIME);
-    // puts(uitoa(C51_VERSION,buffer));
-
-    delay(0,0,0);
-    interrupt_initialize();
+    // delay(0,0,0);
+    serial1_initialize(0xff,0xb8,1);
     spi_initialize();
     pwm_initialize(0);
     adc_initialize(0);
     iap_initialize();
+    clock_initialize();
 
     xRam_initialize();
     lcd12864_spi_initialize();
 
-    systemClock_initialize();
+    // while(1)
+    // puts("Hello World!");
 }
 
 unsigned char code *MAIN_TITLE="Main";

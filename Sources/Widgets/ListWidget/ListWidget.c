@@ -2,7 +2,7 @@
 #include"Sources/LCD12864/LCD12864.h"
 #include"Sources/Pushbutton/Pushbutton.h"
 #include"Sources/Universal/Universal.h"
-#include"Sources/Universal/SystemClock.h"
+#include"Sources/Clock/Clock.h"
 
 #include<string.h>
 
