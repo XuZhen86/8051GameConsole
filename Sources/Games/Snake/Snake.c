@@ -1,6 +1,6 @@
 #include"Sources/Games/Snake/Snake.h"
 
-#include"Sources/I23LC512/I23LC512.h"
+#include"Sources/xRam/xRam.h"
 #include"Sources/LCD12864/LCD12864.h"
 #include"Sources/Universal/SystemClock.h"
 #include"Sources/Universal/Universal.h"
@@ -273,13 +273,13 @@ void snake_restartTick(){
     unsigned char buffer[60];
 
     for(i=1;i<31;i++){
-        i23lc512_uCharSeqRead(buffer,MAP_ADDR+i*64+2,60);
+        xRam_uCharSeqRead(buffer,MAP_ADDR+i*64+2,60);
         for(j=1;j<31;j++){
             if(((unsigned int*)buffer)[j]){
                 ((unsigned int*)buffer)[j]-=deltaTick;
             }
         }
-        i23lc512_uCharSeqWrite(buffer,MAP_ADDR+i*64+2,60);
+        xRam_uCharSeqWrite(buffer,MAP_ADDR+i*64+2,60);
     }
 
     snakeTick-=deltaTick;
@@ -289,9 +289,9 @@ void snake_mapInitialize(){
     unsigned char i;
 
     // Clear map
-    i23lc512_memset(MAP_ADDR,0,MAP_SIZE);
+    xRam_memset(MAP_ADDR,0,MAP_SIZE);
     // Clear map delta
-    i23lc512_memset(MAP_DIRTY_ADDR,0xff,MAP_DIRTY_SIZE);
+    xRam_memset(MAP_DIRTY_ADDR,0xff,MAP_DIRTY_SIZE);
 
     // Setup walls
     for(i=0;i<32;i++){
@@ -319,14 +319,14 @@ void snake_mapInitialize(){
 unsigned int snake_mapGet(unsigned char x,unsigned char y){
     x%=32;
     y%=32;
-    return i23lc512_uIntRead(MAP_ADDR+x*64+y*2);
+    return xRam_uIntRead(MAP_ADDR+x*64+y*2);
 }
 
 unsigned int snake_mapSet(unsigned char x,unsigned char y,unsigned int val){
     x%=32;
     y%=32;
-    i23lc512_uCharWrite(MAP_DIRTY_ADDR+x*4+y/8,i23lc512_uCharRead(MAP_DIRTY_ADDR+x*4+y/8)|(1<<(y%8)));
-    return i23lc512_uIntWrite(MAP_ADDR+x*64+y*2,val);
+    xRam_uCharWrite(MAP_DIRTY_ADDR+x*4+y/8,xRam_uCharRead(MAP_DIRTY_ADDR+x*4+y/8)|(1<<(y%8)));
+    return xRam_uIntWrite(MAP_ADDR+x*64+y*2,val);
 }
 
 void snake_renewDisplay(bit forceFlush){
@@ -344,7 +344,7 @@ void snake_renewDisplay(bit forceFlush){
 
     // draw map
     for(i=0;i<64;i+=2){
-        i23lc512_uCharSeqRead(buffer,MAP_DIRTY_ADDR+i*2,4);
+        xRam_uCharSeqRead(buffer,MAP_DIRTY_ADDR+i*2,4);
         for(j=0;j<64;j+=2){
             if(buffer[j/16]&(1<<(j/2%8))){
                 lightUp=(snake_mapGet(i/2,j/2)!=0);
@@ -355,7 +355,7 @@ void snake_renewDisplay(bit forceFlush){
             }
         }
     }
-    i23lc512_memset(MAP_DIRTY_ADDR,0,MAP_DIRTY_SIZE);
+    xRam_memset(MAP_DIRTY_ADDR,0,MAP_DIRTY_SIZE);
 
     // draw food
     lcd12864_pixelSet(foodX*2,foodY*2,1);
@@ -378,7 +378,7 @@ void snake_iap_read(){
 
     iap_sectorRead(IAP_SECTOR);
     for(i=0;i<LEVEL_MAX;i++){
-        i23lc512_uIntWrite(HSCORE_ADDR+i*2,iap_uIntGet(IAP_HSCORE_OFFSET+i*2));
+        xRam_uIntWrite(HSCORE_ADDR+i*2,iap_uIntGet(IAP_HSCORE_OFFSET+i*2));
     }
 }
 
@@ -386,17 +386,17 @@ void snake_iap_write(){
     unsigned char i;
 
     for(i=0;i<LEVEL_MAX;i++){
-        iap_uIntSet(IAP_HSCORE_OFFSET+i*2,i23lc512_uIntRead(HSCORE_ADDR+i*2));
+        iap_uIntSet(IAP_HSCORE_OFFSET+i*2,xRam_uIntRead(HSCORE_ADDR+i*2));
     }
     iap_sectorWrite(IAP_SECTOR);
 }
 
 void snake_iap_highScoreSet(unsigned char level,unsigned int score){
-    i23lc512_uIntWrite(HSCORE_ADDR+level%LEVEL_MAX*2,score);
+    xRam_uIntWrite(HSCORE_ADDR+level%LEVEL_MAX*2,score);
 }
 
 unsigned int snake_iap_highScoreGet(unsigned char level){
-    unsigned int score=i23lc512_uIntRead(HSCORE_ADDR+level%LEVEL_MAX*2);
+    unsigned int score=xRam_uIntRead(HSCORE_ADDR+level%LEVEL_MAX*2);
     if(score<SCORE_MAX){
         return score;
     }else{
@@ -405,11 +405,11 @@ unsigned int snake_iap_highScoreGet(unsigned char level){
 }
 
 void snake_iap_levelSet(unsigned char level){
-    i23lc512_uCharWrite(LEVEL_ADDR,level);
+    xRam_uCharWrite(LEVEL_ADDR,level);
 }
 
 unsigned char snake_iap_levelGet(){
-    unsigned char level=i23lc512_uCharRead(LEVEL_ADDR);
+    unsigned char level=xRam_uCharRead(LEVEL_ADDR);
     if(LEVEL_MIN<=level&&level<=LEVEL_MAX){
         return level;
     }else{

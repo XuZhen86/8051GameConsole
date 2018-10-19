@@ -7,7 +7,7 @@
 #include<Sources/LCD12864/LCD12864.h>
 #include<Sources/ADC/ADC.h>
 #include<Sources/InterruptRoutine/InterruptRoutine.h>
-#include<Sources/I23LC512/I23LC512.h>
+#include<Sources/xRam/xRam.h>
 #include<Sources/Timer/Timer4.h>
 #include<Sources/Pushbutton/Pushbutton.h>
 #include<Sources/Games/Snake/Snake.h>
@@ -52,7 +52,7 @@ void initialize(){
     adc_initialize(0);
     iap_initialize();
 
-    i23lc512_initialize();
+    xRam_initialize();
     lcd12864_spi_initialize();
 
     systemClock_initialize();

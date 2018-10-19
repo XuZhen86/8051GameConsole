@@ -424,21 +424,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>I23LC512</GroupName>
-          <Files>
-            <File>
-              <FileName>I23LC512.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\I23LC512\I23LC512.c</FilePath>
-            </File>
-            <File>
-              <FileName>I23LC512.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\I23LC512\I23LC512.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>InterruptRoutine</GroupName>
           <Files>
             <File>
@@ -696,6 +681,26 @@
               <FileName>InputDialog.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Widgets\InputDialog\InputDialog.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>XRAM</GroupName>
+          <Files>
+            <File>
+              <FileName>XRAM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\XRAM\XRAM.c</FilePath>
+            </File>
+            <File>
+              <FileName>XRAM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\XRAM\XRAM.h</FilePath>
+            </File>
+            <File>
+              <FileName>XRAMConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\XRAM\XRAMConfig.h</FilePath>
             </File>
           </Files>
         </Group>

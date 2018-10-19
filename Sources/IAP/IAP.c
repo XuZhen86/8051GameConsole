@@ -1,5 +1,5 @@
 #include"Sources/Main/STC15W4K48S4.h"
-#include"Sources/I23LC512/I23LC512.h"
+#include"Sources/xRam/xRam.h"
 #include"Sources/Universal/SystemClock.h"
 
 #include"Sources/IAP/IAP.h"
@@ -55,7 +55,7 @@ void iap_sectorRead(unsigned char sector){
     for(i=0;i<512;i++){
         buffer[i%32]=iap_sectorReadByte(baseAddr+i);
         if(i%32==31){
-            i23lc512_uCharSeqWrite(buffer,BUFFER_ADDR+i&0xffe0,32);
+            xRam_uCharSeqWrite(buffer,BUFFER_ADDR+i&0xffe0,32);
         }
     }
 }
@@ -80,7 +80,7 @@ void iap_sectorWrite(unsigned char sector){
     iap_sectorErase(sector);
     for(i=0;i<512;i++){
         if(i%32==0){
-            i23lc512_uCharSeqRead(buffer,BUFFER_ADDR+i,32);
+            xRam_uCharSeqRead(buffer,BUFFER_ADDR+i,32);
         }
         iap_sectorWriteByte(baseAddr+i,buffer[i%32]);
     }
@@ -96,19 +96,19 @@ void iap_sectorErase(unsigned char sector){
 }
 
 unsigned char iap_uCharGet(unsigned int offset){
-    return i23lc512_uCharRead(BUFFER_ADDR+offset%512);
+    return xRam_uCharRead(BUFFER_ADDR+offset%512);
 }
 
 unsigned char iap_uCharSet(unsigned int offset,unsigned char c){
-    return i23lc512_uCharWrite(BUFFER_ADDR+offset%512,c);
+    return xRam_uCharWrite(BUFFER_ADDR+offset%512,c);
 }
 
 unsigned int iap_uIntGet(unsigned int offset){
-    return i23lc512_uIntRead(BUFFER_ADDR+offset%512);
+    return xRam_uIntRead(BUFFER_ADDR+offset%512);
 }
 
 unsigned int iap_uIntSet(unsigned int offset,unsigned int i){
-    return i23lc512_uIntWrite(BUFFER_ADDR+offset%512,i);
+    return xRam_uIntWrite(BUFFER_ADDR+offset%512,i);
 }
 
 // void _iap_sectorTest(unsigned char sector){

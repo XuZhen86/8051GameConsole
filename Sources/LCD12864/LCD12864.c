@@ -2,7 +2,7 @@
 #include"Sources/PWM/PWM.h"
 #include"Sources/Universal/Universal.h"
 #include"Sources/SPI/SPI.h"
-#include"Sources/I23LC512/I23LC512.h"
+#include"Sources/xRam/xRam.h"
 #include"Sources/Universal/SystemClock.h"
 #include"Sources/Widgets/InputDialog/InputDialog.h"
 #include"Sources/IAP/IAP.h"
@@ -171,8 +171,8 @@ void lcd12864_spi_initialize(){
 
     lcd12864_iap_read();
     lcd12864_pwm_initialize();
-    // i23lc512_memset(GDRAM_ADDR,BUFFER_INIT_VALUE,32*32*2);
-    i23lc512_memset(GDRAM_STACK_ADDR,BUFFER_INIT_VALUE,0x2000);
+    // xRam_memset(GDRAM_ADDR,BUFFER_INIT_VALUE,32*32*2);
+    xRam_memset(GDRAM_STACK_ADDR,BUFFER_INIT_VALUE,0x2000);
 }
 
 /**
@@ -186,7 +186,7 @@ bit lcd12864_flush(bit forceFlush){
 
     for(i=0;i<32;i++){
         if(forceFlush||gdramRowDirty[i/8]&(1<<(i%8))){
-            i23lc512_uCharSeqRead(buffer,GDRAM_ADDR+64*i,64);
+            xRam_uCharSeqRead(buffer,GDRAM_ADDR+64*i,64);
 
             for(j=0;j<32;j+=2){
                 if(forceFlush||buffer[j+0]!=buffer[j+32]||buffer[j+1]!=buffer[j+33]){
@@ -206,7 +206,7 @@ bit lcd12864_flush(bit forceFlush){
                     addressJustBeenSent=0;
                 }*/
             }
-            i23lc512_uCharSeqWrite(buffer+32,GDRAM_ADDR+64*i,32);
+            xRam_uCharSeqWrite(buffer+32,GDRAM_ADDR+64*i,32);
         }
     }
 
@@ -231,7 +231,7 @@ void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c){
     row%=32;
 
     for(i=row;i<row+8;i++){
-        i23lc512_uCharSeqRead(buffer,GDRAM_ADDR+64*i+32+col/8,2);
+        xRam_uCharSeqRead(buffer,GDRAM_ADDR+64*i+32+col/8,2);
 
         tempChar=buffer[0];
         tempChar&=(0xff<<(8-col%8));
@@ -244,7 +244,7 @@ void lcd12864_charSet(unsigned char row,unsigned char col,unsigned char c){
         buffer[3]=tempChar;
 
         if(buffer[0]!=buffer[2]||buffer[1]!=buffer[3]){
-            i23lc512_uCharSeqWrite(buffer+2,GDRAM_ADDR+64*i+32+col/8,2);
+            xRam_uCharSeqWrite(buffer+2,GDRAM_ADDR+64*i+32+col/8,2);
             gdramRowDirty[i/8]|=(1<<(i%8));
         }
     }
@@ -261,7 +261,7 @@ void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
     row%=32;
 
     for(i=row;i<row+8;i++){
-        i23lc512_uCharSeqRead(buffer,GDRAM_ADDR+64*i+32+16*rowGe32,16);
+        xRam_uCharSeqRead(buffer,GDRAM_ADDR+64*i+32+16*rowGe32,16);
         rowDirty=0;
         k=col;
 
@@ -290,7 +290,7 @@ void lcd12864_stringSet(unsigned char row,unsigned char col,unsigned char *str){
         }
 
         if(rowDirty){
-            i23lc512_uCharSeqWrite(buffer,GDRAM_ADDR+64*i+32+16*rowGe32,16);
+            xRam_uCharSeqWrite(buffer,GDRAM_ADDR+64*i+32+16*rowGe32,16);
             gdramRowDirty[i/8]|=(1<<(i%8));
         }
     }
@@ -304,7 +304,7 @@ void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp){
     if(row>31){col+=128;}
     row%=32;
 
-    buffer[0]=i23lc512_uCharRead(GDRAM_ADDR+64*row+32+col/8);
+    buffer[0]=xRam_uCharRead(GDRAM_ADDR+64*row+32+col/8);
 
     if(lightUp){
         buffer[1]=buffer[0]|(0x80>>col%8);
@@ -313,7 +313,7 @@ void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp){
     }
 
     if(buffer[0]!=buffer[1]){
-        i23lc512_uCharWrite(GDRAM_ADDR+64*row+32+col/8,buffer[1]);
+        xRam_uCharWrite(GDRAM_ADDR+64*row+32+col/8,buffer[1]);
         gdramRowDirty[row/8]|=(1<<(row%8));
     }
 }
@@ -321,7 +321,7 @@ void lcd12864_pixelSet(unsigned char row,unsigned char col,bit lightUp){
 void lcd12864_clear(){
     unsigned char idata i;
     for(i=0;i<32;i++){
-        i23lc512_memset(GDRAM_ADDR+64*i+32,BUFFER_INIT_VALUE,32);
+        xRam_memset(GDRAM_ADDR+64*i+32,BUFFER_INIT_VALUE,32);
     }
 
     for(i=0;i<4;i++){
@@ -336,7 +336,7 @@ bit lcd12864_bufferStackPush(){
         return 0;
     }else{
         for(i=0;i<32;i++){
-            i23lc512_memcpy(GDRAM_STACK_ADDR+1024*bufferStack+64*i,GDRAM_ADDR+64*i,32);
+            xRam_memcpy(GDRAM_STACK_ADDR+1024*bufferStack+64*i,GDRAM_ADDR+64*i,32);
         }
         bufferStack++;
         return 1;
@@ -351,7 +351,7 @@ bit lcd12864_bufferStackPop(){
     }else{
         bufferStack--;
         for(i=0;i<32;i++){
-            i23lc512_memcpy(GDRAM_ADDR+64*i+32,GDRAM_STACK_ADDR+1024*bufferStack+64*i,32);
+            xRam_memcpy(GDRAM_ADDR+64*i+32,GDRAM_STACK_ADDR+1024*bufferStack+64*i,32);
         }
         for(i=0;i<4;i++){
             gdramRowDirty[i]=0xff;
@@ -373,17 +373,17 @@ void lcd12864_bufferStackClear(){
 
 //     for(i=startRow;i<endRow;i++){
 //         if(i<32){
-//             i23lc512_uCharSeqRead(buffer,GDRAM_ADDR+64*i+32,16);
+//             xRam_uCharSeqRead(buffer,GDRAM_ADDR+64*i+32,16);
 //             for(j=0;j<16;j++){
 //                 buffer[i]=~buffer[i];
 //             }
-//             i23lc512_uCharSeqWrite(buffer,GDRAM_ADDR+64*i+32,16);
+//             xRam_uCharSeqWrite(buffer,GDRAM_ADDR+64*i+32,16);
 //         }else{
-//             i23lc512_uCharSeqRead(buffer,GDRAM_ADDR+64*i+48,16);
+//             xRam_uCharSeqRead(buffer,GDRAM_ADDR+64*i+48,16);
 //             for(j=0;j<16;j++){
 //                 buffer[i]=~buffer[i];
 //             }
-//             i23lc512_uCharSeqWrite(buffer,GDRAM_ADDR+64*i+48,16);
+//             xRam_uCharSeqWrite(buffer,GDRAM_ADDR+64*i+48,16);
 //         }
 //     }
 // }
@@ -392,10 +392,10 @@ void lcd12864_hLineSet(unsigned char row,bit lightUp){
     row%=64;
 
     if(row<32){
-        i23lc512_memset(GDRAM_ADDR+64*row+32,0xff*lightUp,16);
+        xRam_memset(GDRAM_ADDR+64*row+32,0xff*lightUp,16);
     }else{
         row%=32;
-        i23lc512_memset(GDRAM_ADDR+64*row+48,0xff*lightUp,16);
+        xRam_memset(GDRAM_ADDR+64*row+48,0xff*lightUp,16);
     }
     gdramRowDirty[row/8]|=(1<<(row%8));
 }
