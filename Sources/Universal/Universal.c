@@ -2,27 +2,6 @@
 
 #include"Sources/Universal/Universal.h"
 
-sbit systemBusyLed=P2^5;
-bit delay(unsigned char i,unsigned char j,unsigned char k){
-    systemBusyLed=0;
-    do{
-        do{
-            while(k--);
-        }while(j--);
-    }while(i--);
-    systemBusyLed=1;
-    return 1;
-}
-
-bit delayBusy(unsigned char i,unsigned char j,unsigned char k){
-    do{
-        do{
-            while(k--);
-        }while(j--);
-    }while(i--);
-    return 1;
-}
-
 char* uctoa(unsigned char value,char *str){
     unsigned char len=0,i,temp;
 

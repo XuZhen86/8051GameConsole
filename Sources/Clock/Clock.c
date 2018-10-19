@@ -5,8 +5,8 @@
 
 static unsigned int data delta=0;
 
-static unsigned long int idata clock=0;
-static unsigned int idata millisecond=0;
+static unsigned long int data clock=0;
+static unsigned int data millisecond=0;
 static unsigned char second=0,minute=0,hour=0,day=0;
 
 static bit timerIsRunning;

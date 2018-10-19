@@ -6,6 +6,7 @@
 #include"Sources/Universal/Universal.h"
 #include"Sources/Pushbutton/Pushbutton.h"
 #include"Sources/IAP/IAP.h"
+#include"Sources/Delay/Delay.h"
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -103,10 +104,11 @@ unsigned char snake_gamePlay(){
         clock_timerStart(refreshInterval);
 
         pressedDirection=direction;
-        while(!clock_timerIsTimeUp()&&delay(0,108,145)){
+        while(!clock_timerIsTimeUp()){
             if(pushbutton_directionGet()!=INVALID){
                 pressedDirection=pushbutton_lastPressedDirectionGet();
             }
+            delay(LEVEL_DELAY);
         }
 
         if(pressedDirection==BACK||pressedDirection==FORWARD){

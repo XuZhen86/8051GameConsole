@@ -1,5 +1,6 @@
 #include"Sources/ADC/ADC.h"
 #include"Sources/Universal/Universal.h"
+#include"Sources/Delay/Delay.h"
 
 #include"Sources/Pushbutton/Pushbutton.h"
 
@@ -17,12 +18,6 @@ enum{
     TRIAL_COUNT=8,
     TOLERANCE_NUMBER=4,
     TOLERANCE_DIRECTION=4
-};
-
-enum DELAY_PARAMETERS{
-    DELAY_I=0,
-    DELAY_J=108,
-    DELAY_K=145
 };
 
 static unsigned char
@@ -117,26 +112,26 @@ unsigned char pushbutton_directionGet(){
 
 unsigned char pushbutton_waitNumberGet(){
     while(pushbutton_numberGet()==PUSHBUTTON_NUMBER_INVALID){
-        delay(DELAY_I,DELAY_J,DELAY_K);
+        delay(50);
     }
     return lastPressedNumber;
 }
 
 unsigned char pushbutton_waitDirectionGet(){
     while(pushbutton_directionGet()==PUSHBUTTON_DIRECTION_INVALID){
-        delay(DELAY_I,DELAY_J,DELAY_K);
+        delay(50);
     }
     return lastPressedDirection;
 }
 
 void pushbutton_waitNumberRelease(){
     while(pushbutton_numberGet()!=PUSHBUTTON_NUMBER_INVALID){
-        delay(DELAY_I,DELAY_J,DELAY_K);
+        delay(50);
     }
 }
 void pushbutton_waitDirectionRelease(){
     while(pushbutton_directionGet()!=PUSHBUTTON_DIRECTION_INVALID){
-        delay(DELAY_I,DELAY_J,DELAY_K);
+        delay(50);
     }
 }
 

@@ -699,6 +699,36 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Power</GroupName>
+          <Files>
+            <File>
+              <FileName>Power.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Power\Power.c</FilePath>
+            </File>
+            <File>
+              <FileName>Power.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Power\Power.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Delay</GroupName>
+          <Files>
+            <File>
+              <FileName>Delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Delay\Delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>Delay.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Delay\Delay.h</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

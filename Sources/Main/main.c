@@ -28,8 +28,8 @@ void initialize(){
     P3M1=0x00;
     P4M0=0x00;
     P4M1=0x00;
+    EA=1;
 
-    // delay(0,0,0);
     serial1_initialize(0xff,0xb8,1);
     spi_initialize();
     pwm_initialize(0);
@@ -39,9 +39,6 @@ void initialize(){
 
     xRam_initialize();
     lcd12864_spi_initialize();
-
-    // while(1)
-    // puts("Hello World!");
 }
 
 unsigned char code *MAIN_TITLE="Main";
@@ -76,7 +73,7 @@ void slotUCharValueChanged(unsigned char uChar){
 void main(){
     initialize();
 
-    while(delay(0,0,0)){
+    while(1){
         switch(listWidget_selectFromList(MAIN_TITLE,MAIN_ITEMS,MAIN_ITEM_COUNT,slotCurrentItemChanged,0)){
             case 0:
                 snake();

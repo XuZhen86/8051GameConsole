@@ -5,6 +5,7 @@
 #include"Sources/XRAM/XRAM.h"
 #include"Sources/Widgets/InputDialog/InputDialog.h"
 #include"Sources/IAP/IAP.h"
+#include"Sources/Delay/Delay.h"
 
 #include"Sources/LCD12864/LCD12864.h"
 #include"Sources/LCD12864/LCD12864_ASCII6x8.h"
@@ -65,7 +66,7 @@ void lcd12864_spi_send(bit b,unsigned char c){
 
     spi_waitFinish();
     chipSelect=0;
-    delayBusy(0,0,50);
+    delayLoop(0,0,50);
 }
 
 void lcd12864_spi_send2Bytes(bit b,unsigned char c1,unsigned char c2){
@@ -81,14 +82,14 @@ void lcd12864_spi_send2Bytes(bit b,unsigned char c1,unsigned char c2){
 
     spi_waitFinish();
     chipSelect=0;
-    delayBusy(0,0,50);
+    delayLoop(0,0,50);
 }
 
 void lcd12864_hwReset(){
     resetSignal=0;
-    delayBusy(1,146,229);
+    delay(20);
     resetSignal=1;
-    delayBusy(1,146,229);
+    delay(20);
 }
 
 void lcd12864_pwm_initialize(){
