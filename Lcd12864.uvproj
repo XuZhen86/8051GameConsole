@@ -501,11 +501,6 @@
               <FileType>5</FileType>
               <FilePath>.\Sources\PWM\PWM.h</FilePath>
             </File>
-            <File>
-              <FileName>PWM_XSFR.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\PWM\PWM_XSFR.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

@@ -93,8 +93,7 @@ void lcd12864_hwReset(){
 }
 
 void lcd12864_pwm_initialize(){
-    pwm_3_initialize(1,1,0,0,0,lcd12864_iap_brightnessRawGet());
-    pwm_start();
+    pwm3_initialize(0,lcd12864_iap_brightnessRawGet(),1,1);
 }
 
 void lcd12864_brightnessAdjust(){
@@ -140,7 +139,7 @@ unsigned int lcd12864_iap_brightnessRawSet(unsigned int brightnessRaw){
     }
 
     iap_uIntSet(IAP_BRIGHTNESS_OFFSET,brightnessRaw);
-    pwm_3_timerValueSet(0,brightnessRaw);
+    pwm3_timerValueSet(0,brightnessRaw);
     return brightnessRaw;
 }
 

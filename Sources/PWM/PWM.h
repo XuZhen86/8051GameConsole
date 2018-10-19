@@ -1,17 +1,15 @@
 #ifndef PWM_h_
 #define PWM_h_
 
-void pwn_initialize(bit clkSrc,unsigned char clkDiv);
-void pwm_enable();
-void pwm_xsfrFlush();
-void pwm_3_initialize(bit initVolt,bit portSelect,bit t1Intr,bit t2Intr,unsigned int t1InitV,unsigned int t2InitV);
-void pwm_3_timerValueSet(unsigned int t1InitV,unsigned int t2InitV);
-void pwm_4_initialize(bit initVolt,bit portSelect,bit t1Intr,bit t2Intr,unsigned int t1InitV,unsigned int t2InitV);
-void pwm_4_timerValueSet(unsigned int t1InitV,unsigned int t2InitV);
-void pwm_5_initialize(bit initVolt,bit portSelect,bit t1Intr,bit t2Intr,unsigned int t1InitV,unsigned int t2InitV);
-void pwm_5_timerValueSet(unsigned int t1InitV,unsigned int t2InitV);
-void pwm_start();
+void pwm_initialize(unsigned char clkDiv);
 
-static void interruptRoutine();
+void pwm3_initialize(unsigned int imm16T1,unsigned int imm16T2,bit initVolt,bit portSelect);
+void pwm3_timerValueSet(unsigned int imm16T1,unsigned int imm16T2);
+
+void pwm_4_initialize(unsigned int imm16T1,unsigned int imm16T2,bit initVolt,bit portSelect);
+void pwm4_timerValueSet(unsigned int imm16T1,unsigned int imm16T2);
+
+void pwm_5_initialize(unsigned int imm16T1,unsigned int imm16T2,bit initVolt,bit portSelect);
+void pwm5_timerValueSet(unsigned int imm16T1,unsigned int imm16T2);
 
 #endif

@@ -48,7 +48,7 @@ void initialize(){
     delay(0,0,0);
     interrupt_initialize();
     spi_initialize();
-    pwn_initialize(0,0);
+    pwm_initialize(0);
     adc_initialize(0);
     iap_initialize();
 
