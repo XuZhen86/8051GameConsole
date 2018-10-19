@@ -2,7 +2,7 @@
 #include"Sources/PWM/PWM.h"
 #include"Sources/Universal/Universal.h"
 #include"Sources/SPI/SPI.h"
-#include"Sources/xRam/xRam.h"
+#include"Sources/XRAM/XRAM.h"
 #include"Sources/Universal/SystemClock.h"
 #include"Sources/Widgets/InputDialog/InputDialog.h"
 #include"Sources/IAP/IAP.h"
@@ -57,26 +57,20 @@ sbit chipSelect=P2^7;
 sbit resetSignal=P2^0;
 
 void lcd12864_spi_send(bit b,unsigned char c){
-    spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
-    spi_isOccupiedSet(1);
-
+    spi_setup(SPI_CLKDIV,SPI_CPOL,SPI_CPHA);
     chipSelect=1;
 
     spi_send(b?0xfa:0xf8);
     spi_send(c&0xf0);
     spi_send(c<<4);
 
-    while(!spi_transmissionCompleteGet());
+    spi_waitFinish();
     chipSelect=0;
     delayBusy(0,0,50);
-
-    spi_isOccupiedSet(0);
 }
 
 void lcd12864_spi_send2Bytes(bit b,unsigned char c1,unsigned char c2){
-    spi_setup(SPI_CPOL,SPI_CPHA,SPI_CLKDIV);
-    spi_isOccupiedSet(1);
-
+    spi_setup(SPI_CLKDIV,SPI_CPOL,SPI_CPHA);
     chipSelect=1;
 
     spi_send(b?0xfa:0xf8);
@@ -86,11 +80,9 @@ void lcd12864_spi_send2Bytes(bit b,unsigned char c1,unsigned char c2){
     spi_send(c2&0xf0);
     spi_send(c2<<4);
 
-    while(!spi_transmissionCompleteGet());
+    spi_waitFinish();
     chipSelect=0;
     delayBusy(0,0,50);
-
-    spi_isOccupiedSet(0);
 }
 
 void lcd12864_hwReset(){

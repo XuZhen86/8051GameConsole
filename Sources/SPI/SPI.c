@@ -1,34 +1,24 @@
-#include<Sources/Main/STC15W4K48S4.h>
+#include"Sources/Main/STC15W4K48S4.h"
 
 #include"Sources/SPI/SPI.h"
 
-static bit isOccupied=0;
-
-void spi_isOccupiedSet(bit o){
-    isOccupied=o;
-}
-
-bit spi_isOccupiedGet(){
-    return isOccupied;
-}
-
-void spi_initialize(bit cpol,bit cpha,unsigned char clkDiv){
-    SPCTL=(0xd0|(0x08*cpol)|(0x04*cpha)|(0x03&clkDiv));
+void spi_initialize(){
+    SPCTL=0xd0;
     P_SW1|=0x04;
     SPSTAT=0xc0;
     SPDAT=0x00;
 }
 
-void spi_setup(bit cpol,bit cpha,unsigned char clkDiv){
+void spi_setup(unsigned char clkDiv,bit cpol,bit cpha){
     while(!(SPSTAT&0x80));
     SPCTL=(0xd0|(0x08*cpol)|(0x04*cpha)|(0x03&clkDiv));
 }
 
-unsigned char spi_send(unsigned char c){
+unsigned char spi_send(unsigned char imm8){
     while(!(SPSTAT&0x80));
     SPSTAT|=0x80;
-    SPDAT=c;
-    return c;
+    SPDAT=imm8;
+    return imm8;
 }
 
 unsigned char spi_recv(){
@@ -39,29 +29,29 @@ unsigned char spi_recv(){
     return SPDAT;
 }
 
-unsigned char *spi_seqRecv(unsigned char *destination,unsigned int length){
+unsigned char *spi_recvSeq(unsigned char *dst,unsigned int len){
     unsigned int data i;
-    unsigned char data buffer;
+    unsigned char data buf;
 
     while(!(SPSTAT&0x80));
     SPSTAT|=0x80;
     SPDAT=0x00;
 
-    for(i=0;i<length-1;i++){
+    for(i=0;i<len-1;i++){
         while(!(SPSTAT&0x80));
-        buffer=SPDAT;
+        buf=SPDAT;
         SPSTAT|=0x80;
         SPDAT=0x00;
-        destination[i]=buffer;
+        dst[i]=buf;
     }
 
     while(!(SPSTAT&0x80));
-    buffer=SPDAT;
-    destination[length-1]=buffer;
+    buf=SPDAT;
+    dst[len-1]=buf;
 
-    return destination;
+    return dst;
 }
 
-bit spi_transmissionCompleteGet(){
-    return (SPSTAT&0x80)!=0;
+void spi_waitFinish(){
+    while((SPSTAT&0x80)==0);
 }

@@ -15,7 +15,7 @@ unsigned char xRam_writeModeRegister(unsigned char mode){
     spi_send(WRMR);
     spi_send(mode);
 
-    while(!spi_transmissionCompleteGet());
+    spi_waitFinish();
     CS=1;
     return mode;
 }
@@ -29,7 +29,7 @@ unsigned char xRam_uCharWrite(unsigned int m16,unsigned char imm8){
     spi_send(m16);
     spi_send(imm8);
 
-    while(!spi_transmissionCompleteGet());
+    spi_waitFinish();
     CS=1;
     return imm8;
 }
@@ -58,7 +58,7 @@ unsigned int xRam_uIntWrite(unsigned int m16,unsigned int imm16){
     spi_send(imm16>>8);
     spi_send(imm16);
 
-    while(!spi_transmissionCompleteGet());
+    spi_waitFinish();
     CS=1;
     return imm16;
 }
@@ -86,7 +86,7 @@ unsigned char *xRam_uCharSeqRead(unsigned char *dst,unsigned int m16,unsigned in
     spi_send(READ);
     spi_send(m16>>8);
     spi_send(m16);
-    spi_seqRecv(dst,len);
+    spi_recvSeq(dst,len);
 
     CS=1;
     return dst;
@@ -105,13 +105,12 @@ unsigned char *xRam_uCharSeqWrite(unsigned char *src,unsigned int m16,unsigned i
         spi_send(src[i]);
     }
 
-    while(!spi_transmissionCompleteGet());
+    spi_waitFinish();
     CS=1;
     return src;
 }
 
 unsigned int xRam_memset(unsigned int m16Dst,unsigned char imm8,unsigned int len){
-    unsigned int idata i;
     spi_setup(CPOL,CPHA,CLKDIV);
     CS=0;
 
@@ -119,11 +118,11 @@ unsigned int xRam_memset(unsigned int m16Dst,unsigned char imm8,unsigned int len
     spi_send(m16Dst>>8);
     spi_send(m16Dst);
 
-    for(i=0;i<len;i++){
+    while(len--){
         spi_send(imm8);
     }
 
-    while(!spi_transmissionCompleteGet());
+    spi_waitFinish();
     CS=1;
     return m16Dst;
 }

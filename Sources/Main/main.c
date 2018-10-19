@@ -7,7 +7,7 @@
 #include<Sources/LCD12864/LCD12864.h>
 #include<Sources/ADC/ADC.h>
 #include<Sources/InterruptRoutine/InterruptRoutine.h>
-#include<Sources/xRam/xRam.h>
+#include<Sources/XRAM/XRAM.h>
 #include<Sources/Timer/Timer4.h>
 #include<Sources/Pushbutton/Pushbutton.h>
 #include<Sources/Games/Snake/Snake.h>
@@ -47,7 +47,7 @@ void initialize(){
 
     delay(0,0,0);
     interrupt_initialize();
-    spi_initialize(0,0,0);
+    spi_initialize();
     pwn_initialize(0,0);
     adc_initialize(0);
     iap_initialize();

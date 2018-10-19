@@ -1,6 +1,6 @@
 #include"Sources/Games/Snake/Snake.h"
 
-#include"Sources/xRam/xRam.h"
+#include"Sources/XRAM/XRAM.h"
 #include"Sources/LCD12864/LCD12864.h"
 #include"Sources/Universal/SystemClock.h"
 #include"Sources/Universal/Universal.h"
