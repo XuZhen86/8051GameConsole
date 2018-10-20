@@ -1,9 +1,9 @@
-#ifndef LCD12864_ASCII6x8_H_
-#define LCD12864_ASCII6x8_H_
+#ifndef LCD_ASCII6x8_H_
+#define LCD_ASCII6x8_H_
 
 // Adapted from https://github.com/idispatch/raster-fonts/blob/master/font-6x8.c
 
-static unsigned char code LCD12864_ASCII6x8[256][8]={
+static unsigned char code LCD_ASCII6x8[256][8]={
     /*
      * code=0, hex=0x00, ascii="^@"
      */

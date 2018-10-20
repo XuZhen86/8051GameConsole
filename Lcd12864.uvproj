@@ -439,27 +439,27 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>LCD12864</GroupName>
+          <GroupName>LCD</GroupName>
           <Files>
             <File>
-              <FileName>LCD12864.c</FileName>
+              <FileName>LCD.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\LCD12864\LCD12864.c</FilePath>
+              <FilePath>.\Sources\LCD\LCD.c</FilePath>
             </File>
             <File>
-              <FileName>LCD12864.h</FileName>
+              <FileName>LCD.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Sources\LCD12864\LCD12864.h</FilePath>
+              <FilePath>.\Sources\LCD\LCD.h</FilePath>
             </File>
             <File>
-              <FileName>LCD12864_ASCII5x8.h</FileName>
+              <FileName>LCD_ASCII5x8.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Sources\LCD12864\LCD12864_ASCII5x8.h</FilePath>
+              <FilePath>.\Sources\LCD\LCD_ASCII5x8.h</FilePath>
             </File>
             <File>
-              <FileName>LCD12864_ASCII6x8.h</FileName>
+              <FileName>LCD_ASCII6x8.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Sources\LCD12864\LCD12864_ASCII6x8.h</FilePath>
+              <FilePath>.\Sources\LCD\LCD_ASCII6x8.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -726,6 +726,21 @@
               <FileName>Delay.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Delay\Delay.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Stack</GroupName>
+          <Files>
+            <File>
+              <FileName>Stack.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Stack\Stack.c</FilePath>
+            </File>
+            <File>
+              <FileName>Stack.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Stack\Stack.h</FilePath>
             </File>
           </Files>
         </Group>

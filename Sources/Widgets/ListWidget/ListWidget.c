@@ -1,5 +1,5 @@
 #include"Sources/Widgets/ListWidget/ListWidget.h"
-#include"Sources/LCD12864/LCD12864.h"
+#include"Sources/LCD/LCD.h"
 #include"Sources/Pushbutton/Pushbutton.h"
 #include"Sources/Universal/Universal.h"
 #include"Sources/Clock/Clock.h"
@@ -17,42 +17,42 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
     unsigned char buffer[BUFFER_SIZE];
 
     if(saveBuffer){
-        lcd12864_bufferStackPush();
+        lcd_bufferStackPush();
     }
-    lcd12864_clear();
+    lcd_clear();
 
-    lcd12864_charSet(0,0,POINTER_CHAR_LEFT);
-    lcd12864_stringSet(0,(21-strlen(title))/2,title);
-    lcd12864_hLineSet(7,1);
+    lcd_charSet(0,0,POINTER_CHAR_LEFT);
+    lcd_stringSet(0,(21-strlen(title))/2,title);
+    lcd_hLineSet(7,1);
 
     for(i=0;i<itemCount&&i<7;i++){
-        lcd12864_stringSet(i+1,2,listWidget_strcpySpaceExtend(buffer,items[i]));
+        lcd_stringSet(i+1,2,listWidget_strcpySpaceExtend(buffer,items[i]));
     }
 
-    lcd12864_charSet(selectedRow+1,0,POINTER_CHAR_RIGHT);
+    lcd_charSet(selectedRow+1,0,POINTER_CHAR_RIGHT);
 
-    while(lcd12864_flush(0)){
+    while(lcd_flush(0)){
         switch(pushbutton_waitDirectionGet()){
             case PUSHBUTTON_DIRECTION_UP:
                 if(selectedItem){   // If not reaching top of the list
                     if(selectedRow){    // If not reaching top of the display
-                        lcd12864_charSet(selectedRow+1,0,' ');
-                        lcd12864_charSet(--selectedRow+1,0,POINTER_CHAR_RIGHT);
+                        lcd_charSet(selectedRow+1,0,' ');
+                        lcd_charSet(--selectedRow+1,0,POINTER_CHAR_RIGHT);
                     }else{  // Reached top of the display, move items down one slot
                         for(i=selectedItem-1;i<selectedItem+6&&i<itemCount;i++){
-                            lcd12864_stringSet(i-selectedItem+2,2,listWidget_strcpySpaceExtend(buffer,items[i]));
+                            lcd_stringSet(i-selectedItem+2,2,listWidget_strcpySpaceExtend(buffer,items[i]));
                         }
                     }
                     selectedItem--;
                 }else{  // Reached top of the list
-                    lcd12864_charSet(selectedRow+1,0,' ');
+                    lcd_charSet(selectedRow+1,0,' ');
                     if(itemCount<7){    // If have less than 7 items, no need to redraw list
-                        lcd12864_charSet((selectedItem=selectedRow=itemCount-1)+1,0,POINTER_CHAR_RIGHT);
+                        lcd_charSet((selectedItem=selectedRow=itemCount-1)+1,0,POINTER_CHAR_RIGHT);
                     }else{  // Have more than 7 items, redraw list
-                        lcd12864_charSet((selectedRow=6)+1,0,POINTER_CHAR_RIGHT);
+                        lcd_charSet((selectedRow=6)+1,0,POINTER_CHAR_RIGHT);
                         selectedItem=itemCount-1;
                         for(i=itemCount-7;i<itemCount;i++){
-                            lcd12864_stringSet(i-(itemCount-8),2,listWidget_strcpySpaceExtend(buffer,items[i]));
+                            lcd_stringSet(i-(itemCount-8),2,listWidget_strcpySpaceExtend(buffer,items[i]));
                         }
                     }
                 }
@@ -60,36 +60,36 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
             case PUSHBUTTON_DIRECTION_DOWN:
                 if(selectedItem!=itemCount-1){  // If not reaching end of the list
                     if(selectedRow!=6){ // If not reaching end of the display
-                        lcd12864_charSet(selectedRow+1,0,' ');
-                        lcd12864_charSet(++selectedRow+1,0,POINTER_CHAR_RIGHT);
+                        lcd_charSet(selectedRow+1,0,' ');
+                        lcd_charSet(++selectedRow+1,0,POINTER_CHAR_RIGHT);
                     }else{  // Reached end of the display, move items up one slot
                         for(i=selectedItem-5;i<selectedItem+2&&i<itemCount;i++){
-                            lcd12864_stringSet(i-selectedItem+6,2,listWidget_strcpySpaceExtend(buffer,items[i]));
+                            lcd_stringSet(i-selectedItem+6,2,listWidget_strcpySpaceExtend(buffer,items[i]));
                         }
                     }
                     selectedItem++;
                 }else{  // Reached end of the list
-                    lcd12864_charSet(selectedRow+1,0,' ');
-                    lcd12864_charSet((selectedRow=0)+1,0,POINTER_CHAR_RIGHT);
+                    lcd_charSet(selectedRow+1,0,' ');
+                    lcd_charSet((selectedRow=0)+1,0,POINTER_CHAR_RIGHT);
                     for(i=0;i<itemCount&&i<7;i++){
-                        lcd12864_stringSet(i+1,2,listWidget_strcpySpaceExtend(buffer,items[i]));
+                        lcd_stringSet(i+1,2,listWidget_strcpySpaceExtend(buffer,items[i]));
                     }
                     selectedItem=0;
                 }
                 break;
             case PUSHBUTTON_DIRECTION_FORWARD:  // Confirm selection
                 if(saveBuffer){
-                    lcd12864_bufferStackPop();
+                    lcd_bufferStackPop();
                 }
                 pushbutton_waitDirectionRelease();
-                lcd12864_flush(0);
+                lcd_flush(0);
                 return selectedItem;
             case PUSHBUTTON_DIRECTION_BACK: // Cancel selection
                 if(saveBuffer){
-                    lcd12864_bufferStackPop();
+                    lcd_bufferStackPop();
                 }
                 pushbutton_waitDirectionRelease();
-                lcd12864_flush(0);
+                lcd_flush(0);
                 return itemCount;
         }
 
@@ -102,9 +102,9 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
 
     // This part should never be reached
     if(saveBuffer){
-        lcd12864_bufferStackPop();
+        lcd_bufferStackPop();
     }
-    lcd12864_flush(0);
+    lcd_flush(0);
     return itemCount;
 }
 

@@ -1,7 +1,7 @@
 #include"Sources/Version/Version.h"
 #include"Sources/Version/VersionNumbers.h"
 
-#include"Sources/LCD12864/LCD12864.h"
+#include"Sources/LCD/LCD.h"
 #include"Sources/Pushbutton/Pushbutton.h"
 #include"Sources/Universal/Universal.h"
 #include"Sources/Widgets/ListWidget/ListWidget.h"

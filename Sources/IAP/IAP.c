@@ -4,7 +4,7 @@
 #include"Sources/IAP/IAP.h"
 
 enum IAP_RAM_CONFIG{
-    BUFFER_ADDR=0xdc00,
+    BUFFER_ADDR=0x2000,
     BUFFER_SIZE=512,
 };
 
@@ -54,7 +54,7 @@ void iap_sectorRead(unsigned char sector){
     for(i=0;i<512;i++){
         buffer[i%32]=iap_sectorReadByte(baseAddr+i);
         if(i%32==31){
-            xRam_uCharSeqWrite(buffer,BUFFER_ADDR+i&0xffe0,32);
+            xRam_uCharWriteSeq(buffer,BUFFER_ADDR+i&0xffe0,32);
         }
     }
 }
@@ -79,7 +79,7 @@ void iap_sectorWrite(unsigned char sector){
     iap_sectorErase(sector);
     for(i=0;i<512;i++){
         if(i%32==0){
-            xRam_uCharSeqRead(buffer,BUFFER_ADDR+i,32);
+            xRam_uCharReadSeq(buffer,BUFFER_ADDR+i,32);
         }
         iap_sectorWriteByte(baseAddr+i,buffer[i%32]);
     }

@@ -21,6 +21,16 @@ unsigned char spi_send(unsigned char imm8){
     return imm8;
 }
 
+unsigned char *spi_sendSeq(unsigned char *src,unsigned int len){
+    unsigned int data i;
+    for(i=0;i<len;i++){
+        while((SPSTAT&0x80)==0);
+        SPSTAT|=0x80;
+        SPDAT=src[i];
+    }
+    return src;
+}
+
 unsigned char spi_recv(){
     while((SPSTAT&0x80)==0);
     SPSTAT|=0x80;

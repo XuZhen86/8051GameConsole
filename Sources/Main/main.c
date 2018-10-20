@@ -4,7 +4,7 @@
 #include<Sources/Clock/Clock.h>
 #include<Sources/PWM/PWM.h>
 #include<Sources/SPI/SPI.h>
-#include<Sources/LCD12864/LCD12864.h>
+#include<Sources/LCD/LCD.h>
 #include<Sources/ADC/ADC.h>
 #include<Sources/XRAM/XRAM.h>
 #include<Sources/Pushbutton/Pushbutton.h>
@@ -13,6 +13,7 @@
 #include<Sources/IAP/IAP.h>
 #include<Sources/Widgets/InputDialog/InputDialog.h>
 #include<Sources/Serial/Serial.h>
+#include<Sources/Stack/Stack.h>
 
 #include<stdio.h>
 #include<math.h>
@@ -32,13 +33,14 @@ void initialize(){
 
     serial1_initialize(0xff,0xb8,1);
     spi_initialize();
+    xRam_initialize();
     pwm_initialize(0);
     adc_initialize(0);
     iap_initialize();
     clock_initialize();
 
-    xRam_initialize();
-    lcd12864_spi_initialize();
+    stack_initialize(0x0000);
+    lcd_spi_initialize();
 }
 
 unsigned char code *MAIN_TITLE="Main";
@@ -79,7 +81,7 @@ void main(){
                 snake();
                 break;
             case 1:
-                lcd12864_brightnessAdjust();
+                lcd_brightnessAdjust();
                 break;
             case 2:
                 version_showVersion();

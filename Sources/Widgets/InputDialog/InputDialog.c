@@ -1,5 +1,5 @@
 #include"Sources/Widgets/InputDialog/InputDialog.h"
-#include"Sources/LCD12864/LCD12864.h"
+#include"Sources/LCD/LCD.h"
 #include"Sources/Pushbutton/Pushbutton.h"
 
 #include<stdio.h>
@@ -18,27 +18,27 @@ unsigned char inputDialog_getUChar(unsigned char *title,unsigned char value,unsi
     bit answerDetermined=0;
 
     if(saveBuffer){
-        lcd12864_bufferStackPush();
+        lcd_bufferStackPush();
     }
 
-    lcd12864_stringSet(2,2,"                 ");
-    lcd12864_stringSet(3,2,"                 ");
-    lcd12864_stringSet(4,2,"                 ");
-    lcd12864_stringSet(2,(21-strlen(title))/2,title);
+    lcd_stringSet(2,2,"                 ");
+    lcd_stringSet(3,2,"                 ");
+    lcd_stringSet(4,2,"                 ");
+    lcd_stringSet(2,(21-strlen(title))/2,title);
 
     for(i=0;i<BOARDER_SIZE;i++){
-        lcd12864_pixelSet(15,15+i,1);
-        lcd12864_pixelSet(15+i,15,1);
-        lcd12864_pixelSet(15,113-i,1);
-        lcd12864_pixelSet(15+i,113,1);
-        lcd12864_pixelSet(40,15+i,1);
-        lcd12864_pixelSet(40-i,15,1);
-        lcd12864_pixelSet(40,113-i,1);
-        lcd12864_pixelSet(40-i,113,1);
+        lcd_pixelSet(15,15+i,1);
+        lcd_pixelSet(15+i,15,1);
+        lcd_pixelSet(15,113-i,1);
+        lcd_pixelSet(15+i,113,1);
+        lcd_pixelSet(40,15+i,1);
+        lcd_pixelSet(40-i,15,1);
+        lcd_pixelSet(40,113-i,1);
+        lcd_pixelSet(40-i,113,1);
     }
 
     inputDialog_getUChar_printValue(value,min,max);
-    while(lcd12864_flush(0)&&!answerDetermined){
+    while(lcd_flush(0)&&!answerDetermined){
         switch(pushbutton_waitDirectionGet()){
             case PUSHBUTTON_DIRECTION_UP:
                 value+=step;
@@ -69,7 +69,7 @@ unsigned char inputDialog_getUChar(unsigned char *title,unsigned char value,unsi
     }
 
     if(saveBuffer){
-        lcd12864_bufferStackPop();
+        lcd_bufferStackPop();
     }
     return value;
 }
@@ -88,5 +88,5 @@ void inputDialog_getUChar_printValue(unsigned char value,unsigned char min,unsig
         buffer[bufferLen-2]=POINTER_CHAR_UP_DOWN;
     }
 
-    lcd12864_stringSet(4,(22-bufferLen)/2,buffer);
+    lcd_stringSet(4,(22-bufferLen)/2,buffer);
 }
