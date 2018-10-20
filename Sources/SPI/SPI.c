@@ -41,7 +41,6 @@ unsigned char spi_recv(){
 
 unsigned char *spi_recvSeq(unsigned char *dst,unsigned int len){
     unsigned int data i;
-    unsigned char data buf;
 
     while((SPSTAT&0x80)==0);
     SPSTAT|=0x80;
@@ -49,15 +48,13 @@ unsigned char *spi_recvSeq(unsigned char *dst,unsigned int len){
 
     for(i=0;i<len-1;i++){
         while((SPSTAT&0x80)==0);
-        buf=SPDAT;
+        dst[i]=SPDAT;
         SPSTAT|=0x80;
         SPDAT=0x00;
-        dst[i]=buf;
     }
 
     while((SPSTAT&0x80)==0);
-    buf=SPDAT;
-    dst[len-1]=buf;
+    dst[len-1]=SPDAT;
 
     return dst;
 }

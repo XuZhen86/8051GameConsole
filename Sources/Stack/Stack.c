@@ -12,67 +12,87 @@ void stack_initialize(unsigned int m16Max){
     bp=sp=m16Max;
 }
 
-unsigned int pushUI(unsigned int imm16){
+unsigned int push16(unsigned int imm16){
     return xRam_uIntWrite(sp-=2,imm16);
 }
 
-unsigned char pushUC(unsigned char imm8){
+unsigned char push8(unsigned char imm8){
     return xRam_uCharWrite(sp-=1,imm8);
 }
 
-unsigned int popUI(){
+unsigned int pop16(){
     sp+=2;
     return xRam_uIntRead(sp-2);
 }
 
-unsigned char popUC(){
+unsigned char pop8(){
     sp+=1;
     return xRam_uIntRead(sp-1);
 }
 
-unsigned int rUI(unsigned int offs16){
+unsigned int r16(unsigned int offs16){
     return xRam_uIntRead(bp-offs16);
 }
 
-unsigned int rUIa(unsigned int offs16,unsigned int idx){
+unsigned int r16a(unsigned int offs16,unsigned int idx){
     return xRam_uIntRead(bp-offs16+2*idx);
 }
 
-unsigned char rUC(unsigned int offs16){
+unsigned char r8(unsigned int offs16){
     return xRam_uCharRead(bp-offs16);
 }
 
-unsigned char rUCa(unsigned int offs16,unsigned int idx){
+unsigned char r8a(unsigned int offs16,unsigned int idx){
     return xRam_uCharRead(bp-offs16+idx);
 }
 
-unsigned int wUI(unsigned int offs16,unsigned int imm16){
-    // printf("[wUI %u %u]",bp-offs16,imm16);
+unsigned int w16(unsigned int offs16,unsigned int imm16){
+    // printf("[w16 %u %u]",bp-offs16,imm16);
     return xRam_uIntWrite(bp-offs16,imm16);
 }
 
-unsigned int wUIa(unsigned int offs16,unsigned int idx,unsigned int imm16){
+unsigned int w16a(unsigned int offs16,unsigned int idx,unsigned int imm16){
     return xRam_uIntWrite(bp-offs16+2*idx,imm16);
 }
 
-unsigned char wUC(unsigned int offs16,unsigned char imm8){
+unsigned char w8(unsigned int offs16,unsigned char imm8){
     return xRam_uCharWrite(bp-offs16,imm8);
 }
 
-unsigned char wUCa(unsigned int offs16,unsigned int idx,unsigned char imm8){
+unsigned char w8a(unsigned int offs16,unsigned int idx,unsigned char imm8){
     return xRam_uCharWrite(bp-offs16+idx,imm8);
 }
 
+unsigned int inc16(unsigned int offs16){
+    return xRam_uIntWrite(bp-offs16,xRam_uIntRead(bp-offs16)+1);
+}
+
+unsigned int dec16(unsigned int offs16){
+    return xRam_uIntWrite(bp-offs16,xRam_uIntRead(bp-offs16)-1);
+}
+
+unsigned char inc8(unsigned int offs16){
+    return xRam_uCharWrite(bp-offs16,xRam_uCharRead(bp-offs16)+1);
+}
+
+unsigned char dec8(unsigned int offs16){
+    return xRam_uCharWrite(bp-offs16,xRam_uCharRead(bp-offs16)-1);
+}
+
+unsigned int stack_memset(unsigned int offs16,unsigned char imm8,unsigned int len){
+    xRam_memset(bp-offs16,imm8,len);
+    return offs16;
+}
+
 void enter(unsigned int imm16){
-    pushUI(bp);
+    push16(bp);
     bp=sp;
     sp-=imm16;
-    // printf("[enter %u sp=%u bp=%u]\n",imm16,sp,bp);
 }
 
 void leave(){
     sp=bp;
-    bp=popUI();
+    bp=pop16();
     // printf("[leave sp=%u bp=%u]\n",sp,bp);
 }
 

@@ -162,8 +162,8 @@ void lcd_spi_initialize(){
 
     lcd_iap_read();
     lcd_pwm_initialize();
-    // xRam_memset(GDRAM_ADDR,BUFFER_INIT_VALUE,32*32*2);
-    xRam_memset(GDRAM_STACK_ADDR,BUFFER_INIT_VALUE,0x2000);
+    xRam_memset(GDRAM_ADDR,BUFFER_INIT_VALUE,32*32*2);
+    xRam_memset(GDRAM_STACK_ADDR,BUFFER_INIT_VALUE,0x1800);
     lcd_flush(1);
 }
 
