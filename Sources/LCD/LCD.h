@@ -22,9 +22,8 @@ void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str);
 void lcd_pixelSet(unsigned char row,unsigned char col,bit lightUp);
 void lcd_clear();
 
-bit lcd_bufferStackPush();
-bit lcd_bufferStackPop();
-void lcd_bufferStackClear();
+void lcd_bufferStackPush();
+void lcd_bufferStackPop();
 
 // void lcd_rowReverse(unsigned char startRow,unsigned char endRow);
 void lcd_hLineSet(unsigned char row,bit lightUp);

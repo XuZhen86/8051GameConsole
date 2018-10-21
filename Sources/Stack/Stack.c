@@ -12,12 +12,31 @@ void stack_initialize(unsigned int m16Max){
     bp=sp=m16Max;
 }
 
+unsigned int stack_spGet(){
+    return sp;
+}
+
+unsigned int stack_bpGet(){
+    return bp;
+}
+
 unsigned int push16(unsigned int imm16){
     return xRam_uIntWrite(sp-=2,imm16);
 }
 
 unsigned char push8(unsigned char imm8){
     return xRam_uCharWrite(sp-=1,imm8);
+}
+
+unsigned char *pushSeq(unsigned char *src,unsigned int len){
+    sp-=len;
+    xRam_uCharWriteSeq(src,sp,len);
+    return src;
+}
+
+unsigned int pushN(unsigned int len){
+    sp-=len;
+    return sp;
 }
 
 unsigned int pop16(){
@@ -28,6 +47,17 @@ unsigned int pop16(){
 unsigned char pop8(){
     sp+=1;
     return xRam_uIntRead(sp-1);
+}
+
+unsigned char *popSeq(unsigned char *dst,unsigned int len){
+    xRam_uCharReadSeq(dst,sp,len);
+    sp+=len;
+    return dst;
+}
+
+unsigned int popN(unsigned int len){
+    sp+=len;
+    return sp;
 }
 
 unsigned int r16(unsigned int offs16){

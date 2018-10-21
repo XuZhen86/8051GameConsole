@@ -3,11 +3,18 @@
 
 void stack_initialize(unsigned int m16Max);
 
+unsigned int stack_spGet();
+unsigned int stack_bpGet();
+
 unsigned int push16(unsigned int imm16);
 unsigned char push8(unsigned char imm8);
+unsigned char *pushSeq(unsigned char *src,unsigned int len);
+unsigned int pushN(unsigned int len);
 
 unsigned int pop16();
 unsigned char pop8();
+unsigned char *popSeq(unsigned char *dst,unsigned int len);
+unsigned int popN(unsigned int len);
 
 unsigned int r16(unsigned int offs16);
 unsigned int r16a(unsigned int offs16,unsigned int idx);

@@ -6,6 +6,7 @@
 #include"Sources/Widgets/InputDialog/InputDialog.h"
 #include"Sources/IAP/IAP.h"
 #include"Sources/Delay/Delay.h"
+#include"Sources/Stack/Stack.h"
 
 #include"Sources/LCD/LCD.h"
 #include"Sources/LCD/LCD_ASCII6x8.h"
@@ -40,8 +41,6 @@ enum LCD_OTHER_CONFIG{
 
 enum LCD_RAM_CONFIG{
     GDRAM_ADDR=0x0000,
-    GDRAM_STACK_ADDR=0x0800,
-    GDRAM_STACK_MAX=6
 };
 
 enum LCD_IAP_CONFIG{
@@ -51,7 +50,6 @@ enum LCD_IAP_CONFIG{
 };
 
 static unsigned char idata gdramRowDirty[4]={0,0,0,0};
-static unsigned char bufferStack=0;
 
 sbit chipSelect=P2^7;
 sbit resetSignal=P2^0;
@@ -163,7 +161,6 @@ void lcd_spi_initialize(){
     lcd_iap_read();
     lcd_pwm_initialize();
     xRam_memset(GDRAM_ADDR,BUFFER_INIT_VALUE,32*32*2);
-    xRam_memset(GDRAM_STACK_ADDR,BUFFER_INIT_VALUE,0x1800);
     lcd_flush(1);
 }
 
@@ -321,39 +318,23 @@ void lcd_clear(){
     }
 }
 
-bit lcd_bufferStackPush(){
+void lcd_bufferStackPush(){
     unsigned char i;
-
-    if(bufferStack==GDRAM_STACK_MAX){
-        return 0;
-    }else{
-        for(i=0;i<32;i++){
-            xRam_memcpy(GDRAM_STACK_ADDR+1024*bufferStack+64*i,GDRAM_ADDR+64*i,32);
-        }
-        bufferStack++;
-        return 1;
+    pushN(1024);
+    for(i=0;i<32;i++){
+        xRam_memcpy(stack_spGet()+32*i,GDRAM_ADDR+64*i,32);
     }
 }
 
-bit lcd_bufferStackPop(){
+void lcd_bufferStackPop(){
     unsigned char i;
-
-    if(!bufferStack){
-        return 0;
-    }else{
-        bufferStack--;
-        for(i=0;i<32;i++){
-            xRam_memcpy(GDRAM_ADDR+64*i+32,GDRAM_STACK_ADDR+1024*bufferStack+64*i,32);
-        }
-        for(i=0;i<4;i++){
-            gdramRowDirty[i]=0xff;
-        }
-        return 1;
+    for(i=0;i<32;i++){
+        xRam_memcpy(GDRAM_ADDR+64*i+32,stack_spGet()+32*i,32);
     }
-}
-
-void lcd_bufferStackClear(){
-    bufferStack=0;
+    for(i=0;i<4;i++){
+        gdramRowDirty[i]=0xff;
+    }
+    popN(1024);
 }
 
 // void lcd_rowReverse(unsigned char startRow,unsigned char endRow){
