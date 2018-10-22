@@ -26,7 +26,7 @@ static unsigned char
 
 unsigned char pushbutton_numberGet(){
     unsigned char buffer[TRIAL_COUNT];
-    unsigned char data i=0,j,diff;
+    unsigned char i=0,j,diff;
     bit testPassed=0;
 
     for(j=0;j<TRIAL_COUNT;j++){
@@ -69,7 +69,7 @@ unsigned char pushbutton_numberGet(){
 
 unsigned char pushbutton_directionGet(){
     unsigned char buffer[TRIAL_COUNT];
-    unsigned char data i=0,j,diff;
+    unsigned char i=0,j,diff;
     bit testPassed=0;
 
     for(j=0;j<TRIAL_COUNT;j++){

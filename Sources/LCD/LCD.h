@@ -16,7 +16,11 @@ unsigned int lcd_iap_brightnessRawGet();
 unsigned int lcd_iap_brightnessRawSet(unsigned int brightness);
 
 void lcd_spi_initialize();
-bit lcd_flush(bit forceFlush);
+void lcd_flush();
+void lcd_forceFlush();
+void lcd_clearAllRowDirtyFlags();
+void lcd_setAllRowDirtyFlags();
+
 void lcd_charSet(unsigned char row,unsigned char col,unsigned char c);
 void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str);
 void lcd_pixelSet(unsigned char row,unsigned char col,bit lightUp);

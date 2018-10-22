@@ -63,7 +63,7 @@ void snake_levelSelect(){
         }
 
         lcd_stringSet(5,12,buffer);
-        lcd_flush(0);
+        lcd_flush();
 
         switch(pushbutton_waitDirectionGet()){
             case UP:
@@ -199,7 +199,7 @@ void snake_gamePause(){
         }
     }
     lcd_stringSet(3,2,"Paused");
-    lcd_flush(0);
+    lcd_flush();
 
     do{
         pushbutton_waitDirectionGet();
@@ -207,7 +207,7 @@ void snake_gamePause(){
     }while(pushbutton_lastPressedDirectionGet()!=FORWARD&&pushbutton_lastPressedDirectionGet()!=BACK);
 
     lcd_bufferStackPop();
-    lcd_flush(0);
+    lcd_flush();
 }
 
 void snake_mapInitialize(){
@@ -307,6 +307,6 @@ void snake_screenRenew(){
     lcd_pixelSet(r8(foodX)*2+1,r8(foodY)*2+1,1);
     // printf("[time=%u]",(unsigned int)(clock_get()-tickTock));tickTock=clock_get();
 
-    lcd_flush(0);
+    lcd_flush();
     // printf("[time=%u]\n",(unsigned int)(clock_get()-tickTock));tickTock=clock_get();
 }

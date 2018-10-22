@@ -38,7 +38,8 @@ unsigned char inputDialog_getUChar(unsigned char *title,unsigned char value,unsi
     }
 
     inputDialog_getUChar_printValue(value,min,max);
-    while(lcd_flush(0)&&!answerDetermined){
+    while(!answerDetermined){
+        lcd_flush();
         switch(pushbutton_waitDirectionGet()){
             case PUSHBUTTON_DIRECTION_UP:
                 value+=step;

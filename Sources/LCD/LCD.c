@@ -49,7 +49,7 @@ enum LCD_IAP_CONFIG{
     IAP_BRIGHTNESS_SIZE=2
 };
 
-static unsigned char idata gdramRowDirty[4]={0,0,0,0};
+static unsigned char gdramRowDirty[4]={0,0,0,0};
 
 sbit chipSelect=P2^7;
 sbit resetSignal=P2^0;
@@ -142,7 +142,7 @@ unsigned int lcd_iap_brightnessRawSet(unsigned int brightnessRaw){
 }
 
 void lcd_spi_initialize(){
-    unsigned char data i,j;
+    unsigned char i,j;
 
     chipSelect=0;
     P2M0=CHIP_SELECT_P2M0;
@@ -161,24 +161,24 @@ void lcd_spi_initialize(){
     lcd_iap_read();
     lcd_pwm_initialize();
     xRam_memset(GDRAM_ADDR,BUFFER_INIT_VALUE,32*32*2);
-    lcd_flush(1);
+    lcd_forceFlush();
 }
 
 /**
  * The commented area seals a legendary bug.
  * Sealed by Xu Zhen @ 2018/09/25 8:34PM EDT
  */
-bit lcd_flush(bit forceFlush){
+void lcd_flush(){
     unsigned char buffer[64];
-    unsigned char data i,j;
+    unsigned char i,j;
     bit graphicDisplayDisabled=0/*,addressJustBeenSent=0*/;
 
     for(i=0;i<32;i++){
-        if(forceFlush||gdramRowDirty[i/8]&(1<<(i%8))){
+        if(gdramRowDirty[i/8]&(1<<(i%8))){
             xRam_uCharReadSeq(buffer,GDRAM_ADDR+64*i,64);
 
             for(j=0;j<32;j+=2){
-                if(forceFlush||buffer[j+0]!=buffer[j+32]||buffer[j+1]!=buffer[j+33]){
+                if(buffer[j+0]!=buffer[j+32]||buffer[j+1]!=buffer[j+33]){
                     if(!graphicDisplayDisabled){
                         graphicDisplayDisabled=1;
                         lcd_spi_send(FUNCTION_SET|0x04,0);
@@ -203,16 +203,44 @@ bit lcd_flush(bit forceFlush){
         lcd_spi_send(FUNCTION_SET|0x04|0x02,0);
     }
 
-    for(i=0;i<4;i++){
-        gdramRowDirty[i]=0;
-    }
+    lcd_clearAllRowDirtyFlags();
+}
 
-    return 1;
+void lcd_forceFlush(){
+    unsigned char buffer[32];
+    unsigned char i,j;
+
+    lcd_spi_send(FUNCTION_SET|0x04,0);
+    for(i=0;i<32;i++){
+        xRam_uCharReadSeq(buffer,GDRAM_ADDR+64*i+32,32);
+        for(j=0;j<32;j+=2){
+            lcd_spi_send2Bytes(SET_GDRAM_ADDR|i,SET_GDRAM_ADDR|(j/2),0);
+            lcd_spi_send2Bytes(buffer[j],buffer[j+1],1);
+        }
+        xRam_uCharWriteSeq(buffer,GDRAM_ADDR+64*i,32);
+    }
+    lcd_spi_send(FUNCTION_SET|0x04|0x02,0);
+
+    lcd_clearAllRowDirtyFlags();
+}
+
+void lcd_clearAllRowDirtyFlags(){
+    gdramRowDirty[0]=0;
+    gdramRowDirty[1]=0;
+    gdramRowDirty[2]=0;
+    gdramRowDirty[3]=0;
+}
+
+void lcd_setAllRowDirtyFlags(){
+    gdramRowDirty[0]=0xff;
+    gdramRowDirty[1]=0xff;
+    gdramRowDirty[2]=0xff;
+    gdramRowDirty[3]=0xff;
 }
 
 void lcd_charSet(unsigned char row,unsigned char col,unsigned char c){
     unsigned char buffer[4];
-    unsigned char data i,tempChar;
+    unsigned char i,tempChar;
 
     col=col%21*6;
     row=row%8*8;
@@ -239,6 +267,11 @@ void lcd_charSet(unsigned char row,unsigned char col,unsigned char c){
     }
 }
 
+/**
+ * The folowing code contains an unknown bug:
+ *  unsigned char data i,j,k,tempChar[2];
+ * It seems to break the code if "data" is taken out.
+ */
 void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str){
     unsigned char buffer[16];
     unsigned char data i,j,k,tempChar[2];
@@ -286,7 +319,7 @@ void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str){
 }
 
 void lcd_pixelSet(unsigned char row,unsigned char col,bit lightUp){
-    unsigned char data buffer[2];
+    unsigned char buffer[2];
 
     row%=64;
     col%=128;
@@ -308,14 +341,11 @@ void lcd_pixelSet(unsigned char row,unsigned char col,bit lightUp){
 }
 
 void lcd_clear(){
-    unsigned char idata i;
+    unsigned char i;
     for(i=0;i<32;i++){
         xRam_memset(GDRAM_ADDR+64*i+32,BUFFER_INIT_VALUE,32);
     }
-
-    for(i=0;i<4;i++){
-        gdramRowDirty[i]=0xff;
-    }
+    lcd_setAllRowDirtyFlags();
 }
 
 void lcd_bufferStackPush(){
@@ -331,9 +361,7 @@ void lcd_bufferStackPop(){
     for(i=0;i<32;i++){
         xRam_memcpy(GDRAM_ADDR+64*i+32,stack_spGet()+32*i,32);
     }
-    for(i=0;i<4;i++){
-        gdramRowDirty[i]=0xff;
-    }
+    lcd_setAllRowDirtyFlags();
     popN(1024);
 }
 

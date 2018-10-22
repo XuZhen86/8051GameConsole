@@ -22,13 +22,22 @@ unsigned char spi_send(unsigned char imm8){
 }
 
 unsigned char *spi_sendSeq(unsigned char *src,unsigned int len){
-    unsigned int data i;
+    unsigned int i;
     for(i=0;i<len;i++){
         while((SPSTAT&0x80)==0);
         SPSTAT|=0x80;
         SPDAT=src[i];
     }
     return src;
+}
+
+unsigned char spi_sendN(unsigned char imm8,unsigned int count){
+    while(count--){
+        while((SPSTAT&0x80)==0);
+        SPSTAT|=0x80;
+        SPDAT=imm8;
+    }
+    return imm8;
 }
 
 unsigned char spi_recv(){
@@ -40,8 +49,7 @@ unsigned char spi_recv(){
 }
 
 unsigned char *spi_recvSeq(unsigned char *dst,unsigned int len){
-    unsigned int data i;
-
+    unsigned int i;
     while((SPSTAT&0x80)==0);
     SPSTAT|=0x80;
     SPDAT=0x00;
@@ -55,7 +63,6 @@ unsigned char *spi_recvSeq(unsigned char *dst,unsigned int len){
 
     while((SPSTAT&0x80)==0);
     dst[len-1]=SPDAT;
-
     return dst;
 }
 

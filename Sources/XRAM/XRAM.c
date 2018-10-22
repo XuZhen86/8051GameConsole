@@ -35,7 +35,7 @@ unsigned char xRam_uCharWrite(unsigned int m16,unsigned char imm8){
 }
 
 unsigned char xRam_uCharRead(unsigned int m16){
-    unsigned char idata buffer;
+    unsigned char buffer;
     spi_setup(CPOL,CPHA,CLKDIV);
     CS=0;
 
@@ -64,7 +64,7 @@ unsigned int xRam_uIntWrite(unsigned int m16,unsigned int imm16){
 }
 
 unsigned int xRam_uIntRead(unsigned int m16){
-    unsigned char idata buffer[2];
+    unsigned char buffer[2];
     spi_setup(CPOL,CPHA,CLKDIV);
     CS=0;
 
@@ -93,17 +93,13 @@ unsigned char *xRam_uCharReadSeq(unsigned char *dst,unsigned int m16,unsigned in
 }
 
 unsigned char *xRam_uCharWriteSeq(unsigned char *src,unsigned int m16,unsigned int len){
-    unsigned int idata i;
     spi_setup(CPOL,CPHA,CLKDIV);
     CS=0;
 
     spi_send(WRITE);
     spi_send(m16>>8);
     spi_send(m16);
-
-    for(i=0;i<len;i++){
-        spi_send(src[i]);
-    }
+    spi_sendSeq(src,len);
 
     spi_waitFinish();
     CS=1;
@@ -117,10 +113,7 @@ unsigned int xRam_memset(unsigned int m16Dst,unsigned char imm8,unsigned int len
     spi_send(WRITE);
     spi_send(m16Dst>>8);
     spi_send(m16Dst);
-
-    while(len--){
-        spi_send(imm8);
-    }
+    spi_sendN(imm8,len);
 
     spi_waitFinish();
     CS=1;
@@ -129,7 +122,7 @@ unsigned int xRam_memset(unsigned int m16Dst,unsigned char imm8,unsigned int len
 
 unsigned int xRam_memcpy(unsigned int m16Dst,unsigned int m16Src,unsigned int len){
     unsigned char buffer[32];
-    unsigned int idata i;
+    unsigned int i;
 
     for(i=0;i+32>i&&i+32<len;i+=32){
         xRam_uCharReadSeq(buffer,m16Src+i,32);

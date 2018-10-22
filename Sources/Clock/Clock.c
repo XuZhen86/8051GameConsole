@@ -6,7 +6,7 @@
 static unsigned int data delta=0;
 
 static unsigned long int data clock=0;
-static unsigned int data millisecond=0;
+static unsigned int millisecond=0;
 static unsigned char second=0,minute=0,hour=0,day=0;
 
 static bit timerIsRunning;
@@ -22,7 +22,7 @@ void clock_tick() interrupt 1{
 }
 
 void clock_flush(){
-    unsigned int data deltaCopy=delta;
+    unsigned int deltaCopy=delta;
     delta=0;
 
     if(deltaCopy==0){

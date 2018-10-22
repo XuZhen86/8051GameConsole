@@ -31,7 +31,9 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
 
     lcd_charSet(selectedRow+1,0,POINTER_CHAR_RIGHT);
 
-    while(lcd_flush(0)){
+    while(1){
+        lcd_flush();
+
         switch(pushbutton_waitDirectionGet()){
             case PUSHBUTTON_DIRECTION_UP:
                 if(selectedItem){   // If not reaching top of the list
@@ -82,14 +84,14 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
                     lcd_bufferStackPop();
                 }
                 pushbutton_waitDirectionRelease();
-                lcd_flush(0);
+                lcd_flush();
                 return selectedItem;
             case PUSHBUTTON_DIRECTION_BACK: // Cancel selection
                 if(saveBuffer){
                     lcd_bufferStackPop();
                 }
                 pushbutton_waitDirectionRelease();
-                lcd_flush(0);
+                lcd_flush();
                 return itemCount;
         }
 
@@ -99,13 +101,6 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
 
         pushbutton_waitDirectionRelease();
     }
-
-    // This part should never be reached
-    if(saveBuffer){
-        lcd_bufferStackPop();
-    }
-    lcd_flush(0);
-    return itemCount;
 }
 
 unsigned char *listWidget_strcpySpaceExtend(unsigned char *destination,unsigned char *source){
