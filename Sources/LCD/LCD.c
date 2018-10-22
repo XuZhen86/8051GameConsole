@@ -267,52 +267,51 @@ void lcd_charSet(unsigned char row,unsigned char col,unsigned char c){
     }
 }
 
-/**
- * The folowing code contains an unknown bug:
- *  unsigned char data i,j,k,tempChar[2];
- * It seems to break the code if "data" is taken out.
- */
 void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str){
-    unsigned char buffer[16];
-    unsigned char data i,j,k,tempChar[2];
-    bit rowDirty,rowGe32=0; // row greater or equal 32
+    unsigned char buffer[16],i,j,k,tempChar[2];
+    unsigned char rowGe32=0; // row greater or equal 32
+    bit rowDirty;
 
     col=col%21*6;
     row=row%8*8;
-    if(row>31){col+=128;rowGe32=1;}
+    if(row>31){col+=128;rowGe32=16;}
     row%=32;
 
     for(i=row;i<row+8;i++){
-        xRam_uCharReadSeq(buffer,GDRAM_ADDR+64*i+32+16*rowGe32,16);
+        xRam_uCharReadSeq(buffer,GDRAM_ADDR+64*i+32+rowGe32,16);
         rowDirty=0;
         k=col;
 
         for(j=0;str[j]&&col<=k;j++){
-            tempChar[0]=tempChar[1]=buffer[k/8-16*rowGe32];
-            tempChar[0]&=(0xff<<(8-k%8));
-            if(str[j]!=' '){
-                tempChar[0]|=(LCD_ASCII6x8[str[j]][i%8]>>(k%8));
-            }
-            if(tempChar[0]!=tempChar[1]){
-                buffer[k/8-16*rowGe32]=tempChar[0];
-                rowDirty=1;
+            if(k/8-rowGe32<16){
+                tempChar[0]=tempChar[1]=buffer[k/8-rowGe32];
+                tempChar[0]&=(0xff<<(8-k%8));
+                if(str[j]!=' '){
+                    tempChar[0]|=(LCD_ASCII6x8[str[j]][i%8]>>(k%8));
+                }
+                if(tempChar[0]!=tempChar[1]){
+                    buffer[k/8-rowGe32]=tempChar[0];
+                    rowDirty=1;
+                }
             }
 
-            tempChar[0]=tempChar[1]=buffer[k/8+1-16*rowGe32];
-            tempChar[0]&=(0xff>>(k%8));
-            if(str[j]!=' '){
-                tempChar[0]|=(LCD_ASCII6x8[str[j]][i%8]<<(8-k%8));
-            }
-            if(tempChar[0]!=tempChar[1]){
-                buffer[k/8+1-16*rowGe32]=tempChar[0];
-                rowDirty=1;
+            if(k/8+1-rowGe32<16){
+                tempChar[0]=tempChar[1]=buffer[k/8+1-rowGe32];
+                tempChar[0]&=(0xff>>(k%8));
+                if(str[j]!=' '){
+                    tempChar[0]|=(LCD_ASCII6x8[str[j]][i%8]<<(8-k%8));
+                }
+                if(tempChar[0]!=tempChar[1]){
+                    buffer[k/8+1-rowGe32]=tempChar[0];
+                    rowDirty=1;
+                }
             }
 
             k+=6;
         }
 
         if(rowDirty){
-            xRam_uCharWriteSeq(buffer,GDRAM_ADDR+64*i+32+16*rowGe32,16);
+            xRam_uCharWriteSeq(buffer,GDRAM_ADDR+64*i+32+rowGe32,16);
             gdramRowDirty[i/8]|=(1<<(i%8));
         }
     }
