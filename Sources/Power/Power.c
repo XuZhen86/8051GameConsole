@@ -9,3 +9,9 @@ void power_idle(){
     PCON|=0x01;
     systemBusyLed=1;
 }
+
+void power_powerDown(){
+    systemBusyLed=0;
+    PCON|=0x02;
+    systemBusyLed=1;
+}

@@ -54,7 +54,7 @@ static unsigned char gdramRowDirty[4]={0,0,0,0};
 sbit chipSelect=P2^7;
 sbit resetSignal=P2^0;
 
-void lcd_spi_send(unsigned char c,bit b){
+void lcd_spi_send(unsigned char c,unsigned char b){
     spi_setup(SPI_CLKDIV,SPI_CPOL,SPI_CPHA);
     chipSelect=1;
 
@@ -67,7 +67,7 @@ void lcd_spi_send(unsigned char c,bit b){
     delayLoop(0,0,50);
 }
 
-void lcd_spi_send2Bytes(unsigned char c1,unsigned char c2,bit b){
+void lcd_spi_send2Bytes(unsigned char c1,unsigned char c2,unsigned char b){
     spi_setup(SPI_CLKDIV,SPI_CPOL,SPI_CPHA);
     chipSelect=1;
 
@@ -268,56 +268,54 @@ void lcd_charSet(unsigned char row,unsigned char col,unsigned char c){
 }
 
 void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str){
-    unsigned char buffer[16],i,j,k,tempChar[2];
-    unsigned char rowGe32=0; // row greater or equal 32
-    bit rowDirty;
+    unsigned char buffer[32];
+    unsigned char data tempChar,mask,fill,i,j,k;
+    unsigned char attr=0x00;    // bit 1: rowDirty, bit 0: row>=32
 
     col=col%21*6;
     row=row%8*8;
-    if(row>31){col+=128;rowGe32=16;}
-    row%=32;
+    if(row>31){
+        col+=128;
+        attr|=0x01;
+        row-=32;
+    }
 
-    for(i=row;i<row+8;i++){
-        xRam_uCharReadSeq(buffer,GDRAM_ADDR+64*i+32+rowGe32,16);
-        rowDirty=0;
+    for(i=0;i<8;i++){
+        xRam_uCharReadSeq(buffer+col/8,GDRAM_ADDR+64*(i+row)+32+col/8,32-col/8);
+        attr&=~0x02;
         k=col;
 
         for(j=0;str[j]&&col<=k;j++){
-            if(k/8-rowGe32<16){
-                tempChar[0]=tempChar[1]=buffer[k/8-rowGe32];
-                tempChar[0]&=(0xff<<(8-k%8));
-                if(str[j]!=' '){
-                    tempChar[0]|=(LCD_ASCII6x8[str[j]][i%8]>>(k%8));
-                }
-                if(tempChar[0]!=tempChar[1]){
-                    buffer[k/8-rowGe32]=tempChar[0];
-                    rowDirty=1;
+            mask=0xff>>(k%8);
+            fill=LCD_ASCII6x8[str[j]][i];
+
+            if(k/8<32){
+                tempChar=buffer[k/8]&(~mask)|(fill>>(k%8));
+                if(tempChar!=buffer[k/8]){
+                    buffer[k/8]=tempChar;
+                    attr|=0x02;
                 }
             }
 
-            if(k/8+1-rowGe32<16){
-                tempChar[0]=tempChar[1]=buffer[k/8+1-rowGe32];
-                tempChar[0]&=(0xff>>(k%8));
-                if(str[j]!=' '){
-                    tempChar[0]|=(LCD_ASCII6x8[str[j]][i%8]<<(8-k%8));
-                }
-                if(tempChar[0]!=tempChar[1]){
-                    buffer[k/8+1-rowGe32]=tempChar[0];
-                    rowDirty=1;
+            if(k/8+1<32){
+                tempChar=buffer[k/8+1]&(mask)|(fill<<(8-k%8));
+                if(tempChar!=buffer[k/8+1]){
+                    buffer[k/8+1]=tempChar;
+                    attr|=0x02;
                 }
             }
 
             k+=6;
         }
 
-        if(rowDirty){
-            xRam_uCharWriteSeq(buffer,GDRAM_ADDR+64*i+32+rowGe32,16);
-            gdramRowDirty[i/8]|=(1<<(i%8));
+        if(attr&0x02){
+            xRam_uCharWriteSeq(buffer+col/8,GDRAM_ADDR+64*(i+row)+32+col/8,32-col/8);
+            gdramRowDirty[row/8]|=(1<<i);
         }
     }
 }
 
-void lcd_pixelSet(unsigned char row,unsigned char col,bit lightUp){
+void lcd_pixelSet(unsigned char row,unsigned char col,unsigned char lightUp){
     unsigned char buffer[2];
 
     row%=64;
@@ -388,14 +386,14 @@ void lcd_bufferStackPop(){
 //     }
 // }
 
-void lcd_hLineSet(unsigned char row,bit lightUp){
+void lcd_hLineSet(unsigned char row,unsigned char lightUp){
     row%=64;
 
     if(row<32){
         xRam_memset(GDRAM_ADDR+64*row+32,0xff*lightUp,16);
     }else{
-        row%=32;
-        xRam_memset(GDRAM_ADDR+64*row+48,0xff*lightUp,16);
+        // row%=32;
+        xRam_memset(GDRAM_ADDR+64*(row%32)+48,0xff*lightUp,16);
     }
     gdramRowDirty[row/8]|=(1<<(row%8));
 }

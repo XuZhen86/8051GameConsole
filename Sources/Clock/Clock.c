@@ -115,7 +115,7 @@ void clock_timerCancel(){
     timerIsRunning=0;
 }
 
-bit clock_timerIsTimeUp(){
+unsigned char clock_timerIsTimeUp(){
     clock_flush();
     return timerRemains==0;
 }

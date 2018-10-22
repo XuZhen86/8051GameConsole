@@ -16,6 +16,6 @@ void clock_timerStart(unsigned int time);
 void clock_timerPause();
 void clock_timerResume();
 void clock_timerCancel();
-bit clock_timerIsTimeUp();
+unsigned char clock_timerIsTimeUp();
 
 #endif

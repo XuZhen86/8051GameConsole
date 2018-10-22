@@ -1,8 +1,8 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-void lcd_spi_send(unsigned char c,bit b);
-void lcd_spi_send2Bytes(unsigned char c1,unsigned char c2,bit b);
+void lcd_spi_send(unsigned char c,unsigned char b);
+void lcd_spi_send2Bytes(unsigned char c1,unsigned char c2,unsigned char b);
 void lcd_hwReset();
 void lcd_pwm_initialize();
 
@@ -23,13 +23,13 @@ void lcd_setAllRowDirtyFlags();
 
 void lcd_charSet(unsigned char row,unsigned char col,unsigned char c);
 void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str);
-void lcd_pixelSet(unsigned char row,unsigned char col,bit lightUp);
+void lcd_pixelSet(unsigned char row,unsigned char col,unsigned char lightUp);
 void lcd_clear();
 
 void lcd_bufferStackPush();
 void lcd_bufferStackPop();
 
 // void lcd_rowReverse(unsigned char startRow,unsigned char endRow);
-void lcd_hLineSet(unsigned char row,bit lightUp);
+void lcd_hLineSet(unsigned char row,unsigned char lightUp);
 
 #endif
