@@ -4,6 +4,7 @@
 #include<Sources/Clock/Clock.h>
 #include<Sources/PWM/PWM.h>
 #include<Sources/SPI/SPI.h>
+#include<Sources/SQI/SQI.h>
 #include<Sources/LCD/LCD.h>
 #include<Sources/ADC/ADC.h>
 #include<Sources/XRAM/XRAM.h>
@@ -14,6 +15,7 @@
 #include<Sources/Widgets/InputDialog/InputDialog.h>
 #include<Sources/Serial/Serial.h>
 #include<Sources/Stack/Stack.h>
+#include<Sources/XRAM2/XRAM2.h>
 
 #include<stdio.h>
 #include<math.h>
@@ -33,7 +35,9 @@ void initialize(){
 
     serial1_initialize(0xff,0xb8,1);
     spi_initialize();
+    sqi_initialize();
     xRam_initialize();
+    xRam2_initialize();
     pwm_initialize(0);
     adc_initialize(0);
     iap_initialize();
