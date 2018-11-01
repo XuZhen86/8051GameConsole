@@ -19,8 +19,11 @@ enum XRAM2_MODE{
     SEQUENTIAL_MODE=0x40
 };
 
-sbit SI=P0^4;
 sbit SCLK=P1^0;
 sbit CS=P1^1;
+sfr SIO=0x80;
+sfr SIOM0=0x94;
+sfr SIOM1=0x93;
+sbit SI=SIO^4;
 
 #endif

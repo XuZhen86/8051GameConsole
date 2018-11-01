@@ -1,30 +1,29 @@
 #include"Sources/Main/STC15W4K48S4.h"
-#include"Sources/Delay/Delay.h"
+
 #include"Sources/SQI/SQI.h"
 
-#include<stdio.h>
-
-sfr IO=0x80;
 sbit SCLK=P1^0;
+sfr SIO=0x80;
+sfr SIOM0=0x94;
+sfr SIOM1=0x93;
 
 void sqi_initialize(){
-    P0M0=0x00;
+    SIOM0=0x00;
     SCLK=0;
 }
 
 unsigned char sqi_send(unsigned char imm8){
+    // SIOM1=0x00;
     #pragma asm
-        mov P0M1,#000h
-
-        mov IO,A
+        mov SIO,A
         setb SCLK
         clr SCLK
+
         swap A
 
-        mov IO,A
+        mov SIO,A
         setb SCLK
         clr SCLK
-        swap A
     #pragma endasm
 }
 
@@ -44,16 +43,16 @@ unsigned char sqi_sendN(unsigned char imm8,unsigned int count){
 }
 
 unsigned char sqi_recv(){
+    // SIO=0x00;
+    // SIOM1=0xff;
     #pragma asm
-        mov P0M1,#0ffh
-
         setb SCLK
-        mov A,IO
+        mov A,SIO
         clr SCLK
         swap A
 
         setb SCLK
-        orl A,IO
+        orl A,SIO
         clr SCLK
         swap A
 

@@ -15,4 +15,6 @@ unsigned char *xRam_uCharWriteSeq(unsigned char *src,unsigned int m16,unsigned i
 unsigned int xRam_memset(unsigned int m16Dst,unsigned char imm8,unsigned int len);
 unsigned int xRam_memcpy(unsigned int m16Dst,unsigned int m16Src,unsigned int len);
 
+// void _xRam_test();
+
 #endif

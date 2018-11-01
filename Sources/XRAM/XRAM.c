@@ -134,3 +134,60 @@ unsigned int xRam_memcpy(unsigned int m16Dst,unsigned int m16Src,unsigned int le
 
     return m16Dst;
 }
+
+// #include<stdlib.h>
+// #include<stdio.h>
+// #include"Sources/Clock/Clock.h"
+
+// void _xRam_test(){
+//     unsigned char data ucVar;
+//     unsigned int data i,j,errCount,uiVar;
+
+//     unsigned long int time=clock_get();
+
+//     errCount=0;
+//     for(i=0;i<0xffff;i++){
+//         ucVar=rand();
+//         xRam_uCharWrite(i,ucVar);
+//         if(xRam_uCharRead(i)!=ucVar){
+//             errCount++;
+//         }
+//     }
+//     printf("[%5u ",errCount);
+
+//     errCount=0;
+//     for(i=0;i<0xffff;i++){
+//         ucVar=rand();
+//         uiVar=rand();
+//         xRam_uCharWrite(uiVar,ucVar);
+//         if(xRam_uCharRead(uiVar)!=ucVar){
+//             errCount++;
+//         }
+//     }
+//     printf("%5u ",errCount);
+
+//     errCount=0;
+//     for(i=0;i<0xffff-2;i+=2){
+//         uiVar=rand();
+//         // uiVar=0x3232;
+//         xRam_uIntWrite(i,uiVar);
+//         if(xRam_uIntRead(i)!=uiVar){
+//             errCount++;
+//         }
+//     }
+//     printf("%5u ",errCount);
+
+//     errCount=0;
+//     for(i=0;i<0xffff-31;i+=32){
+//         ucVar=rand();
+//         xRam_memset(i,ucVar,32);
+//         for(j=0;j<32;j++){
+//             if(xRam_uCharRead(i+j)!=ucVar){
+//                 errCount++;
+//             }
+//         }
+//     }
+//     printf("%5u] ",errCount);
+
+//     printf("%u\n",(unsigned int)(clock_get()-time));
+// }
