@@ -272,7 +272,7 @@ void snake_foodRenew(){
 void snake_screenRenew(){
     unsigned char i,j,buffer[8];
     bit lightUp;
-    // unsigned long int tickTock=clock_get();
+    unsigned long int tickTock=clock_get();
 
     sprintf(buffer,"%4u",r16(lengthHigh));
     lcd_stringSet(5,17,buffer);
@@ -308,5 +308,5 @@ void snake_screenRenew(){
     // printf("[time=%u]",(unsigned int)(clock_get()-tickTock));tickTock=clock_get();
 
     lcd_flush();
-    // printf("[time=%u]\n",(unsigned int)(clock_get()-tickTock));tickTock=clock_get();
+    printf("[snake_screenRenew time=%u]\n",(unsigned int)(clock_get()-tickTock));
 }
