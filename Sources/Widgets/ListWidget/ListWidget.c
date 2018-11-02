@@ -7,7 +7,7 @@
 #include<string.h>
 
 enum{
-    BUFFER_SIZE=25,
+    BUFFER_SIZE=20,
     POINTER_CHAR_LEFT=0x11,
     POINTER_CHAR_RIGHT=0x10
 };

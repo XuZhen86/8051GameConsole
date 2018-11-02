@@ -268,20 +268,19 @@ void lcd_charSet(unsigned char row,unsigned char col,unsigned char c){
 }
 
 void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str){
-    unsigned char buffer[32];
+    unsigned char buffer[16];
     unsigned char data tempChar,mask,fill,i,j,k;
     unsigned char attr=0x00;    // bit 1: rowDirty, bit 0: row>=32
 
     col=col%21*6;
     row=row%8*8;
     if(row>31){
-        col+=128;
         attr|=0x01;
         row-=32;
     }
 
     for(i=0;i<8;i++){
-        xRam_uCharReadSeq(buffer+col/8,GDRAM_ADDR+64*(i+row)+32+col/8,32-col/8);
+        xRam_uCharReadSeq(buffer+col/8,GDRAM_ADDR+64*(i+row)+32+col/8+(attr&0x01)*16,16-col/8);
         attr&=~0x02;
         k=col;
 
@@ -289,7 +288,7 @@ void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str){
             mask=0xff>>(k%8);
             fill=LCD_ASCII6x8[str[j]][i];
 
-            if(k/8<32){
+            if(k/8<16){
                 tempChar=buffer[k/8]&(~mask)|(fill>>(k%8));
                 if(tempChar!=buffer[k/8]){
                     buffer[k/8]=tempChar;
@@ -297,7 +296,7 @@ void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str){
                 }
             }
 
-            if(k/8+1<32){
+            if(k/8+1<16){
                 tempChar=buffer[k/8+1]&(mask)|(fill<<(8-k%8));
                 if(tempChar!=buffer[k/8+1]){
                     buffer[k/8+1]=tempChar;
@@ -309,7 +308,7 @@ void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str){
         }
 
         if(attr&0x02){
-            xRam_uCharWriteSeq(buffer+col/8,GDRAM_ADDR+64*(i+row)+32+col/8,32-col/8);
+            xRam_uCharWriteSeq(buffer+col/8,GDRAM_ADDR+64*(i+row)+32+col/8+(attr&0x01)*16,16-col/8);
             gdramRowDirty[row/8]|=(1<<i);
         }
     }
