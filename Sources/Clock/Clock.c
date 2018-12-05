@@ -1,7 +1,6 @@
-#include"Sources/Timer/Timer.h"
-
-#include"Sources/Clock/Clock.h"
-#include"Sources/Clock/ClockConfig.h"
+#include"../Timer/Timer.h"
+#include"./Clock.h"
+#include"./ClockConfig.h"
 
 static unsigned int data delta=0;
 

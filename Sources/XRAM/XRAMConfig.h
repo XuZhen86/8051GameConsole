@@ -1,8 +1,6 @@
 #ifndef XRAMCONFIG_H_
 #define XRAMCONFIG_H_
 
-#include"Sources/Main/STC15W4K48S4.h"
-
 enum XRAM_COMMAND{
     READ=0x03,
     WRITE=0x02,
@@ -24,8 +22,5 @@ enum XRAM_MODE{
     PAGE_MODE=0x80,
     SEQUENTIAL_MODE=0x40
 };
-
-sbit CS=P2^6;
-sbit redLed=P2^4;
 
 #endif

@@ -1,8 +1,6 @@
-#include"Sources/XRAM/XRAM.h"
-#include<stdio.h>
-#include"Sources/Delay/Delay.h"
-
-#include"Sources/Stack/Stack.h"
+#include"../XRAM/XRAM.h"
+#include"../Delay/Delay.h"
+#include"./Stack.h"
 
 // static unsigned int bpMax;
 static unsigned int data bp,sp;

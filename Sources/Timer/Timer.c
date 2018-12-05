@@ -1,6 +1,5 @@
-#include"Sources/Main/STC15W4K48S4.h"
-
-#include"Sources/Timer/Timer.h"
+#include"../Main/STC15W4K48S4.h"
+#include"./Timer.h"
 
 void timer0_setup(unsigned char imm8Th,unsigned char imm8Tl,unsigned char mode,bit x12,bit enIrq,bit prIrq){
     TMOD=TMOD&~0x03|mode&0x03;

@@ -1,8 +1,7 @@
-#include"Sources/ADC/ADC.h"
-#include"Sources/Universal/Universal.h"
-#include"Sources/Delay/Delay.h"
-
-#include"Sources/Pushbutton/Pushbutton.h"
+#include"../ADC/ADC.h"
+#include"../Universal/Universal.h"
+#include"../Delay/Delay.h"
+#include"./Pushbutton.h"
 
 static unsigned char code numberStdVal[16]={
     241,225,210,195,

@@ -1,17 +1,9 @@
-#include"Sources/Widgets/InputDialog/InputDialog.h"
-#include"Sources/LCD/LCD.h"
-#include"Sources/Pushbutton/Pushbutton.h"
-
 #include<stdio.h>
 #include<string.h>
-
-enum INPUT_DIALOG{
-    BOARDER_SIZE=6,
-    BUFFER_SIZE=20,
-    POINTER_CHAR_UP_DOWN=0x12,
-    POINTER_CHAR_UP=0x18,
-    POINTER_CHAR_DOWN=0x19
-};
+#include"../../LCD/LCD.h"
+#include"../../Pushbutton/Pushbutton.h"
+#include"./InputDialog.h"
+#include"./InputDialogConfig.h"
 
 unsigned char inputDialog_getUChar(unsigned char *title,unsigned char value,unsigned char min,unsigned char max,unsigned char step,void (*sigUCharValueChanged)(unsigned char),bit saveBuffer){
     unsigned char i;

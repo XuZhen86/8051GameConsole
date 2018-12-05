@@ -1,7 +1,10 @@
-#include"Sources/SPI/SPI.h"
+#include"../Main/STC15W4K48S4.h"
+#include"../SPI/SPI.h"
+#include"./XRAM.h"
+#include"./XRAMConfig.h"
 
-#include"Sources/XRAM/XRAM.h"
-#include"Sources/XRAM/XRAMConfig.h"
+sbit CS=P2^6;
+sbit redLed=P2^4;
 
 void xRam_initialize(){
     CS=1;

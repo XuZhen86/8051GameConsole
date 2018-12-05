@@ -1,6 +1,5 @@
-#include"Sources/Main/STC15W4K48S4.h"
-
-#include"Sources/SPI/SPI.h"
+#include"../Main/STC15W4K48S4.h"
+#include"./SPI.h"
 
 void spi_initialize(){
     SPCTL=0xd0;

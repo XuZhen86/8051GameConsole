@@ -1,17 +1,10 @@
-#include"Sources/Widgets/ListWidget/ListWidget.h"
-#include"Sources/LCD/LCD.h"
-#include"Sources/Pushbutton/Pushbutton.h"
-#include"Sources/Universal/Universal.h"
-#include"Sources/Clock/Clock.h"
-#include"Sources/FarMem/FarMem.h"
-
 #include<string.h>
-
-enum{
-    BUFFER_SIZE=20,
-    POINTER_CHAR_LEFT=0x11,
-    POINTER_CHAR_RIGHT=0x10
-};
+#include"../../LCD/LCD.h"
+#include"../../Pushbutton/Pushbutton.h"
+#include"../../Universal/Universal.h"
+#include"../../Clock/Clock.h"
+#include"./ListWidget.h"
+#include"./ListWidgetConfig.h"
 
 unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char code *items[],unsigned char itemCount,void (*sigCurrentItemChanged)(unsigned char),bit saveBuffer){
     unsigned char i,selectedRow=0,selectedItem=0;

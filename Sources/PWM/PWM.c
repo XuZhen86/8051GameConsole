@@ -1,6 +1,5 @@
-#include"Sources/Main/STC15W4K48S4.h"
-
-#include"Sources/PWM/PWM.h"
+#include"../Main/STC15W4K48S4.h"
+#include"./PWM.h"
 
 void pwm_initialize(unsigned char clkDiv){
     P_SW2|=0x80;

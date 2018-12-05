@@ -1,6 +1,5 @@
-#include"Sources/Main/STC15W4K48S4.h"
-
-#include"Sources/Universal/Universal.h"
+#include"../Main/STC15W4K48S4.h"
+#include"./Universal.h"
 
 char* uctoa(unsigned char value,char *str){
     unsigned char len=0,i,temp;

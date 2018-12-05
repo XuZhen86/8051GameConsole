@@ -3,10 +3,11 @@
 
 #include"Sources/LCD/LCD.h"
 #include"Sources/Pushbutton/Pushbutton.h"
-#include"Sources/Universal/Universal.h"
-#include"Sources/Widgets/ListWidget/ListWidget.h"
-
 #include<stdlib.h>
+#include"../Universal/Universal.h"
+#include"../Widgets/ListWidget/ListWidget.h"
+#include"./Version.h"
+#include"./VersionNumbers.h"
 
 #define xStringize(s) stringize(s)
 #define stringize(s) #s

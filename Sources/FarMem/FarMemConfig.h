@@ -1,0 +1,8 @@
+#ifndef FARMEMCONFIG_H_
+#define FARMEMCONFIG_H_
+
+enum FAR_MEM_CONFIG{
+    FRAGMENTED_FREE_SPACE_MAX=1024
+};
+
+#endif

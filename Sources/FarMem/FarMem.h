@@ -3,9 +3,9 @@
 
 void farMem_Initialize();
 void *farMalloc(unsigned int size);
-void *farCalloc(unsigned int size);
+void *farCalloc(unsigned int num,unsigned int size);
 void farFree(void *ptr);
 
-static void defragFreeBlocks();
+static void defragFreeSpace();
 
 #endif

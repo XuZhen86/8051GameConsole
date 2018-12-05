@@ -1,17 +1,18 @@
-#include"Sources/Main/STC15W4K48S4.h"
-#include"Sources/PWM/PWM.h"
-#include"Sources/Universal/Universal.h"
-#include"Sources/SPI/SPI.h"
-#include"Sources/Widgets/InputDialog/InputDialog.h"
-#include"Sources/IAP/IAP.h"
-#include"Sources/Delay/Delay.h"
-
-#include"Sources/LCD/LCD.h"
-#include"Sources/LCD/LCDConfig.h"
-#include"Sources/LCD/LCD_ASCII6x8.h"
-
 #include<stdio.h>
 #include<string.h>
+#include"../Main/STC15W4K48S4.h"
+#include"../PWM/PWM.h"
+#include"../Universal/Universal.h"
+#include"../SPI/SPI.h"
+#include"../Widgets/InputDialog/InputDialog.h"
+#include"../IAP/IAP.h"
+#include"../Delay/Delay.h"
+#include"./LCD.h"
+#include"./LCDConfig.h"
+#include"./LCD_ASCII6x8.h"
+
+sbit chipSelect=P2^7;
+sbit resetSignal=P2^0;
 
 static unsigned char gdram[64][32];
 

@@ -1,22 +1,19 @@
 #include<stdio.h>
-#include<stdlib.h>
 #include<string.h>
-
 #include"./FarMem.h"
-
-struct FarMemBlock{
-    unsigned int size;
-    unsigned char attr;
-    struct FarMemBlock *next;
-    unsigned char pad[2];
-};
+#include"./FarMemBlock.h"
+#include"./FarMemConfig.h"
 
 struct FarMemBlock far head _at_ 0x020000;
+unsigned int data usedSpace,fragmentedFreeSpace;
 
 void farMem_Initialize(){
     head.size=0xffff-sizeof(struct FarMemBlock);
     head.attr=0x00;
     head.next=NULL;
+
+    usedSpace=0;
+    fragmentedFreeSpace=0;
 }
 
 void *farMalloc(unsigned int size){
@@ -33,7 +30,9 @@ void *farMalloc(unsigned int size){
             p->next=np;
             p->size=size;
 
-            // printf("[farMalloc() 0x%x]\n",(unsigned int)(p+sizeof(struct FarMemBlock)));
+            usedSpace+=(size+sizeof(struct FarMemBlock));
+
+            printf("[farMalloc() p=0x%0x usedSpace=%u]\n",(unsigned int)(p+sizeof(struct FarMemBlock)),usedSpace);
             return p+sizeof(struct FarMemBlock);
         }
     }
@@ -41,10 +40,10 @@ void *farMalloc(unsigned int size){
     return NULL;
 }
 
-void *farCalloc(unsigned int size){
-    void *p=farMalloc(size);
+void *farCalloc(unsigned int num,unsigned int size){
+    void *p=farMalloc(num*size);
     if(p!=NULL){
-        memset(p,0x00,size);
+        memset(p,0x00,num*size);
     }
     return p;
 }
@@ -54,12 +53,18 @@ void farFree(void *ptr){
 
     p-=sizeof(struct FarMemBlock);
     p->attr=0x00;
-    defragFreeBlocks();
+    usedSpace-=(p->size+sizeof(struct FarMemBlock));
 
-    // printf("[farFree() 0x%x]\n",(unsigned int)p);
+    fragmentedFreeSpace+=p->size;
+    if(fragmentedFreeSpace>=FRAGMENTED_FREE_SPACE_MAX){
+        defragFreeSpace();
+        fragmentedFreeSpace=0;
+    }
+
+    printf("[farFree() p=0x%0x usedSpace=%u]\n",(unsigned int)p,usedSpace);
 }
 
-static void defragFreeBlocks(){
+static void defragFreeSpace(){
     struct FarMemBlock *p=&head;
 
     while(p!=NULL){

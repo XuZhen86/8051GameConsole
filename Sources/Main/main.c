@@ -17,9 +17,6 @@
 #include<Sources/FarMem/FarMem.h>
 
 #include<stdio.h>
-#include<math.h>
-
-unsigned char far *farChar;
 
 void initialize(){
     P0M0=0x00;

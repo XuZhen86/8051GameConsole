@@ -411,6 +411,11 @@
               <FileType>5</FileType>
               <FilePath>.\Sources\Games\Snake\Snake.h</FilePath>
             </File>
+            <File>
+              <FileName>SnakeConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Games\Snake\SnakeConfig.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -450,6 +455,11 @@
               <FileName>LCD_ASCII6x8.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\LCD\LCD_ASCII6x8.h</FilePath>
+            </File>
+            <File>
+              <FileName>LCDConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\LCD\LCDConfig.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -602,6 +612,11 @@
               <FileType>5</FileType>
               <FilePath>.\Sources\Widgets\ListWidget\ListWidget.h</FilePath>
             </File>
+            <File>
+              <FileName>ListWidgetConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Widgets\ListWidget\ListWidgetConfig.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -617,6 +632,11 @@
               <FileType>5</FileType>
               <FilePath>.\Sources\IAP\IAP.h</FilePath>
             </File>
+            <File>
+              <FileName>IAPConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\IAP\IAPConfig.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -631,6 +651,11 @@
               <FileName>InputDialog.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Widgets\InputDialog\InputDialog.h</FilePath>
+            </File>
+            <File>
+              <FileName>InputDialogConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Widgets\InputDialog\InputDialogConfig.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -746,6 +771,16 @@
               <FileName>FarMem.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\FarMem\FarMem.h</FilePath>
+            </File>
+            <File>
+              <FileName>FarMemBlock.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\FarMem\FarMemBlock.h</FilePath>
+            </File>
+            <File>
+              <FileName>FarMemConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\FarMem\FarMemConfig.h</FilePath>
             </File>
           </Files>
         </Group>

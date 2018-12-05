@@ -33,7 +33,4 @@ enum LCD_IAP_CONFIG{
     IAP_BRIGHTNESS_SIZE=2
 };
 
-sbit chipSelect=P2^7;
-sbit resetSignal=P2^0;
-
 #endif

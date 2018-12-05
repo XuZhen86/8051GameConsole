@@ -1,8 +1,7 @@
-#include"Sources/Main/STC15W4K48S4.h"
-#include"Sources/Timer/Timer.h"
-#include"Sources/Power/Power.h"
-
-#include"Sources/Delay/Delay.h"
+#include"../Main/STC15W4K48S4.h"
+#include"../Timer/Timer.h"
+#include"../Power/Power.h"
+#include"./Delay.h"
 
 void delay(unsigned int ms){
     unsigned char t=TH0;

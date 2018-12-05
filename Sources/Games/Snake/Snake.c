@@ -1,15 +1,13 @@
-#include"Sources/Pushbutton/Pushbutton.h"
-#include"Sources/LCD/LCD.h"
-#include"Sources/Clock/Clock.h"
-#include"Sources/Delay/Delay.h"
-#include"Sources/FarMem/FarMem.h"
-
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
-#include"Sources/Games/Snake/Snake.h"
-#include"Sources/Games/Snake/SnakeConfig.h"
+#include"../../Pushbutton/Pushbutton.h"
+#include"../../LCD/LCD.h"
+#include"../../Clock/Clock.h"
+#include"../../Delay/Delay.h"
+#include"../../FarMem/FarMem.h"
+#include"./Snake.h"
+#include"./SnakeConfig.h"
 
 unsigned char foodX,foodY,headX,headY,tailX,tailY,level,direction,pressedDirection;
 unsigned int tick,length,lengthHigh,refreshInterval,tailVal;
