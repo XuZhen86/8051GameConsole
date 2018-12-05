@@ -18,7 +18,7 @@ unsigned char inputDialog_getUChar(unsigned char *title,unsigned char value,unsi
     bit answerDetermined=0;
 
     if(saveBuffer){
-        lcd_bufferStackPush();
+        // lcd_bufferStackPush();
     }
 
     lcd_stringSet(2,2,"                 ");
@@ -37,7 +37,7 @@ unsigned char inputDialog_getUChar(unsigned char *title,unsigned char value,unsi
         lcd_pixelSet(40-i,113,1);
     }
 
-    inputDialog_getUChar_printValue(value,min,max);
+    printValue(value,min,max);
     while(!answerDetermined){
         lcd_flush();
         switch(pushbutton_waitDirectionGet()){
@@ -61,7 +61,7 @@ unsigned char inputDialog_getUChar(unsigned char *title,unsigned char value,unsi
                 answerDetermined=1;
                 break;
         }
-        inputDialog_getUChar_printValue(value,min,max);
+        printValue(value,min,max);
 
         pushbutton_waitDirectionRelease();
         if(sigUCharValueChanged!=NULL){
@@ -70,12 +70,12 @@ unsigned char inputDialog_getUChar(unsigned char *title,unsigned char value,unsi
     }
 
     if(saveBuffer){
-        lcd_bufferStackPop();
+        // lcd_bufferStackPop();
     }
     return value;
 }
 
-void inputDialog_getUChar_printValue(unsigned char value,unsigned char min,unsigned char max){
+static void printValue(unsigned char value,unsigned char min,unsigned char max){
     unsigned char bufferLen;
     unsigned char buffer[BUFFER_SIZE];
 

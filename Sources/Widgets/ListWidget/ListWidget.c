@@ -3,6 +3,7 @@
 #include"Sources/Pushbutton/Pushbutton.h"
 #include"Sources/Universal/Universal.h"
 #include"Sources/Clock/Clock.h"
+#include"Sources/FarMem/FarMem.h"
 
 #include<string.h>
 
@@ -17,7 +18,7 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
     unsigned char buffer[BUFFER_SIZE];
 
     if(saveBuffer){
-        lcd_bufferStackPush();
+        // lcd_bufferStackPush();
     }
     lcd_clear();
 
@@ -26,7 +27,7 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
     lcd_hLineSet(7,1);
 
     for(i=0;i<itemCount&&i<7;i++){
-        lcd_stringSet(i+1,2,listWidget_strcpySpaceExtend(buffer,items[i]));
+        lcd_stringSet(i+1,2,strcpySpaceExtend(buffer,items[i]));
     }
 
     lcd_charSet(selectedRow+1,0,POINTER_CHAR_RIGHT);
@@ -42,7 +43,7 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
                         lcd_charSet(--selectedRow+1,0,POINTER_CHAR_RIGHT);
                     }else{  // Reached top of the display, move items down one slot
                         for(i=selectedItem-1;i<selectedItem+6&&i<itemCount;i++){
-                            lcd_stringSet(i-selectedItem+2,2,listWidget_strcpySpaceExtend(buffer,items[i]));
+                            lcd_stringSet(i-selectedItem+2,2,strcpySpaceExtend(buffer,items[i]));
                         }
                     }
                     selectedItem--;
@@ -54,7 +55,7 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
                         lcd_charSet((selectedRow=6)+1,0,POINTER_CHAR_RIGHT);
                         selectedItem=itemCount-1;
                         for(i=itemCount-7;i<itemCount;i++){
-                            lcd_stringSet(i-(itemCount-8),2,listWidget_strcpySpaceExtend(buffer,items[i]));
+                            lcd_stringSet(i-(itemCount-8),2,strcpySpaceExtend(buffer,items[i]));
                         }
                     }
                 }
@@ -66,7 +67,7 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
                         lcd_charSet(++selectedRow+1,0,POINTER_CHAR_RIGHT);
                     }else{  // Reached end of the display, move items up one slot
                         for(i=selectedItem-5;i<selectedItem+2&&i<itemCount;i++){
-                            lcd_stringSet(i-selectedItem+6,2,listWidget_strcpySpaceExtend(buffer,items[i]));
+                            lcd_stringSet(i-selectedItem+6,2,strcpySpaceExtend(buffer,items[i]));
                         }
                     }
                     selectedItem++;
@@ -74,21 +75,21 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
                     lcd_charSet(selectedRow+1,0,' ');
                     lcd_charSet((selectedRow=0)+1,0,POINTER_CHAR_RIGHT);
                     for(i=0;i<itemCount&&i<7;i++){
-                        lcd_stringSet(i+1,2,listWidget_strcpySpaceExtend(buffer,items[i]));
+                        lcd_stringSet(i+1,2,strcpySpaceExtend(buffer,items[i]));
                     }
                     selectedItem=0;
                 }
                 break;
             case PUSHBUTTON_DIRECTION_FORWARD:  // Confirm selection
                 if(saveBuffer){
-                    lcd_bufferStackPop();
+                    // lcd_bufferStackPop();
                 }
                 pushbutton_waitDirectionRelease();
                 lcd_flush();
                 return selectedItem;
             case PUSHBUTTON_DIRECTION_BACK: // Cancel selection
                 if(saveBuffer){
-                    lcd_bufferStackPop();
+                    // lcd_bufferStackPop();
                 }
                 pushbutton_waitDirectionRelease();
                 lcd_flush();
@@ -103,7 +104,7 @@ unsigned char listWidget_selectFromList(unsigned char code *title,unsigned char 
     }
 }
 
-unsigned char *listWidget_strcpySpaceExtend(unsigned char *destination,unsigned char *source){
+static unsigned char *strcpySpaceExtend(unsigned char *destination,unsigned char *source){
     unsigned char i;
     bit spaceExt=0;
 

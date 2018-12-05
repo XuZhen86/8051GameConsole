@@ -26,5 +26,6 @@ enum XRAM_MODE{
 };
 
 sbit CS=P2^6;
+sbit redLed=P2^4;
 
 #endif

@@ -5,6 +5,7 @@
 
 void xRam_initialize(){
     CS=1;
+    redLed=0;
     xRam_writeModeRegister(SEQUENTIAL_MODE);
 }
 

@@ -186,7 +186,7 @@
         </Utilities>
         <Target51>
           <Target51Misc>
-            <MemoryModel>1</MemoryModel>
+            <MemoryModel>2</MemoryModel>
             <RTOS>0</RTOS>
             <RomSize>2</RomSize>
             <DataHold>0</DataHold>
@@ -205,7 +205,7 @@
             <Mod517au>0</Mod517au>
             <Mode2>0</Mode2>
             <useCB>0</useCB>
-            <useXB>0</useXB>
+            <useXB>1</useXB>
             <useL251>1</useL251>
             <useA251>0</useA251>
             <Mx51>0</Mx51>
@@ -353,7 +353,7 @@
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>
-            <UserClasses></UserClasses>
+            <UserClasses>CODE (C:0x0000-C:0xBFFF), CONST (C:0x0000-C:0xBFFF), XDATA  (X:0x0000-X:0x0EFF), HDATA (X:0x020000-X:0x02FFFF)</UserClasses>
             <CSection></CSection>
             <UserSection></UserSection>
             <CodeBaseAddress>0X0000-0XBFFF</CodeBaseAddress>
@@ -390,6 +390,11 @@
               <FileName>STC15W4K48S4.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Main\STC15W4K48S4.h</FilePath>
+            </File>
+            <File>
+              <FileName>XBANKING.A51</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\Sources\Main\XBANKING.A51</FilePath>
             </File>
           </Files>
         </Group>
@@ -726,6 +731,21 @@
               <FileName>Stack.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Stack\Stack.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>FarMem</GroupName>
+          <Files>
+            <File>
+              <FileName>FarMem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\FarMem\FarMem.c</FilePath>
+            </File>
+            <File>
+              <FileName>FarMem.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\FarMem\FarMem.h</FilePath>
             </File>
           </Files>
         </Group>

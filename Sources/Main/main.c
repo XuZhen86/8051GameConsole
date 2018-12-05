@@ -14,9 +14,12 @@
 #include<Sources/Widgets/InputDialog/InputDialog.h>
 #include<Sources/Serial/Serial.h>
 #include<Sources/Stack/Stack.h>
+#include<Sources/FarMem/FarMem.h>
 
 #include<stdio.h>
 #include<math.h>
+
+unsigned char far *farChar;
 
 void initialize(){
     P0M0=0x00;
@@ -34,6 +37,7 @@ void initialize(){
     serial1_initialize(0xff,0xb8,1);
     spi_initialize();
     xRam_initialize();
+    farMem_Initialize();
     pwm_initialize(0);
     adc_initialize(0);
     iap_initialize();
