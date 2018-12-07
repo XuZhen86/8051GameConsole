@@ -170,9 +170,9 @@ endm
     mov DPL,R7  ; Save R7
     mov DPH,A
 
-    mXramSpiSetup
+    ; mXramSpiSetup
     clr bChipSelect
-    setb bRedLed
+    ; setb bRedLed
 
     mXramSpiSendVal 03h     ; Send read command
     mXramSpiSendReg R2      ; Send high address
@@ -180,7 +180,7 @@ endm
     mXramSpiRecvReg DPH     ; Receive byte
 
     setb bChipSelect
-    clr bRedLed
+    ; clr bRedLed
 
     mov R7,DPL  ; Restore R7
     mov A,DPH
@@ -194,9 +194,9 @@ endm
     mov DPL,R7  ; Save R7
     mov DPH,A   ; Save A
 
-    mXramSpiSetup
+    ; mXramSpiSetup
     clr bChipSelect
-    setb bRedLed
+    ; setb bRedLed
 
     mXramSpiSendVal 02h     ; Send write command
     mXramSpiSendReg R2      ; Send high address
@@ -205,7 +205,7 @@ endm
 
     call spi_waitFinish
     setb bChipSelect
-    clr bRedLed
+    ; clr bRedLed
 
     mov R7,DPL  ; Restore R7
     mov A,DPH   ; Restore A
@@ -219,9 +219,9 @@ endm
     mov DPL,R7  ; Save R7
     mov DPH,A
 
-    mXramSpiSetup
+    ; mXramSpiSetup
     clr bChipSelect
-    setb bRedLed
+    ; setb bRedLed
 
     mXramSpiSendVal 03h     ; Send read command
     mXramSpiSendReg R2      ; Send high address
@@ -230,7 +230,7 @@ endm
     mXramSpiRecvReg DPH     ; Receive low byte
 
     setb bChipSelect
-    clr bRedLed
+    ; clr bRedLed
 
     mov R7,DPL  ; Restore R7
     mov A,DPH
@@ -244,9 +244,9 @@ endm
     mov DPL,R7
     mov DPH,A
 
-    mXramSpiSetup
+    ; mXramSpiSetup
     clr bChipSelect
-    setb bRedLed
+    ; setb bRedLed
 
     mXramSpiSendVal 02h     ; Send write command
     mXramSpiSendReg R2      ; Send high address
@@ -256,7 +256,7 @@ endm
 
     call spi_waitFinish
     setb bChipSelect
-    clr bRedLed
+    ; clr bRedLed
 
     mov R7,DPL  ; Restore R7
     mov A,DPH   ; Restore A
@@ -269,9 +269,9 @@ endm
 ?C?PLDXPTR:
     mov DPL,R7  ; Save R7
 
-    mXramSpiSetup
+    ; mXramSpiSetup
     clr bChipSelect
-    setb bRedLed
+    ; setb bRedLed
 
     mXramSpiSendVal 03h     ; Send read command
     mXramSpiSendReg R2      ; Send high address
@@ -281,7 +281,7 @@ endm
     mXramSpiRecvReg R3      ; Receive low byte
 
     setb bChipSelect
-    clr bRedLed
+    ; clr bRedLed
 
     mov R7,DPL  ; Restore R7
     ret
@@ -294,9 +294,9 @@ endm
     mov DPL,R7  ; Save R7
     mov DPH,A
 
-    mXramSpiSetup
+    ; mXramSpiSetup
     clr bChipSelect
-    setb bRedLed
+    ; setb bRedLed
 
     mXramSpiSendVal 02h     ; Send write command
     mXramSpiSendReg R2      ; Send high address
@@ -317,9 +317,9 @@ endm
 ; Registers which can be used without saving:  DPTR, CY, A, R4, R5, R6, R7
 ;
 ?C?LLDXPTR:
-    mXramSpiSetup
+    ; mXramSpiSetup
     clr bChipSelect
-    setb bRedLed
+    ; setb bRedLed
 
     mXramSpiSendVal 03h     ; Send read command
     mXramSpiSendReg R2      ; Send high address
@@ -330,7 +330,7 @@ endm
     mXramSpiRecvReg R7      ; Receive low byte
 
     setb bChipSelect
-    clr bRedLed
+    ; clr bRedLed
 
     ret
 
@@ -341,9 +341,9 @@ endm
 ?C?LSTXPTR:
     mov DPL,R7  ; Save R7
 
-    mXramSpiSetup
+    ; mXramSpiSetup
     clr bChipSelect
-    setb bRedLed
+    ; setb bRedLed
 
     mXramSpiSendVal 02h     ; Send write command
     mXramSpiSendReg R2      ; Send high address
@@ -355,7 +355,7 @@ endm
 
     call spi_waitFinish
     setb bChipSelect
-    clr bRedLed
+    ; clr bRedLed
 
     mov R7,DPL
     ret

@@ -27,6 +27,7 @@ void lcd_spi_send(unsigned char c,unsigned char b){
     spi_waitFinish();
     chipSelect=0;
     delayLoop(0,0,50);
+    spi_setup(0,0,0);
 }
 
 void lcd_spi_send2Bytes(unsigned char c1,unsigned char c2,unsigned char b){
@@ -43,6 +44,7 @@ void lcd_spi_send2Bytes(unsigned char c1,unsigned char c2,unsigned char b){
     spi_waitFinish();
     chipSelect=0;
     delayLoop(0,0,50);
+    spi_setup(0,0,0);
 }
 
 void lcd_hwReset(){

@@ -23,7 +23,16 @@ unsigned char code *ITEMS[]={
 };
 
 void version_showVersion(){
-    listWidget_selectFromList(TITLE,ITEMS,ITEM_COUNT,NULL,0);
+    ListWidget *lw=ListWidget_new();
+    unsigned char i;
+
+    ListWidget_setTitle(lw,TITLE);
+    for(i=0;i<ITEM_COUNT;i++){
+        ListWidget_addItem(lw,ITEMS[i]);
+    }
+
+    ListWidget_getSelection(lw);
+    ListWidget_delete(lw);
 }
 
 unsigned char version_compileDateGet(){

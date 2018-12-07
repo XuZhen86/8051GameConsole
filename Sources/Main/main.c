@@ -17,6 +17,7 @@
 #include<Sources/FarMem/FarMem.h>
 
 #include<stdio.h>
+#include<string.h>
 
 void initialize(){
     P0M0=0x00;
@@ -44,40 +45,36 @@ void initialize(){
     lcd_spi_initialize();
 }
 
-unsigned char code *MAIN_TITLE="Main";
-unsigned char code MAIN_ITEM_COUNT=16;
-unsigned char code *MAIN_ITEMS[]={
-    "Snake",
-    "Brightness",
-    "Version",
-    "Input Dialog",
-    "Item 4",
-    "Item 5",
-    "Item 6",
-    "Item 7",
-    "Item 8",
-    "Item 9",
-    "Item 10",
-    "Item 11",
-    "Item 12",
-    "Item 13",
-    "Item 14",
-    "Item 15"
-};
-
 void slotCurrentItemChanged(unsigned char item){
     printf("[main slotCurrentItemChanged %bu]\n",item);
 }
 
-void slotUCharValueChanged(unsigned char uChar){
-    printf("[main slotUCharValueChanged %bu]",uChar);
-}
+// void slotUCharValueChanged(unsigned char uChar){
+//     printf("[main slotUCharValueChanged %bu]",uChar);
+// }
+
+ListWidget *mainListWidget;
 
 void main(){
     initialize();
 
+    mainListWidget=ListWidget_new();
+    ListWidget_setTitle(mainListWidget,"Main");
+    ListWidget_addItem(mainListWidget,"Snake");
+    ListWidget_addItem(mainListWidget,"Brightness");
+    ListWidget_addItem(mainListWidget,"Version");
+    ListWidget_addItem(mainListWidget,"Input Dialog");
+    ListWidget_addItem(mainListWidget,"bead94c4-5f1f-4757-b488-b99ad8528078");
+    ListWidget_addItem(mainListWidget,"7c7811e5-89bb-4f44-8e74-cd1358cbad3c");
+    ListWidget_addItem(mainListWidget,"4522629a-0ebb-4153-9045-5d55f23aac85");
+    ListWidget_addItem(mainListWidget,"1e85499b-9108-44c8-8f71-00d073c65783");
+    ListWidget_addItem(mainListWidget,"fd0cf450-c49d-43df-8cb9-2cff7c9192e6");
+    ListWidget_addItem(mainListWidget,"be5cb133-3f62-411d-9c08-11948589c17b");
+    ListWidget_addItem(mainListWidget,"53f85aa2-5dea-4045-988d-0229b5f3ca47");
+    ListWidget_setSigCurrentItemChanged(mainListWidget,slotCurrentItemChanged);
+
     while(1){
-        switch(listWidget_selectFromList(MAIN_TITLE,MAIN_ITEMS,MAIN_ITEM_COUNT,slotCurrentItemChanged,0)){
+        switch(ListWidget_getSelection(mainListWidget)){
             case 0:
                 snake();
                 break;
@@ -88,33 +85,7 @@ void main(){
                 version_showVersion();
                 break;
             case 3:
-                inputDialog_getUChar("Input Dialog",8,0,128,20,slotUCharValueChanged,1);
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            case 8:
-                break;
-            case 9:
-                break;
-            case 10:
-                break;
-            case 11:
-                break;
-            case 12:
-                break;
-            case 13:
-                break;
-            case 14:
-                break;
-            case 15:
-                break;
-            case 16:
+                // inputDialog_getUChar("Input Dialog",8,0,128,20,slotUCharValueChanged,1);
                 break;
         }
     }

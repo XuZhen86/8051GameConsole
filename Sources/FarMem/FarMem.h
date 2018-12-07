@@ -6,6 +6,8 @@ void *farMalloc(unsigned int size);
 void *farCalloc(unsigned int num,unsigned int size);
 void farFree(void *ptr);
 
-static void defragFreeSpace();
+static void defragFreeBlock();
+
+void farDump();
 
 #endif
