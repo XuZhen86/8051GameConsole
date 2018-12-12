@@ -15,13 +15,13 @@ enum PUSHBUTTON_NUMBERS{
     PUSHBUTTON_NUMBER_INVALID=255
 };
 
-unsigned char pushbutton_numberGet();
-unsigned char pushbutton_directionGet();
+unsigned char pushbutton_numberGet() small;
+unsigned char pushbutton_directionGet() small;
 
-unsigned char pushbutton_waitNumberGet();
-unsigned char pushbutton_waitDirectionGet();
-void pushbutton_waitNumberRelease();
-void pushbutton_waitDirectionRelease();
+unsigned char pushbutton_waitNumberGet() small;
+unsigned char pushbutton_waitDirectionGet() small;
+void pushbutton_waitNumberRelease() small;
+void pushbutton_waitDirectionRelease() small;
 
 unsigned char pushbutton_lastPressedNumberGet();
 unsigned char pushbutton_lastPressedDirectionGet();

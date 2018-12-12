@@ -3,7 +3,7 @@
 #include"../Power/Power.h"
 #include"./Delay.h"
 
-void delay(unsigned int ms){
+void delay(unsigned int ms) small{
     unsigned char t=TH0;
     while(ms--){
         power_idle();
@@ -11,7 +11,7 @@ void delay(unsigned int ms){
     while(TH0<t);
 }
 
-void delayLoop(unsigned char i,unsigned char j,unsigned char k){
+void delayLoop(unsigned char i,unsigned char j,unsigned char k) small{
     do{
         do{
             while(k--);

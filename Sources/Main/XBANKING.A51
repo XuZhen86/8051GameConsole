@@ -134,11 +134,9 @@ bChipSelect bit 0a0h.6
 bRedLed bit 0a0h.4
 SPCTL data 0ceh
 
-extrn code (_spi_setup)
 extrn code (_spi_send)
 extrn code (spi_recv)
 extrn code (spi_waitFinish)
-extrn bit (?_spi_setup?BIT)
 
 mXramSpiSetup macro
     call spi_waitFinish

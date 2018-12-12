@@ -2,14 +2,14 @@
 #define FARMEM_H_
 
 void farMem_Initialize();
-void *farMalloc(unsigned int size);
-void *farCalloc(unsigned int num,unsigned int size);
-void farFree(void *ptr);
+void *farMalloc(unsigned int size) small;
+void *farCalloc(unsigned int num,unsigned int size) small;
+void farFree(void *ptr) small;
 
-static void defragFreeBlock();
-static bit verifyFarMemBlock(void *ptr);
-static unsigned char calculateFarMemBlockPad0(void *ptr);
-static unsigned char calculateFarMemBlockPad1(void *ptr);
+static void defragFreeBlock() small;
+static bit verifyFarMemBlock(void *ptr) small;
+static unsigned char calculateFarMemBlockPad0(void *ptr) small;
+static unsigned char calculateFarMemBlockPad1(void *ptr) small;
 
 void farDump();
 

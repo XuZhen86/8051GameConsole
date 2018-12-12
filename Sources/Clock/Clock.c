@@ -20,7 +20,7 @@ void clock_tick() interrupt 1{
     delta+=TICK_INTERVAL;
 }
 
-void clock_flush(){
+void clock_flush() small{
     unsigned int deltaCopy=delta;
     delta=0;
 

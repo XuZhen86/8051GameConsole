@@ -23,7 +23,7 @@ static unsigned char
     lastPressedNumber=PUSHBUTTON_DIRECTION_INVALID,
     lastPressedDirection=PUSHBUTTON_DIRECTION_INVALID;
 
-unsigned char pushbutton_numberGet(){
+unsigned char pushbutton_numberGet() small{
     unsigned char buffer[TRIAL_COUNT];
     unsigned char i=0,j,diff;
     unsigned char testPassed=0;
@@ -66,7 +66,7 @@ unsigned char pushbutton_numberGet(){
     return PUSHBUTTON_NUMBER_INVALID;
 }
 
-unsigned char pushbutton_directionGet(){
+unsigned char pushbutton_directionGet() small{
     unsigned char buffer[TRIAL_COUNT];
     unsigned char i=0,j,diff;
     unsigned char testPassed=0;
@@ -109,26 +109,26 @@ unsigned char pushbutton_directionGet(){
     return PUSHBUTTON_DIRECTION_INVALID;
 }
 
-unsigned char pushbutton_waitNumberGet(){
+unsigned char pushbutton_waitNumberGet() small{
     while(pushbutton_numberGet()==PUSHBUTTON_NUMBER_INVALID){
         delay(50);
     }
     return lastPressedNumber;
 }
 
-unsigned char pushbutton_waitDirectionGet(){
+unsigned char pushbutton_waitDirectionGet() small{
     while(pushbutton_directionGet()==PUSHBUTTON_DIRECTION_INVALID){
         delay(50);
     }
     return lastPressedDirection;
 }
 
-void pushbutton_waitNumberRelease(){
+void pushbutton_waitNumberRelease() small{
     while(pushbutton_numberGet()!=PUSHBUTTON_NUMBER_INVALID){
         delay(50);
     }
 }
-void pushbutton_waitDirectionRelease(){
+void pushbutton_waitDirectionRelease() small{
     while(pushbutton_directionGet()!=PUSHBUTTON_DIRECTION_INVALID){
         delay(50);
     }

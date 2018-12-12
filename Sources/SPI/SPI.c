@@ -8,19 +8,19 @@ void spi_initialize(){
     SPDAT=0x00;
 }
 
-void spi_setup(unsigned char clkDiv,bit cpol,bit cpha){
+void spi_setup(unsigned char clkDiv,unsigned char cpol,unsigned char cpha) small{
     while((SPSTAT&0x80)==0);
-    SPCTL=0xd0|0x08*cpol|0x04*cpha|0x03&clkDiv;
+    SPCTL=0xd0|0x08*(cpol!=0)|0x04*(cpha!=0)|0x03&clkDiv;
 }
 
-unsigned char spi_send(unsigned char imm8){
+unsigned char spi_send(unsigned char imm8) small{
     while((SPSTAT&0x80)==0);
     SPSTAT|=0x80;
     SPDAT=imm8;
     return imm8;
 }
 
-unsigned char *spi_sendSeq(unsigned char *src,unsigned int len){
+unsigned char *spi_sendSeq(unsigned char *src,unsigned int len) small{
     unsigned int i;
     for(i=0;i<len;i++){
         while((SPSTAT&0x80)==0);
@@ -30,7 +30,7 @@ unsigned char *spi_sendSeq(unsigned char *src,unsigned int len){
     return src;
 }
 
-unsigned char spi_sendN(unsigned char imm8,unsigned int count){
+unsigned char spi_sendN(unsigned char imm8,unsigned int count) small{
     while(count--){
         while((SPSTAT&0x80)==0);
         SPSTAT|=0x80;
@@ -39,7 +39,7 @@ unsigned char spi_sendN(unsigned char imm8,unsigned int count){
     return imm8;
 }
 
-unsigned char spi_recv(){
+unsigned char spi_recv() small{
     while((SPSTAT&0x80)==0);
     SPSTAT|=0x80;
     SPDAT=0x00;
@@ -47,7 +47,7 @@ unsigned char spi_recv(){
     return SPDAT;
 }
 
-unsigned char *spi_recvSeq(unsigned char *dst,unsigned int len){
+unsigned char *spi_recvSeq(unsigned char *dst,unsigned int len) small{
     unsigned int i;
     while((SPSTAT&0x80)==0);
     SPSTAT|=0x80;
@@ -65,6 +65,6 @@ unsigned char *spi_recvSeq(unsigned char *dst,unsigned int len){
     return dst;
 }
 
-void spi_waitFinish(){
+void spi_waitFinish() small{
     while((SPSTAT&0x80)==0);
 }

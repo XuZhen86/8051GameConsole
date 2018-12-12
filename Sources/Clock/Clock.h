@@ -3,7 +3,7 @@
 
 void clock_initialize();
 void clock_tick();
-void clock_flush();
+void clock_flush() small;
 
 unsigned long int clock_get();
 unsigned int clock_mSecGet();

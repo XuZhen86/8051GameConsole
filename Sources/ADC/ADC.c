@@ -9,7 +9,7 @@ void adc_initialize(unsigned char speed){
     adcSpeed=(speed&0x03)<<5;
 }
 
-unsigned int adc_get(unsigned char channel){
+unsigned int adc_get(unsigned char channel) small{
     unsigned int result;
 
     P1ASF|=(1<<channel);

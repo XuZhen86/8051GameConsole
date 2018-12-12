@@ -5,9 +5,10 @@
 #include"./FarMemConfig.h"
 #include"../XRAM/XRAM.h"
 
-FarMemBlock far head _at_ 0x020000;
-unsigned int data
-    usedSpace,
+static FarMemBlock far head _at_ 0x020000;
+static unsigned int
+    numFarMemBlock,
+    netUsedSpace,
     fragmentedFreeByte,
     fragmentedFreeBlock;
 
@@ -18,12 +19,13 @@ void farMem_Initialize(){
     head.pad[0]=calculateFarMemBlockPad0(&head);
     head.pad[1]=calculateFarMemBlockPad1(&head);
 
-    usedSpace=0;
+    numFarMemBlock=1;
+    netUsedSpace=0;
     fragmentedFreeByte=0;
     fragmentedFreeBlock=0;
 }
 
-void *farMalloc(unsigned int size){
+void *farMalloc(unsigned int size) small{
     FarMemBlock *p,*np;
 
     for(p=&head;p!=NULL;p=p->next){
@@ -46,8 +48,9 @@ void *farMalloc(unsigned int size){
             p->pad[0]=calculateFarMemBlockPad0(p);
             p->pad[1]=calculateFarMemBlockPad1(p);
 
-            usedSpace+=(size+sizeof(FarMemBlock));
-            printf("[farMalloc() usedSpace=%u]\n",usedSpace);
+            numFarMemBlock++;
+            netUsedSpace+=size;
+            printf("[farMalloc() size=%u numFarMemBlock=%u netUsedSpace=%u usedSpace=%u]\n",size,numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
             return (void *)p+sizeof(FarMemBlock);
         }
     }
@@ -55,7 +58,7 @@ void *farMalloc(unsigned int size){
     return NULL;
 }
 
-void *farCalloc(unsigned int num,unsigned int size){
+void *farCalloc(unsigned int num,unsigned int size) small{
     void *p=farMalloc(num*size);
     if(p!=NULL){
         memset(p,0x00,num*size);
@@ -63,7 +66,7 @@ void *farCalloc(unsigned int num,unsigned int size){
     return p;
 }
 
-void farFree(void *ptr){
+void farFree(void *ptr) small{
     FarMemBlock *p=ptr-sizeof(FarMemBlock);
 
     if(ptr==NULL){
@@ -76,8 +79,8 @@ void farFree(void *ptr){
     p->attr=0x00;
     p->pad[0]=calculateFarMemBlockPad0(p);
     p->pad[1]=calculateFarMemBlockPad1(p);
-    usedSpace-=(p->size+sizeof(FarMemBlock));
 
+    netUsedSpace-=p->size;
     fragmentedFreeByte+=p->size;
     fragmentedFreeBlock++;
 
@@ -87,13 +90,11 @@ void farFree(void *ptr){
         fragmentedFreeBlock=0;
     }
 
-    printf("[farFree() usedSpace=%u]\n",usedSpace);
+    printf("[farFree() numFarMemBlock=%u netUsedSpace=%u usedSpace=%u]\n",numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
 }
 
-static void defragFreeBlock(){
+static void defragFreeBlock() small{
     FarMemBlock *p=&head;
-
-    // printf("[defragFreeBlock()]");
 
     while(p!=NULL){
         if(!verifyFarMemBlock(p)){
@@ -106,13 +107,15 @@ static void defragFreeBlock(){
             p->next=p->next->next;
             p->pad[0]=calculateFarMemBlockPad0(p);
             p->pad[1]=calculateFarMemBlockPad1(p);
+
+            numFarMemBlock--;
         }else{
             p=p->next;
         }
     }
 }
 
-static bit verifyFarMemBlock(void *ptr){
+static bit verifyFarMemBlock(void *ptr) small{
     FarMemBlock *p=ptr;
 
     if(calculateFarMemBlockPad0(ptr)!=p->pad[0]){
@@ -125,12 +128,9 @@ static bit verifyFarMemBlock(void *ptr){
     return 1;
 }
 
-static unsigned char calculateFarMemBlockPad0(void *ptr){
-    unsigned char *bytes=ptr;
-    unsigned char pad;
-    unsigned char i;
+static unsigned char calculateFarMemBlockPad0(void *ptr) small{
+    unsigned char *bytes=ptr,pad=0x00,i;
 
-    pad=0;
     for(i=0;i<6;i++){
         pad^=bytes[i];
     }
@@ -139,12 +139,9 @@ static unsigned char calculateFarMemBlockPad0(void *ptr){
     return pad;
 }
 
-static unsigned char calculateFarMemBlockPad1(void *ptr){
-    unsigned char *bytes=ptr;
-    unsigned char pad;
-    unsigned char i;
+static unsigned char calculateFarMemBlockPad1(void *ptr) small{
+    unsigned char *bytes=ptr,pad=0x00,i;
 
-    pad=0;
     for(i=0;i<6;i++){
         pad+=bytes[i];
     }
@@ -155,7 +152,7 @@ static unsigned char calculateFarMemBlockPad1(void *ptr){
 
 void farDump(){
     unsigned int i;
-    for(i=0;i<usedSpace;i++){
+    for(i=0;i<netUsedSpace+numFarMemBlock*sizeof(FarMemBlock);i++){
         printf("far[0x%04x]=%3bu 0x%02bx\n",i,xRam_uCharRead(i),xRam_uCharRead(i));
     }
 }

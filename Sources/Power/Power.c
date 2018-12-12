@@ -3,7 +3,7 @@
 
 sbit systemBusyLed=P2^5;
 
-void power_idle(){
+void power_idle() small{
     systemBusyLed=0;
     PCON|=0x01;
     systemBusyLed=1;

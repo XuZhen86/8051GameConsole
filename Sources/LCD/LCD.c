@@ -128,7 +128,7 @@ void lcd_spi_initialize(){
     lcd_forceFlush();
 }
 
-void lcd_flush(){
+void lcd_flush() small{
     unsigned char i,j,displayDisabled=0;
 
     for(i=0;i<64;i++){
@@ -151,7 +151,7 @@ void lcd_flush(){
     }
 }
 
-void lcd_forceFlush(){
+void lcd_forceFlush() small{
     unsigned char i,j;
 
     lcd_spi_send(FUNCTION_SET|0x04,0);
@@ -165,7 +165,7 @@ void lcd_forceFlush(){
     lcd_spi_send(FUNCTION_SET|0x04|0x02,0);
 }
 
-void lcd_charSet(unsigned char row,unsigned char col,unsigned char c){
+void lcd_charSet(unsigned char row,unsigned char col,unsigned char c) small{
     unsigned char i,mask,fill;
     col=col%21*6;   // col%=128;
     row=row%8*8;    // row%=64;
@@ -178,7 +178,7 @@ void lcd_charSet(unsigned char row,unsigned char col,unsigned char c){
     }
 }
 
-void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str){
+void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str) small{
     unsigned char i,j,k,mask,fill;
     col=col%21*6;
     row=row%8*8;
@@ -200,19 +200,15 @@ void lcd_stringSet(unsigned char row,unsigned char col,unsigned char *str){
     }
 }
 
-void lcd_pixelSet(unsigned char row,unsigned char col,unsigned char lightUp){
-    row%=64;
-    col%=128;
-    lightUp%=2;
-
+void lcd_pixelSet(unsigned char row,unsigned char col,unsigned char lightUp) small{
     if(lightUp){
-        gdram[row][col/8]|=(0x80>>col%8);
+        gdram[row%64][col%128/8]|=(0x80>>col%8);
     }else{
-        gdram[row][col/8]&=~(0x80>>col%8);
+        gdram[row%64][col%128/8]&=~(0x80>>col%8);
     }
 }
 
-void lcd_clear(){
+void lcd_clear() small{
     unsigned char i;
     for(i=0;i<64;i++){
         memset(gdram[i],BUFFER_INIT_VALUE,16);
@@ -225,13 +221,12 @@ void lcd_hLineSet(unsigned char row,unsigned char lightUp){
 
 void lcd_vLineSet(unsigned char col,unsigned char lightUp){
     unsigned char i;
-    col%=128;
 
     for(i=0;i<64;i++){
         if(lightUp){
-            gdram[i][col/8]|=(0x80>>(col%8));
+            gdram[i][col%128/8]|=(0x80>>(col%8));
         }else{
-            gdram[i][col/8]&=~(0x80>>(col%8));
+            gdram[i][col%128/8]&=~(0x80>>(col%8));
         }
     }
 }
