@@ -8,8 +8,7 @@ void farFree(void *ptr) small;
 
 static void defragFreeBlock() small;
 static bit verifyFarMemBlock(void *ptr) small;
-static unsigned char calculateFarMemBlockPad0(void *ptr) small;
-static unsigned char calculateFarMemBlockPad1(void *ptr) small;
+static unsigned int calculateFarMemBlockPad(void *ptr) small;
 
 void farDump();
 

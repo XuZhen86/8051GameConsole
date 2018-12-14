@@ -16,8 +16,7 @@ void farMem_Initialize(){
     head.size=0x10000-sizeof(FarMemBlock);
     head.attr=0x00;
     head.next=NULL;
-    head.pad[0]=calculateFarMemBlockPad0(&head);
-    head.pad[1]=calculateFarMemBlockPad1(&head);
+    head.pad=calculateFarMemBlockPad(&head);
 
     numFarMemBlock=1;
     netUsedSpace=0;
@@ -39,14 +38,12 @@ void *farMalloc(unsigned int size) small{
             np->attr=0x00;
             np->next=p->next;
             np->size=p->size-size-sizeof(FarMemBlock);
-            np->pad[0]=calculateFarMemBlockPad0(np);
-            np->pad[1]=calculateFarMemBlockPad1(np);
+            np->pad=calculateFarMemBlockPad(np);
 
             p->attr=0x01;
             p->next=np;
             p->size=size;
-            p->pad[0]=calculateFarMemBlockPad0(p);
-            p->pad[1]=calculateFarMemBlockPad1(p);
+            p->pad=calculateFarMemBlockPad(p);
 
             numFarMemBlock++;
             netUsedSpace+=size;
@@ -77,8 +74,7 @@ void farFree(void *ptr) small{
     }
 
     p->attr=0x00;
-    p->pad[0]=calculateFarMemBlockPad0(p);
-    p->pad[1]=calculateFarMemBlockPad1(p);
+    p->pad=calculateFarMemBlockPad(p);
 
     netUsedSpace-=p->size;
     fragmentedFreeByte+=p->size;
@@ -105,8 +101,7 @@ static void defragFreeBlock() small{
         if(p->attr==0x00&&p->next!=NULL&&p->next->attr==0x00){
             p->size+=sizeof(FarMemBlock)+p->next->size;
             p->next=p->next->next;
-            p->pad[0]=calculateFarMemBlockPad0(p);
-            p->pad[1]=calculateFarMemBlockPad1(p);
+            p->pad=calculateFarMemBlockPad(p);
 
             numFarMemBlock--;
         }else{
@@ -118,36 +113,22 @@ static void defragFreeBlock() small{
 static bit verifyFarMemBlock(void *ptr) small{
     FarMemBlock *p=ptr;
 
-    if(calculateFarMemBlockPad0(ptr)!=p->pad[0]){
+    if(calculateFarMemBlockPad(ptr)!=p->pad){
         return 0;
     }
-    if(calculateFarMemBlockPad1(ptr)!=p->pad[1]){
-        return 0;
-    }
-
     return 1;
 }
 
-static unsigned char calculateFarMemBlockPad0(void *ptr) small{
-    unsigned char *bytes=ptr,pad=0x00,i;
+static unsigned int calculateFarMemBlockPad(void *ptr) small{
+    unsigned char *bytes=ptr,pad0=0x00,pad1=0x00,i;
 
-    for(i=0;i<6;i++){
-        pad^=bytes[i];
+    for(i=0;i<sizeof(FarMemBlock)-2;i++){
+        pad0^=bytes[i];
+        pad1+=bytes[i];
     }
 
-    // printf("[pad0=0x%0x]\n",(unsigned int)pad);
-    return pad;
-}
-
-static unsigned char calculateFarMemBlockPad1(void *ptr) small{
-    unsigned char *bytes=ptr,pad=0x00,i;
-
-    for(i=0;i<6;i++){
-        pad+=bytes[i];
-    }
-
-    // printf("[pad1=0x%0x]\n",(unsigned int)pad);
-    return pad;
+    // printf("[pad0=0x%x pad1=0x%x]\n",(unsigned int)pad0,(unsigned int)pad1);
+    return ((unsigned int)pad0<<8)|pad1;
 }
 
 void farDump(){
