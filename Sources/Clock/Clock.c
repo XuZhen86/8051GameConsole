@@ -12,7 +12,7 @@ static bit timerIsRunning;
 static unsigned int data timerRemains;
 
 void clock_initialize(){
-    timer0_setup(TH,TL,0,X12,1,1);
+    timer0_setup(TH,TL,TIMER_MODE_0|(X12?TIMER_X12:0)|TIMER_ENIRQ|TIMER_PRIRQ);
     timer0_start();
 }
 
