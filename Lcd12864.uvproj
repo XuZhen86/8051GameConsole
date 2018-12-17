@@ -784,6 +784,26 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>IAPFile</GroupName>
+          <Files>
+            <File>
+              <FileName>IAPFile.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\IAPFile\IAPFile.c</FilePath>
+            </File>
+            <File>
+              <FileName>IAPFile.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\IAPFile\IAPFile.h</FilePath>
+            </File>
+            <File>
+              <FileName>IAPFileConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\IAPFile\IAPFileConfig.h</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

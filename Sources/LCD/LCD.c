@@ -5,7 +5,7 @@
 #include"../Universal/Universal.h"
 #include"../SPI/SPI.h"
 #include"../Widgets/InputDialog/InputDialog.h"
-#include"../IAP/IAP.h"
+#include"../IAPFile/IAPFile.h"
 #include"../Delay/Delay.h"
 #include"./LCD.h"
 #include"./LCDConfig.h"
@@ -14,9 +14,9 @@
 sbit chipSelect=P2^7;
 sbit resetSignal=P2^0;
 
-static unsigned char gdram[64][32];
+static unsigned char gdram[64][32],brightness;
 
-void lcd_spi_send(unsigned char c,unsigned char b){
+void lcd_spi_send(unsigned char c,unsigned char b) small{
     spi_setup(SPI_CLKDIV,SPI_CPOL,SPI_CPHA);
     chipSelect=1;
 
@@ -30,7 +30,7 @@ void lcd_spi_send(unsigned char c,unsigned char b){
     spi_setup(0,0,0);
 }
 
-void lcd_spi_send2Bytes(unsigned char c1,unsigned char c2,unsigned char b){
+void lcd_spi_send2Bytes(unsigned char c1,unsigned char c2,unsigned char b) small{
     spi_setup(SPI_CLKDIV,SPI_CPOL,SPI_CPHA);
     chipSelect=1;
 
@@ -55,54 +55,48 @@ void lcd_hwReset(){
 }
 
 void lcd_pwm_initialize(){
-    pwm3_initialize(0,lcd_iap_brightnessRawGet(),1,1);
+    IapFile *file=IapFile_new();
+    unsigned char buffer[8];
+
+    IapFile_open(file,"LCD.txt");
+    if(IapFile_readLine(file,buffer,8)){
+        sscanf(buffer,"%bu",&brightness);
+        // printf("buffer=[%s] brightness=%bu\n",buffer,brightness);
+    }else{
+        IapFile_write(file,"8\n",strlen("8\n"));
+        brightness=8;
+    }
+    IapFile_close(file);
+    IapFile_delete(file);
+
+    pwm3_initialize(0,1,1,1);
+    lcd_setBrightness(brightness);
 }
 
-void lcd_brightnessAdjust(){
-    unsigned char levelNew,levelOld=lcd_brightnessLevelGet();
-
-    levelNew=inputDialog_getUChar("Brightness",levelOld,0,16,1,lcd_brightnessLevelSet,1);
-    if(levelNew==16){
-        lcd_brightnessLevelSet(levelOld);
-    }else if(levelNew!=levelOld){
-        lcd_iap_write();
+void lcd_setBrightness(unsigned char b){
+    brightness=b;
+    if(b==0){
+        pwm3_timerValueSet(0,1);
+    }else{
+        pwm3_timerValueSet(0,b*0x800);
     }
 }
 
-unsigned char lcd_brightnessLevelGet(){
-    return lcd_iap_brightnessRawGet()/0x800;
-}
+void lcd_adjustBrightness(){
+    IapFile *file=IapFile_new();
+    unsigned char bOld=brightness,bNew,buffer[8];
 
-void lcd_brightnessLevelSet(unsigned char level){
-    lcd_iap_brightnessRawSet(level%16*0x800);
-}
-
-void lcd_iap_read(){
-    iap_sectorRead(IAP_SECTOR);
-}
-
-void lcd_iap_write(){
-    iap_sectorWrite(IAP_SECTOR);
-}
-
-unsigned int lcd_iap_brightnessRawGet(){
-    unsigned int brightnessRaw=iap_uIntGet(IAP_BRIGHTNESS_OFFSET);
-    if(brightnessRaw==0xffff){
-        iap_uIntSet(IAP_BRIGHTNESS_OFFSET,0x4000);
-        return 0x4000;
-    }
-    return brightnessRaw;
-}
-
-unsigned int lcd_iap_brightnessRawSet(unsigned int brightnessRaw){
-    brightnessRaw%=0x8000;
-    if(brightnessRaw==0){
-        brightnessRaw=1;
+    bNew=inputDialog_getUChar("Brightness",brightness,0,16,1,lcd_setBrightness,0);
+    if(bNew==16){
+        lcd_setBrightness(bOld);
+    }else{
+        sprintf(buffer,"%bu\n",bNew);
+        IapFile_open(file,"LCD.txt");
+        IapFile_write(file,buffer,strlen(buffer));
     }
 
-    iap_uIntSet(IAP_BRIGHTNESS_OFFSET,brightnessRaw);
-    pwm3_timerValueSet(0,brightnessRaw);
-    return brightnessRaw;
+    IapFile_close(file);
+    IapFile_delete(file);
 }
 
 void lcd_spi_initialize(){
@@ -122,10 +116,10 @@ void lcd_spi_initialize(){
     }
     lcd_spi_send(FUNCTION_SET|0x04|0x02,0);
 
-    lcd_iap_read();
-    lcd_pwm_initialize();
     memset(gdram,BUFFER_INIT_VALUE,sizeof gdram);
     lcd_forceFlush();
+
+    lcd_pwm_initialize();
 }
 
 void lcd_flush() small{

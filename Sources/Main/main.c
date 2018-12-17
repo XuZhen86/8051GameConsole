@@ -15,6 +15,7 @@
 #include<Sources/Serial/Serial.h>
 #include<Sources/Stack/Stack.h>
 #include<Sources/FarMem/FarMem.h>
+#include<Sources/IAPFile/IAPFile.h>
 
 #include<stdio.h>
 #include<string.h>
@@ -38,7 +39,7 @@ void initialize(){
     farMem_Initialize();
     pwm_initialize(0);
     adc_initialize(0);
-    iap_initialize();
+    Iap_initialize();
     clock_initialize();
 
     stack_initialize(0x0000);
@@ -79,7 +80,7 @@ void main(){
                 snake();
                 break;
             case 1:
-                lcd_brightnessAdjust();
+                lcd_adjustBrightness();
                 break;
             case 2:
                 version_showVersion();

@@ -47,7 +47,7 @@ void *farMalloc(unsigned int size) small{
 
             numFarMemBlock++;
             netUsedSpace+=size;
-            printf("[farMalloc() size=%u numFarMemBlock=%u netUsedSpace=%u usedSpace=%u]\n",size,numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
+            // printf("[farMalloc() size=%u numFarMemBlock=%u netUsedSpace=%u usedSpace=%u]\n",size,numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
             return (void *)p+sizeof(FarMemBlock);
         }
     }
@@ -86,7 +86,7 @@ void farFree(void *ptr) small{
         fragmentedFreeBlock=0;
     }
 
-    printf("[farFree() numFarMemBlock=%u netUsedSpace=%u usedSpace=%u]\n",numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
+    // printf("[farFree() numFarMemBlock=%u netUsedSpace=%u usedSpace=%u]\n",numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
 }
 
 static void defragFreeBlock() small{

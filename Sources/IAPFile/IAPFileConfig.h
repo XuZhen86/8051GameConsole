@@ -1,0 +1,9 @@
+#ifndef IAPFILECONFIG_H_
+#define IAPFILECONFIG_H_
+
+enum IAPFILE_CONFIG{
+    FILE_ID_MAX=32,
+    FILE_SIZE_MAX=0xfe
+};
+
+#endif

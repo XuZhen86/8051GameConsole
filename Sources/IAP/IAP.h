@@ -1,20 +1,18 @@
 #ifndef IAP_H_
 #define IAP_H_
 
-void iap_initialize();
+void Iap_initialize();
 
-unsigned char iap_sectorReadByte(unsigned int address);
-void iap_sectorRead(unsigned char sector);
+unsigned char Iap_read(unsigned int addr16) small;
+unsigned char Iap_write(unsigned int addr16,unsigned char imm8) small;
+void Iap_flush();
 
-unsigned char iap_sectorWriteByte(unsigned int address,unsigned char c);
-void iap_sectorWrite(unsigned char sector);
-void iap_sectorErase(unsigned char sector);
+static void loadSector(unsigned char sector) small;
+static void unloadSector(unsigned char sector) small;
+static void eraseSector(unsigned char sector) small;
+static void writeSector(unsigned char sector) small;
 
-unsigned char iap_uCharGet(unsigned int offset);
-unsigned char iap_uCharSet(unsigned int offset,unsigned char c);
-unsigned int iap_uIntGet(unsigned int offset);
-unsigned int iap_uIntSet(unsigned int offset,unsigned int i);
-
-// void _iap_sectorTest(unsigned char sector);
+void Iap_test();
+void Iap_dump(unsigned int startAddr,unsigned int endAddr);
 
 #endif
