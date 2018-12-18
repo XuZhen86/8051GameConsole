@@ -178,6 +178,10 @@ bit IapFile_resize(IapFile *f,unsigned char sz){
     return 1;
 }
 
+unsigned char IapFile_size(IapFile *f){
+    return getFileSize(f);
+}
+
 static unsigned char getFileSize(IapFile *f) small{
     return Iap_read(f->fileId*16+15);
 }

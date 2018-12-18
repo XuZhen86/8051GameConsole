@@ -22,6 +22,7 @@ unsigned char IapFile_read(IapFile *f,unsigned char *dst,unsigned char maxSize) 
 unsigned char IapFile_readLine(IapFile *f,unsigned char *dst,unsigned char maxSize) small;
 unsigned char IapFile_write(IapFile *f,unsigned char *src,unsigned char maxSize) small;
 bit IapFile_resize(IapFile *f,unsigned char sz);
+unsigned char IapFile_size(IapFile *f);
 
 static unsigned char getFileSize(IapFile *f) small;
 static unsigned char setFileSize(IapFile *f,unsigned char sz) small;
