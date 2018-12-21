@@ -16,6 +16,7 @@
 #include<Power.h>
 #include<Pushbutton.h>
 #include<Serial.h>
+#include<Snake.h>
 #include<SPI.h>
 #include<STC15W4K48S4.h>
 #include<Time.h>

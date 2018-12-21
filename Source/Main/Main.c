@@ -52,7 +52,7 @@ void main(){
     while(1){
         switch(ListWidget_getSelection(mainListWidget)){
             case 0:
-                // Snake();
+                Snake();
                 break;
             case 1:
                 LCD_adjustBrightness();

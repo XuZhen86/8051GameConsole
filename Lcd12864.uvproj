@@ -543,6 +543,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Snake</GroupName>
+          <Files>
+            <File>
+              <FileName>Snake.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Game\Snake\Snake.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>
