@@ -3,7 +3,7 @@
 using namespace std;
 
 const char FILE_NAME_1[]="Version/VersionNumbers.txt";
-const char FILE_NAME_2[]="Sources/Version/VersionNumbers.h";
+const char FILE_NAME_2[]="Source/Version/VersionNumber.h";
 
 int main(){
     fstream fs(FILE_NAME_1,ios::in);
@@ -21,12 +21,12 @@ int main(){
 
     fs.open(FILE_NAME_2,ios::out);
     if(!fs.is_open()){return 1;}
-    fs<<"#ifndef VERSIONNUMBERS_H_"<<endl
-        <<"#define VERSIONNUMBERS_H_"<<endl
+    fs<<"#ifndef VERSIONNUMBER_H_"<<endl
+        <<"#define VERSIONNUMBER_H_"<<endl
         <<endl
-        <<"#define VERSION_NUMBER \""<<major<<"."<<minor<<"."<<patch<<"."<<build<<"\""<<endl
+        <<"#define VERSION_STRING \""<<major<<"."<<minor<<"."<<patch<<"."<<build<<"\""<<endl
         <<endl
-        <<"enum VERSION_NUMBERS{"<<endl
+        <<"enum VERSION_NUMBER{"<<endl
         <<"    VERSION_MAJOR="<<major<<","<<endl
         <<"    VERSION_MINOR="<<minor<<","<<endl
         <<"    VERSION_PATCH="<<patch<<","<<endl

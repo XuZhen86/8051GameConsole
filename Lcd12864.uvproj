@@ -324,7 +324,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>Include</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -377,134 +377,29 @@
           <GroupName>Main</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>Main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\Main\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>STARTUP.A51</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\Sources\Main\STARTUP.A51</FilePath>
-            </File>
-            <File>
-              <FileName>STC15W4K48S4.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Main\STC15W4K48S4.h</FilePath>
-            </File>
-            <File>
-              <FileName>XBANKING.A51</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\Sources\Main\XBANKING.A51</FilePath>
+              <FilePath>.\Source\Main\Main.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Games_Snake</GroupName>
+          <GroupName>Analog</GroupName>
           <Files>
             <File>
-              <FileName>Snake.c</FileName>
+              <FileName>Analog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\Games\Snake\Snake.c</FilePath>
-            </File>
-            <File>
-              <FileName>Snake.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Games\Snake\Snake.h</FilePath>
-            </File>
-            <File>
-              <FileName>SnakeConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Games\Snake\SnakeConfig.h</FilePath>
+              <FilePath>.\Source\Analog\Analog.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>ADC</GroupName>
+          <GroupName>Time</GroupName>
           <Files>
             <File>
-              <FileName>ADC.c</FileName>
+              <FileName>Time.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\ADC\ADC.c</FilePath>
-            </File>
-            <File>
-              <FileName>ADC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\ADC\ADC.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>LCD</GroupName>
-          <Files>
-            <File>
-              <FileName>LCD.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\LCD\LCD.c</FilePath>
-            </File>
-            <File>
-              <FileName>LCD.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\LCD\LCD.h</FilePath>
-            </File>
-            <File>
-              <FileName>LCD_ASCII5x8.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\LCD\LCD_ASCII5x8.h</FilePath>
-            </File>
-            <File>
-              <FileName>LCD_ASCII6x8.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\LCD\LCD_ASCII6x8.h</FilePath>
-            </File>
-            <File>
-              <FileName>LCDConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\LCD\LCDConfig.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Pushbutton</GroupName>
-          <Files>
-            <File>
-              <FileName>Pushbutton.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Pushbutton\Pushbutton.c</FilePath>
-            </File>
-            <File>
-              <FileName>Pushbutton.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Pushbutton\Pushbutton.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>PWM</GroupName>
-          <Files>
-            <File>
-              <FileName>PWM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\PWM\PWM.c</FilePath>
-            </File>
-            <File>
-              <FileName>PWM.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\PWM\PWM.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>SPI</GroupName>
-          <Files>
-            <File>
-              <FileName>SPI.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\SPI\SPI.c</FilePath>
-            </File>
-            <File>
-              <FileName>SPI.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\SPI\SPI.h</FilePath>
+              <FilePath>.\Source\Time\Time.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -514,203 +409,7 @@
             <File>
               <FileName>Timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\Timer\Timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>Timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Timer\Timer.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Universal</GroupName>
-          <Files>
-            <File>
-              <FileName>Universal.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Universal\Universal.c</FilePath>
-            </File>
-            <File>
-              <FileName>Universal.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Universal\Universal.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Version</GroupName>
-          <Files>
-            <File>
-              <FileName>Version.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Version\Version.h</FilePath>
-            </File>
-            <File>
-              <FileName>Version.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Version\Version.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
-                  <AlwaysBuild>1</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                  <BankNo>65535</BankNo>
-                </CommonProperty>
-                <File51>
-                  <C51>
-                    <RegisterColoring>2</RegisterColoring>
-                    <VariablesInOrder>2</VariablesInOrder>
-                    <IntegerPromotion>2</IntegerPromotion>
-                    <uAregs>2</uAregs>
-                    <UseInterruptVector>2</UseInterruptVector>
-                    <Fuzzy>8</Fuzzy>
-                    <Optimize>10</Optimize>
-                    <WarningLevel>3</WarningLevel>
-                    <SizeSpeed>2</SizeSpeed>
-                    <ObjectExtend>2</ObjectExtend>
-                    <ACallAJmp>2</ACallAJmp>
-                    <InterruptVectorAddress>0</InterruptVectorAddress>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </C51>
-                </File51>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>VersionNumbers.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Version\VersionNumbers.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Widgets_ListWidget</GroupName>
-          <Files>
-            <File>
-              <FileName>ListWidget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Widgets\ListWidget\ListWidget.c</FilePath>
-            </File>
-            <File>
-              <FileName>ListWidget.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Widgets\ListWidget\ListWidget.h</FilePath>
-            </File>
-            <File>
-              <FileName>ListWidgetConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Widgets\ListWidget\ListWidgetConfig.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>IAP</GroupName>
-          <Files>
-            <File>
-              <FileName>IAP.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\IAP\IAP.c</FilePath>
-            </File>
-            <File>
-              <FileName>IAP.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\IAP\IAP.h</FilePath>
-            </File>
-            <File>
-              <FileName>IAPConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\IAP\IAPConfig.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Widgets_InputDialog</GroupName>
-          <Files>
-            <File>
-              <FileName>InputDialog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Widgets\InputDialog\InputDialog.c</FilePath>
-            </File>
-            <File>
-              <FileName>InputDialog.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Widgets\InputDialog\InputDialog.h</FilePath>
-            </File>
-            <File>
-              <FileName>InputDialogConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Widgets\InputDialog\InputDialogConfig.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>XRAM</GroupName>
-          <Files>
-            <File>
-              <FileName>XRAM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\XRAM\XRAM.c</FilePath>
-            </File>
-            <File>
-              <FileName>XRAM.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\XRAM\XRAM.h</FilePath>
-            </File>
-            <File>
-              <FileName>XRAMConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\XRAM\XRAMConfig.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Serial</GroupName>
-          <Files>
-            <File>
-              <FileName>Serial.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Serial\Serial.c</FilePath>
-            </File>
-            <File>
-              <FileName>Serial.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Serial\Serial.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Clock</GroupName>
-          <Files>
-            <File>
-              <FileName>Clock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Clock\Clock.c</FilePath>
-            </File>
-            <File>
-              <FileName>Clock.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Clock\Clock.h</FilePath>
-            </File>
-            <File>
-              <FileName>ClockConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Clock\ClockConfig.h</FilePath>
+              <FilePath>.\Source\Timer\Timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -720,12 +419,7 @@
             <File>
               <FileName>Power.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\Power\Power.c</FilePath>
-            </File>
-            <File>
-              <FileName>Power.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Power\Power.h</FilePath>
+              <FilePath>.\Source\Power\Power.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -735,52 +429,62 @@
             <File>
               <FileName>Delay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\Delay\Delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>Delay.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Delay\Delay.h</FilePath>
+              <FilePath>.\Source\Delay\Delay.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Stack</GroupName>
+          <GroupName>SPI</GroupName>
           <Files>
             <File>
-              <FileName>Stack.c</FileName>
+              <FileName>SPI.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\Stack\Stack.c</FilePath>
-            </File>
-            <File>
-              <FileName>Stack.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\Stack\Stack.h</FilePath>
+              <FilePath>.\Source\SPI\SPI.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>FarMem</GroupName>
+          <GroupName>Serial</GroupName>
           <Files>
             <File>
-              <FileName>FarMem.c</FileName>
+              <FileName>Serial.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\FarMem\FarMem.c</FilePath>
+              <FilePath>.\Source\Serial\Serial.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Far</GroupName>
+          <Files>
+            <File>
+              <FileName>Far.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Far\Far.c</FilePath>
             </File>
             <File>
-              <FileName>FarMem.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\FarMem\FarMem.h</FilePath>
+              <FileName>XBANKING.A51</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\Source\Far\XBANKING.A51</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>IAP</GroupName>
+          <Files>
             <File>
-              <FileName>FarMemBlock.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\FarMem\FarMemBlock.h</FilePath>
+              <FileName>IAP.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\IAP\IAP.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Pushbutton</GroupName>
+          <Files>
             <File>
-              <FileName>FarMemConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\FarMem\FarMemConfig.h</FilePath>
+              <FileName>Pushbutton.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Pushbutton\Pushbutton.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -790,17 +494,52 @@
             <File>
               <FileName>IAPFile.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\IAPFile\IAPFile.c</FilePath>
+              <FilePath>.\Source\IAPFile\IAPFile.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>LCD</GroupName>
+          <Files>
+            <File>
+              <FileName>ASCII6x8.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\LCD\Font\ASCII6x8.c</FilePath>
             </File>
             <File>
-              <FileName>IAPFile.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\IAPFile\IAPFile.h</FilePath>
+              <FileName>LCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\LCD\LCD.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ListWidget</GroupName>
+          <Files>
             <File>
-              <FileName>IAPFileConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Sources\IAPFile\IAPFileConfig.h</FilePath>
+              <FileName>ListWidget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Widget\ListWidget\ListWidget.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>InputDialog</GroupName>
+          <Files>
+            <File>
+              <FileName>InputDialog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Widget\InputDialog\InputDialog.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Version</GroupName>
+          <Files>
+            <File>
+              <FileName>Version.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Version\Version.c</FilePath>
             </File>
           </Files>
         </Group>

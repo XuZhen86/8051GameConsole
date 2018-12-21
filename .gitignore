@@ -1,5 +1,4 @@
-Lcd12864.uvgui.*
-*.xlsx
+*.uvgui.*
 .vscode
 Build
 *.exe

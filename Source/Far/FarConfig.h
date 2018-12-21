@@ -1,0 +1,9 @@
+#ifndef FARCONFIG_H_
+#define FARCONFIG_H_
+
+enum FAR_CONFIG{
+    FRAGMENTED_FREE_BYTE_MAX=1024,
+    FRAGMENTED_FREE_BLOCK_MAX=128,
+};
+
+#endif
