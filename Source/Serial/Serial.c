@@ -2,19 +2,14 @@
 #include<Serial.h>
 #include<Timer.h>
 
-sbit led=P2^4;
-
 char putchar(char c){
-    led=1;
     while(!TI);
     SBUF=c;
     TI=0;
-    led=0;
     return c;
 }
 
 void Serial1_init(){
-    led=0;
     Serial1_setMode(1);
     TI=1;
 

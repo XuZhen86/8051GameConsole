@@ -6,13 +6,9 @@
 #include<stdio.h>
 #include<string.h>
 
-unsigned char InputDialog_getUChar(unsigned char *title,unsigned char value,unsigned char min,unsigned char max,unsigned char step,void (*sigUCharValueChanged)(unsigned char),bit saveBuffer){
+unsigned char InputDialog_getUChar(unsigned char *title,unsigned char value,unsigned char min,unsigned char max,unsigned char step,void (*sigUCharValueChanged)(unsigned char)){
     unsigned char i;
-    bit answerDetermined=0;
-
-    if(saveBuffer){
-        // lcd_bufferStackPush();
-    }
+    unsigned char answerDetermined=0;
 
     LCD_setString(2,2,"                 ");
     LCD_setString(3,2,"                 ");
@@ -62,15 +58,12 @@ unsigned char InputDialog_getUChar(unsigned char *title,unsigned char value,unsi
         }
     }
 
-    if(saveBuffer){
-        // lcd_bufferStackPop();
-    }
     return value;
 }
 
 static void printValue(unsigned char value,unsigned char min,unsigned char max){
     unsigned char bufferLen;
-    unsigned char buffer[BUFFER_SIZE];
+    unsigned char xdata buffer[BUFFER_SIZE];
 
     bufferLen=sprintf(buffer," [ %bu ]  ",value);
 

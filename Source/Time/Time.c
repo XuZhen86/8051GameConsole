@@ -2,7 +2,7 @@
 #include<Time.h>
 #include<Timer.h>
 
-static unsigned int data timeDelta=0,timeElapsed=0;
+static unsigned long data timeDelta=0,timeElapsed=0;
 static unsigned int millisecond=0;
 static unsigned char second=0,minute=0,hour=0;
 
@@ -45,8 +45,8 @@ unsigned char Time_hour(){
     return hour;
 }
 
-unsigned int Time_restart(){
-    unsigned int tElapsed=timeElapsed;
+unsigned long Time_restart(){
+    unsigned long tElapsed=timeElapsed;
     timeElapsed=0;
     return tElapsed;
 }
@@ -55,7 +55,7 @@ void Time_start(){
     timeElapsed=0;
 }
 
-unsigned int Time_elapsed(){
+unsigned long Time_elapsed(){
     return timeElapsed;
 }
 
@@ -65,7 +65,7 @@ static void tick() interrupt 1{
 }
 
 static void flush(){
-    unsigned int delta=timeDelta;
+    unsigned long delta=timeDelta;
     timeDelta=0;
 
     if(delta==0){
@@ -85,7 +85,6 @@ static void flush(){
 
             if(delta){
                 hour=(delta+hour)%24;
-                delta/=24;
             }
         }
     }

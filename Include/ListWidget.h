@@ -16,6 +16,4 @@ void ListWidget_setTitle(ListWidget *lw,char *title);
 void ListWidget_addItem(ListWidget *lw,char *item);
 void ListWidget_setSigCurrentItemChanged(ListWidget *lw,void (*sigCurrentItemChanged)(unsigned char));
 
-void ListWidget_print(ListWidget *lw);
-
 #endif

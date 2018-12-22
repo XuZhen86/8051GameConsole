@@ -61,7 +61,7 @@ void main(){
                 Version_show();
                 break;
             case 3:
-                InputDialog_getUChar("Input Dialog",8,0,128,20,slotUCharValueChanged,1);
+                InputDialog_getUChar("Input Dialog",8,0,128,20,slotUCharValueChanged);
                 break;
         }
     }

@@ -145,13 +145,15 @@ static void play(){
             }
         }else{
             dp->length++;
-            if(dp->highScore[dp->level]<dp->length){
-                dp->highScore[dp->level]=dp->length;
-            }
+
             renewFood();
         }
 
         drawScreen();
+    }
+
+    if(dp->highScore[dp->level]<dp->length){
+        dp->highScore[dp->level]=dp->length;
     }
 
     do{
@@ -193,7 +195,7 @@ static void loadData(){
         generateDefaultData(file);
     }
 
-    for(i=0;i<16;i++){
+    for(i=1;i<17;i++){
         IAPFile_readLine(file,buffer,8);
         sscanf(buffer,"%u",&(dp->highScore[i]));
     }
@@ -212,7 +214,7 @@ static void storeData(){
 
     IAPFile_open(file,"Snake.txt");
 
-    for(i=0;i<16;i++){
+    for(i=1;i<17;i++){
         sprintf(buffer,"%u\n",dp->highScore[i]);
         IAPFile_write(file,buffer,strlen(buffer));
     }

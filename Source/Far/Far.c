@@ -7,7 +7,7 @@
 #include<string.h>
 
 static FarMemBlock far head _at_ 0x020000;
-static unsigned int numFarMemBlock,netUsedSpace,fragmentedFreeByte,fragmentedFreeBlock;
+static unsigned int data numFarMemBlock,netUsedSpace,fragmentedFreeByte,fragmentedFreeBlock;
 
 void Far_init(){
     head.size=0x10000-sizeof(FarMemBlock);

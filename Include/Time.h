@@ -9,8 +9,8 @@ unsigned char Time_second();
 unsigned char Time_minute();
 unsigned char Time_hour();
 
-unsigned int Time_restart();
+unsigned long Time_restart();
 void Time_start();
-unsigned int Time_elapsed();
+unsigned long Time_elapsed();
 
 #endif

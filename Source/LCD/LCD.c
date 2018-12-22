@@ -73,13 +73,11 @@ static void initAnalog(){
     IAPFile_close(file);
     IAPFile_delete(file);
 
-    // pwm3_initialize(0,1,1,1);
     LCD_setBrightness(brightness);
 }
 
 void LCD_setBrightness(unsigned char b){
     brightness=b;
-    // pwm3_timerValueSet(0,b*0x800);
     Analog_write(3,b*0x800,1);
 }
 
@@ -87,7 +85,7 @@ void LCD_adjustBrightness(){
     IAPFile *file=IAPFile_new();
     unsigned char bOld=brightness,bNew,buffer[8];
 
-    bNew=InputDialog_getUChar("Brightness",brightness,0,16,1,LCD_setBrightness,0);
+    bNew=InputDialog_getUChar("Brightness",brightness,0,16,1,LCD_setBrightness);
     if(bNew==16){
         LCD_setBrightness(bOld);
     }else{

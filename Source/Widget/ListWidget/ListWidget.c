@@ -38,7 +38,6 @@ void ListWidget_addItem(ListWidget *lw,char *item){
 
 unsigned char ListWidget_getSelection(ListWidget *lw){
     unsigned char i,selectedRow=0,selectedItem=0;
-    unsigned char buffer[BUFFER_SIZE];
     LCD_clear();
 
     LCD_setChar(0,0,POINTER_CHAR_LEFT);
@@ -46,8 +45,7 @@ unsigned char ListWidget_getSelection(ListWidget *lw){
     LCD_setHLine(7,1);
 
     for(i=0;i<lw->count&&i<7;i++){
-        strcpySpaceExtend(buffer,lw->items[i]);
-        LCD_setString(i+1,2,buffer);
+        printItem(i+1,lw->items[i]);
     }
 
     LCD_setChar(selectedRow+1,0,POINTER_CHAR_RIGHT);
@@ -63,8 +61,7 @@ unsigned char ListWidget_getSelection(ListWidget *lw){
                         LCD_setChar(--selectedRow+1,0,POINTER_CHAR_RIGHT);
                     }else{  // Reached top of the display, move items down one slot
                         for(i=selectedItem-1;i<selectedItem+6&&i<lw->count;i++){
-                            strcpySpaceExtend(buffer,lw->items[i]);
-                            LCD_setString(i-selectedItem+2,2,buffer);
+                            printItem(i-selectedItem+2,lw->items[i]);
                         }
                     }
                     selectedItem--;
@@ -76,8 +73,7 @@ unsigned char ListWidget_getSelection(ListWidget *lw){
                         LCD_setChar((selectedRow=6)+1,0,POINTER_CHAR_RIGHT);
                         selectedItem=lw->count-1;
                         for(i=lw->count-7;i<lw->count;i++){
-                            strcpySpaceExtend(buffer,lw->items[i]);
-                            LCD_setString(i-(lw->count-8),2,buffer);
+                            printItem(i-(lw->count-8),lw->items[i]);
                         }
                     }
                 }
@@ -89,8 +85,7 @@ unsigned char ListWidget_getSelection(ListWidget *lw){
                         LCD_setChar(++selectedRow+1,0,POINTER_CHAR_RIGHT);
                     }else{  // Reached end of the display, move items up one slot
                         for(i=selectedItem-5;i<selectedItem+2&&i<lw->count;i++){
-                            strcpySpaceExtend(buffer,lw->items[i]);
-                            LCD_setString(i-selectedItem+6,2,buffer);
+                            printItem(i-selectedItem+6,lw->items[i]);
                         }
                     }
                     selectedItem++;
@@ -98,8 +93,7 @@ unsigned char ListWidget_getSelection(ListWidget *lw){
                     LCD_setChar(selectedRow+1,0,' ');
                     LCD_setChar((selectedRow=0)+1,0,POINTER_CHAR_RIGHT);
                     for(i=0;i<lw->count&&i<7;i++){
-                        strcpySpaceExtend(buffer,lw->items[i]);
-                        LCD_setString(i+1,2,buffer);
+                        printItem(i+1,lw->items[i]);
                     }
                     selectedItem=0;
                 }
@@ -124,30 +118,7 @@ void ListWidget_setSigCurrentItemChanged(ListWidget *lw,void (*sigCurrentItemCha
     lw->sigCurrentItemChanged=sigCurrentItemChanged;
 }
 
-void ListWidget_print(ListWidget *lw){
-    unsigned char i;
-
-    printf("[ListWidget title=%s count=%bu]\n",lw->title,lw->count);
-    for(i=0;i<lw->count;i++){
-        printf("[items[%bu]=%s]\n",i,lw->items[i]);
-    }
-}
-
-static void strcpySpaceExtend(unsigned char *dst,unsigned char *src){
-    unsigned char i;
-    bit spaceExt=0;
-
-    for(i=0;i<BUFFER_SIZE-1;i++){
-        if(spaceExt){
-            dst[i]=' ';
-        }else{
-            if(src[i]!=0){
-                dst[i]=src[i];
-            }else{
-                spaceExt=1;
-                dst[i]=' ';
-            }
-        }
-    }
-    dst[BUFFER_SIZE-1]=0;
+static void printItem(unsigned char row,unsigned char *item){
+    LCD_setString(row,2,"                   ");
+    LCD_setString(row,2,item);
 }

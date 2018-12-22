@@ -4,7 +4,8 @@
 #include<STC15W4K48S4.h>
 #include<string.h>
 
-static unsigned char xdata sectorBuffer[512],currentSector;
+static unsigned char xdata sectorBuffer[512];
+static unsigned char currentSector;
 
 void IAP_init(){
     IAP_CONTR=0x80|SECTOR_ERASE_WAIT;
