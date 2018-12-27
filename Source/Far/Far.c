@@ -1,51 +1,62 @@
 #include"FarConfig.h"
 #include"FarMemBlock.h"
 #include"FarStatic.h"
-#include<Far.h>
 #include<Debug.h>
+#include<Far.h>
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 
 static FarMemBlock far head _at_ 0x020000;
-static unsigned int data numFarMemBlock,netUsedSpace,fragmentedFreeByte,fragmentedFreeBlock;
+static unsigned int data numFarMemBlock,netUsedSpace;
 
 void Far_init(){
     head.size=0x10000-sizeof(FarMemBlock);
     head.attr=0x00;
     head.next=NULL;
+    head.prev=NULL;
     head.pad=calculateFarMemBlockPad(&head);
 
     numFarMemBlock=1;
     netUsedSpace=0;
-    fragmentedFreeByte=0;
-    fragmentedFreeBlock=0;
 }
 
 void *Far_malloc(unsigned int size){
     FarMemBlock *p,*np;
 
-    for(p=&head;p!=NULL;p=p->next){
-        if(!verifyFarMemBlock(p)){
-            Debug(CRITICAL,HERE,"Memory Corruption p=0x%04x pad=0x%04x 0x%04x",(unsigned int)p,p->pad,calculateFarMemBlockPad(p));
-        }
+    Debug(DEBUG,HERE,"Far_malloc size=%u",size);
 
-        if(p->size>=size+sizeof(FarMemBlock)&&p->attr==0x00){
-            np=(void *)p+sizeof(FarMemBlock)+size;
-            np->attr=0x00;
+    for(p=&head;p!=NULL;p=p->next){
+        verifyFarMemBlock(p);
+
+        if(p->size>=size+sizeof(FarMemBlock)&&!(p->attr&ALLOCATED)){
+            np=(void *)p+p->size-size;
+            np->attr|=ALLOCATED;
             np->next=p->next;
-            np->size=p->size-size-sizeof(FarMemBlock);
+            np->prev=p;
+            np->size=size;
             np->pad=calculateFarMemBlockPad(np);
 
-            p->attr=0x01;
+            if(p->next!=NULL){
+                p->next->prev=np;
+            }
+
             p->next=np;
-            p->size=size;
+            p->size=p->size-sizeof(FarMemBlock)-size;
             p->pad=calculateFarMemBlockPad(p);
 
             numFarMemBlock++;
             netUsedSpace+=size;
-            Debug(DEBUG,HERE,"size=%u numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",size,numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
-            return (void *)p+sizeof(FarMemBlock);
+
+            Debug(DEBUG,HERE,
+                "np=0x%x size=%u numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",
+                (unsigned int)np,
+                size,
+                numFarMemBlock,
+                netUsedSpace,
+                netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
+
+            return (void *)np+sizeof(FarMemBlock);
         }
     }
 
@@ -64,51 +75,72 @@ void Far_free(void *ptr){
     FarMemBlock *p=ptr-sizeof(FarMemBlock);
 
     if(ptr==NULL){
+        Debug(DEBUG,HERE,"Far_free p=0x%x size=%u NULL",(unsigned int)p,p->size);
         return;
-    }else if(!verifyFarMemBlock(p)){
-        Debug(CRITICAL,HERE,"Memory Corruption p=0x%0x",(unsigned int)p);
     }
+    verifyFarMemBlock(p);
 
-    p->attr=0x00;
-    p->pad=calculateFarMemBlockPad(p);
+    Debug(DEBUG,HERE,"Far_free p=0x%x size=%u",(unsigned int)p,p->size);
 
+    p->attr&=~ALLOCATED;
     netUsedSpace-=p->size;
-    fragmentedFreeByte+=p->size;
-    fragmentedFreeBlock++;
 
-    if(fragmentedFreeByte>=FRAGMENTED_FREE_BYTE_MAX||fragmentedFreeBlock>=FRAGMENTED_FREE_BLOCK_MAX){
-        defragFreeBlock();
-        fragmentedFreeByte=0;
-        fragmentedFreeBlock=0;
-    }
+    while(p->prev!=NULL&&!(p->prev->attr&ALLOCATED)){
+        Debug(DEBUG,HERE,
+            "Merge p=0x%x prev=0x%x",
+            (unsigned int)p,
+            (unsigned int)(p->prev));
 
-    Debug(DEBUG,HERE,"numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
-}
+        p->prev->size+=sizeof(FarMemBlock)+p->size;
 
-static void defragFreeBlock(){
-    FarMemBlock *p=&head;
+        p->prev->next=p->next;
+        p->prev->pad=calculateFarMemBlockPad(p->prev);
 
-    while(p!=NULL){
-        if(!verifyFarMemBlock(p)){
-            Debug(CRITICAL,HERE,"Memory Corruption p=0x%0x",(unsigned int)p);
+        if(p->next!=NULL){
+            p->next->prev=p->prev;
+            p->next->pad=calculateFarMemBlockPad(p->next);
         }
 
-        if(p->attr==0x00&&p->next!=NULL&&p->next->attr==0x00){
-            p->size+=sizeof(FarMemBlock)+p->next->size;
-            p->next=p->next->next;
-            p->pad=calculateFarMemBlockPad(p);
-
-            numFarMemBlock--;
-        }else{
-            p=p->next;
-        }
+        numFarMemBlock--;
+        p=p->prev;
     }
+
+    while(p->next!=NULL&&!(p->next->attr&ALLOCATED)){
+        Debug(DEBUG,HERE,
+            "Merge p=0x%x next=0x%x",
+            (unsigned int)p,
+            (unsigned int)(p->next));
+
+        p->size+=sizeof(FarMemBlock)+p->next->size;
+
+        if(p->next->next!=NULL){
+            p->next->next->prev=p;
+            p->next->next->pad=calculateFarMemBlockPad(p->next->next);
+        }
+
+        p->next=p->next->next;
+        p->pad=calculateFarMemBlockPad(p);
+
+        numFarMemBlock--;
+    }
+
+    Debug(DEBUG,HERE,
+        "numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",
+        numFarMemBlock,
+        netUsedSpace,
+        netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
 }
 
 static bit verifyFarMemBlock(void *ptr){
     FarMemBlock *p=ptr;
 
     if(calculateFarMemBlockPad(ptr)!=p->pad){
+        Debug(CRITICAL,HERE,
+            "Memory Corruption p=0x%04x pad=0x%04x expect=0x%04x",
+            (unsigned int)p,
+            p->pad,
+            calculateFarMemBlockPad(ptr));
+
         return 0;
     }
     return 1;
@@ -122,6 +154,10 @@ static unsigned int calculateFarMemBlockPad(void *ptr){
         pad1+=bytes[i];
     }
 
-    Debug(DEBUG,HERE,"pad0=0x%x pad1=0x%x",(unsigned int)pad0,(unsigned int)pad1);
+    Debug(DEBUG,HERE,
+        "p=0x%x pad0=0x%x pad1=0x%x",
+        (unsigned int)ptr,
+        (unsigned int)pad0,
+        (unsigned int)pad1);
     return ((unsigned int)pad0<<8)|pad1;
 }

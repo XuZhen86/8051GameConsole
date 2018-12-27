@@ -4,7 +4,7 @@
 typedef struct FarMemBlock_{
     unsigned int size;
     unsigned char attr;
-    struct FarMemBlock_ *next;
+    struct FarMemBlock_ *next,*prev;
     unsigned int pad;
 } FarMemBlock;
 

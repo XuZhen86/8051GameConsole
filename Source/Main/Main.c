@@ -12,6 +12,9 @@ void init(){
     P4M0=0x00;
     P4M1=0x00;
 
+    Debug_setEnable(DEBUG|INFO|WARNING|CRITICAL|FATAL);
+    Debug_setDisable(DEBUG);
+
     Serial1_init();
     SPI_init();
     Far_init();
@@ -20,8 +23,7 @@ void init(){
     Time_init();
     LCD_init();
 
-    Debug_setEnable(INFO|WARNING|CRITICAL|FATAL);
-    Debug_setDisable(DEBUG);
+    Debug(INFO,HERE,"Init complete");
 }
 
 void slotCurrentItemChanged(unsigned char item){
