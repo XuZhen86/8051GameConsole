@@ -2,6 +2,7 @@
 #include"LCDConfig.h"
 #include"LCDStatic.h"
 #include<Analog.h>
+#include<Debug.h>
 #include<Delay.h>
 #include<IAPFile.h>
 #include<InputDialog.h>
@@ -65,7 +66,7 @@ static void initAnalog(){
     IAPFile_open(file,"LCD.txt");
     if(IAPFile_readLine(file,buffer,8)){
         sscanf(buffer,"%bu",&brightness);
-        // printf("buffer=[%s] brightness=%bu\n",buffer,brightness);
+        Debug(DEBUG,HERE,"buffer=[%s] brightness=%bu\n",buffer,brightness);
     }else{
         IAPFile_write(file,"8\n",strlen("8\n"));
         brightness=8;

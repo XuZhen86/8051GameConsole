@@ -6,6 +6,7 @@
 #include<string.h>
 
 #include<Analog.h>
+#include<Debug.h>
 #include<Delay.h>
 #include<Far.h>
 #include<IAP.h>

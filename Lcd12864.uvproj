@@ -553,6 +553,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Debug</GroupName>
+          <Files>
+            <File>
+              <FileName>Debug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Debug\Debug.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

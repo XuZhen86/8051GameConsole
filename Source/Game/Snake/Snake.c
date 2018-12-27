@@ -1,6 +1,7 @@
 #include"SnakeConfig.h"
 #include"SnakeDataPack.h"
 #include"SnakeStatic.h"
+#include<Debug.h>
 #include<Delay.h>
 #include<Far.h>
 #include<IAPFile.h>
@@ -139,8 +140,8 @@ static void play(){
             }else if(getMap(dp->tailX,dp->tailY+1)==dp->tailVal){
                 dp->tailY++;
             }else{
-                puts("SNAKE_EXIT_CODE_UNEXPECTED_TAIL_DATA");
-                printf("[head=%bu,%bu food=%bu,%bu tail=%bu,%bu]\n",dp->headX,dp->headY,dp->foodX,dp->foodY,dp->tailX,dp->tailY);
+                Debug(FATAL,HERE,"SNAKE_EXIT_CODE_UNEXPECTED_TAIL_DATA");
+                Debug(FATAL,HERE,"[head=%bu,%bu food=%bu,%bu tail=%bu,%bu]",dp->headX,dp->headY,dp->foodX,dp->foodY,dp->tailX,dp->tailY);
                 return;
             }
         }else{
@@ -188,7 +189,7 @@ static void pause(){
 static void loadData(){
     IAPFile *file=IAPFile_new();
     unsigned char i,buffer[8];
-    // printf("loadData()\n");
+    Debug(DEBUG,HERE,"loadData()");
 
     IAPFile_open(file,"Snake.txt");
     if(IAPFile_size(file)==0){
@@ -210,7 +211,7 @@ static void loadData(){
 static void storeData(){
     IAPFile *file=IAPFile_new();
     unsigned char i,buffer[8];
-    // printf("storeData()\n");
+    Debug(DEBUG,HERE,"storeData()");
 
     IAPFile_open(file,"Snake.txt");
 
@@ -228,7 +229,7 @@ static void storeData(){
 
 static void generateDefaultData(IAPFile *file){
     unsigned char i;
-    // printf("generateDefaultData()\n");
+    Debug(DEBUG,HERE,"generateDefaultData()");
 
     for(i=0;i<16;i++){
         IAPFile_write(file,"0\n",strlen("0\n"));

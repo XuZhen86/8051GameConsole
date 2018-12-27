@@ -4,6 +4,7 @@
 typedef struct IAPFile_{
     unsigned char fileId;
     unsigned char position;
+    unsigned char *fileName;
 } IAPFile;
 
 void IAPFile_init();

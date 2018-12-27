@@ -1,5 +1,6 @@
 #include"IAPFileConfig.h"
 #include"IAPFileStatic.h"
+#include<Debug.h>
 #include<Far.h>
 #include<IAP.h>
 #include<IAPFile.h>
@@ -20,10 +21,12 @@ void IAPFile_format(){
 IAPFile *IAPFile_new(){
     IAPFile *file=Far_malloc(sizeof(IAPFile));
     file->fileId=FILE_ID_MAX;
+    file->fileName=NULL;
     return file;
 }
 
 void IAPFile_delete(IAPFile *f){
+    Far_free(f->fileName);
     Far_free(f);
 }
 
@@ -41,10 +44,15 @@ bit IAPFile_open(IAPFile *f,unsigned char *fileName){
         }
 
         if(found){   // Found existing file
+            Debug(INFO,HERE,"Open file \"%s\"",fileName);
+
             f->fileId=i;
             f->position=0;
+            f->fileName=Far_malloc(strlen(fileName)+1);
+            strcpy(f->fileName,fileName);
             return 1;
         }else if(IAP_read(i*16)==0){    // Create new file
+            Debug(WARNING,HERE,"Create new file \"%s\"",fileName);
             for(j=0;j<15&&fileName[j];j++){
                 IAP_write(i*16+j,fileName[j]);
             }
@@ -55,6 +63,8 @@ bit IAPFile_open(IAPFile *f,unsigned char *fileName){
 
             f->fileId=i;
             f->position=0;
+            f->fileName=Far_malloc(strlen(fileName)+1);
+            strcpy(f->fileName,fileName);
             setFileSize(f,0);
 
             return 1;
@@ -65,12 +75,14 @@ bit IAPFile_open(IAPFile *f,unsigned char *fileName){
 }
 
 void IAPFile_close(IAPFile *f){
+    Debug(INFO,HERE,"Close file \"%s\"",f->fileName);
     IAP_flush();
     f->fileId=FILE_ID_MAX;
 }
 
 bit IAPFile_getChar(IAPFile *f,char *c){
     if(f->fileId==FILE_ID_MAX||f->position==getFileSize(f)){ // Reached end of file
+        Debug(WARNING,HERE,"Reached EOF \"%s\"",f->fileName);
         return 0;
     }
 
@@ -82,6 +94,7 @@ bit IAPFile_getChar(IAPFile *f,char *c){
 
 bit IAPFile_putChar(IAPFile *f,char c){
     if(f->fileId==FILE_ID_MAX||f->position==FILE_SIZE_MAX){  // Reached max file size
+        Debug(WARNING,HERE,"Reached max file size \"%s\"",f->fileName);
         return 0;
     }
 

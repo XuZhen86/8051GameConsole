@@ -19,14 +19,17 @@ void init(){
     IAP_init();
     Time_init();
     LCD_init();
+
+    Debug_setEnable(INFO|WARNING|CRITICAL|FATAL);
+    Debug_setDisable(DEBUG);
 }
 
 void slotCurrentItemChanged(unsigned char item){
-    printf("[main slotCurrentItemChanged %bu]\n",item);
+    Debug(DEBUG,HERE,"slotCurrentItemChanged %bu",item);
 }
 
 void slotUCharValueChanged(unsigned char uChar){
-    printf("[main slotUCharValueChanged %bu]",uChar);
+    Debug(DEBUG,HERE,"slotUCharValueChanged %bu",uChar);
 }
 
 ListWidget *mainListWidget;

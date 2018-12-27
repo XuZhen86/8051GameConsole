@@ -2,6 +2,7 @@
 #include"FarMemBlock.h"
 #include"FarStatic.h"
 #include<Far.h>
+#include<Debug.h>
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -26,8 +27,7 @@ void *Far_malloc(unsigned int size){
 
     for(p=&head;p!=NULL;p=p->next){
         if(!verifyFarMemBlock(p)){
-            printf("[Far_malloc() Memory Corruption p=0x%04x pad=0x%04x 0x%04x]\n",(unsigned int)p,p->pad,calculateFarMemBlockPad(p));
-            while(1);
+            Debug(CRITICAL,HERE,"Memory Corruption p=0x%04x pad=0x%04x 0x%04x",(unsigned int)p,p->pad,calculateFarMemBlockPad(p));
         }
 
         if(p->size>=size+sizeof(FarMemBlock)&&p->attr==0x00){
@@ -44,7 +44,7 @@ void *Far_malloc(unsigned int size){
 
             numFarMemBlock++;
             netUsedSpace+=size;
-            // printf("[farMalloc() size=%u numFarMemBlock=%u netUsedSpace=%u usedSpace=%u]\n",size,numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
+            Debug(DEBUG,HERE,"size=%u numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",size,numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
             return (void *)p+sizeof(FarMemBlock);
         }
     }
@@ -66,8 +66,7 @@ void Far_free(void *ptr){
     if(ptr==NULL){
         return;
     }else if(!verifyFarMemBlock(p)){
-        printf("[Far_free() Memory Corruption p=0x%0x]\n",(unsigned int)p);
-        while(1);
+        Debug(CRITICAL,HERE,"Memory Corruption p=0x%0x",(unsigned int)p);
     }
 
     p->attr=0x00;
@@ -83,7 +82,7 @@ void Far_free(void *ptr){
         fragmentedFreeBlock=0;
     }
 
-    // printf("[farFree() numFarMemBlock=%u netUsedSpace=%u usedSpace=%u]\n",numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
+    Debug(DEBUG,HERE,"numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
 }
 
 static void defragFreeBlock(){
@@ -91,8 +90,7 @@ static void defragFreeBlock(){
 
     while(p!=NULL){
         if(!verifyFarMemBlock(p)){
-            printf("[defragFreeBlock() Memory Corruption p=0x%0x]\n",(unsigned int)p);
-            while(1);
+            Debug(CRITICAL,HERE,"Memory Corruption p=0x%0x",(unsigned int)p);
         }
 
         if(p->attr==0x00&&p->next!=NULL&&p->next->attr==0x00){
@@ -124,7 +122,6 @@ static unsigned int calculateFarMemBlockPad(void *ptr){
         pad1+=bytes[i];
     }
 
-    // printf("[pad0=0x%x pad1=0x%x]\n",(unsigned int)pad0,(unsigned int)pad1);
+    Debug(DEBUG,HERE,"pad0=0x%x pad1=0x%x",(unsigned int)pad0,(unsigned int)pad1);
     return ((unsigned int)pad0<<8)|pad1;
 }
-
