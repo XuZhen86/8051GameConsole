@@ -44,7 +44,7 @@ bit IAPFile_open(IAPFile *f,unsigned char *fileName){
         }
 
         if(found){   // Found existing file
-            Debug(INFO,HERE,"Open file \"%s\"",fileName);
+            Debug(INFO,"Open file \"%s\"",fileName);
 
             f->fileId=i;
             f->position=0;
@@ -52,7 +52,7 @@ bit IAPFile_open(IAPFile *f,unsigned char *fileName){
             strcpy(f->fileName,fileName);
             return 1;
         }else if(IAP_read(i*16)==0){    // Create new file
-            Debug(WARNING,HERE,"Create new file \"%s\"",fileName);
+            Debug(WARNING,"Create new file \"%s\"",fileName);
             for(j=0;j<15&&fileName[j];j++){
                 IAP_write(i*16+j,fileName[j]);
             }
@@ -75,14 +75,14 @@ bit IAPFile_open(IAPFile *f,unsigned char *fileName){
 }
 
 void IAPFile_close(IAPFile *f){
-    Debug(INFO,HERE,"Close file \"%s\"",f->fileName);
+    Debug(INFO,"Close file \"%s\"",f->fileName);
     IAP_flush();
     f->fileId=FILE_ID_MAX;
 }
 
 bit IAPFile_getChar(IAPFile *f,char *c){
     if(f->fileId==FILE_ID_MAX||f->position==getFileSize(f)){ // Reached end of file
-        Debug(WARNING,HERE,"Reached EOF \"%s\"",f->fileName);
+        Debug(WARNING,"Reached EOF \"%s\"",f->fileName);
         return 0;
     }
 
@@ -94,7 +94,7 @@ bit IAPFile_getChar(IAPFile *f,char *c){
 
 bit IAPFile_putChar(IAPFile *f,char c){
     if(f->fileId==FILE_ID_MAX||f->position==FILE_SIZE_MAX){  // Reached max file size
-        Debug(WARNING,HERE,"Reached max file size \"%s\"",f->fileName);
+        Debug(WARNING,"Reached max file size \"%s\"",f->fileName);
         return 0;
     }
 

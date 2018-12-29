@@ -1,5 +1,6 @@
 #include"ListWidgetConfig.h"
 #include"ListWidgetStatic.h"
+#include<Debug.h>
 #include<Far.h>
 #include<LCD.h>
 #include<ListWidget.h>
@@ -23,6 +24,7 @@ void ListWidget_delete(ListWidget *lw){
 }
 
 void ListWidget_setTitle(ListWidget *lw,char *title){
+    Debug(DEBUG,"ListWidget_setTitle title=%s",title);
     Far_free(lw->title);
     lw->title=Far_malloc(strlen(title)+1);
     strcpy(lw->title,title);
@@ -30,6 +32,7 @@ void ListWidget_setTitle(ListWidget *lw,char *title){
 
 void ListWidget_addItem(ListWidget *lw,char *item){
     unsigned char len=strlen(item);
+    Debug(DEBUG,"ListWidget_addItem item=%s",item);
 
     lw->items[lw->count]=Far_malloc(len+1);
     strcpy(lw->items[lw->count],item);

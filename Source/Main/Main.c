@@ -13,7 +13,7 @@ void init(){
     P4M1=0x00;
 
     Debug_setEnable(DEBUG|INFO|WARNING|CRITICAL|FATAL);
-    Debug_setDisable(DEBUG);
+    // Debug_setDisable(DEBUG);
 
     Serial1_init();
     SPI_init();
@@ -23,21 +23,23 @@ void init(){
     Time_init();
     LCD_init();
 
-    Debug(INFO,HERE,"Init complete");
+    Debug(INFO,"Init complete");
 }
 
 void slotCurrentItemChanged(unsigned char item){
-    Debug(DEBUG,HERE,"slotCurrentItemChanged %bu",item);
+    Debug(DEBUG,"slotCurrentItemChanged %bu",item);
 }
 
 void slotUCharValueChanged(unsigned char uChar){
-    Debug(DEBUG,HERE,"slotUCharValueChanged %bu",uChar);
+    Debug(DEBUG,"slotUCharValueChanged %bu",uChar);
 }
 
 ListWidget *mainListWidget;
 
 void main(){
     init();
+
+    Debug(INFO,"Start main()");
 
     mainListWidget=ListWidget_new();
     ListWidget_setTitle(mainListWidget,"Main");

@@ -66,7 +66,7 @@ static void initAnalog(){
     IAPFile_open(file,"LCD.txt");
     if(IAPFile_readLine(file,buffer,8)){
         sscanf(buffer,"%bu",&brightness);
-        Debug(DEBUG,HERE,"buffer=[%s] brightness=%bu\n",buffer,brightness);
+        Debug(DEBUG,"buffer=[%s] brightness=%bu\n",buffer,brightness);
     }else{
         IAPFile_write(file,"8\n",strlen("8\n"));
         brightness=8;

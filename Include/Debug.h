@@ -9,10 +9,16 @@ enum DEBUG_LEVEL{
     FATAL=0x10,
 };
 
-void Debug(unsigned char level,unsigned int line,char *file,char *message,...);
+void Debug_print(unsigned char level,char *message,...);
+void Debug_setCurrentFileLine(char *file,unsigned int line);
+
 void Debug_setEnable(unsigned char mask);
 void Debug_setDisable(unsigned char mask);
 
-#define HERE __LINE__,__FILE__
+#ifdef NO_DEBUG_OUTPUT
+    #define Debug if(0)Debug_print
+#else
+    #define Debug Debug_setCurrentFileLine(__FILE__,__LINE__);Debug_print
+#endif
 
 #endif

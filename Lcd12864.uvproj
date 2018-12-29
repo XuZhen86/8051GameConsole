@@ -322,7 +322,7 @@
             <InterruptVectorAddress>0</InterruptVectorAddress>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>DEBUG_OUTPUT</Define>
               <Undefine></Undefine>
               <IncludePath>Include</IncludePath>
             </VariousControls>

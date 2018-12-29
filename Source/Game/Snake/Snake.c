@@ -140,8 +140,8 @@ static void play(){
             }else if(getMap(dp->tailX,dp->tailY+1)==dp->tailVal){
                 dp->tailY++;
             }else{
-                Debug(FATAL,HERE,"SNAKE_EXIT_CODE_UNEXPECTED_TAIL_DATA");
-                Debug(FATAL,HERE,"[head=%bu,%bu food=%bu,%bu tail=%bu,%bu]",dp->headX,dp->headY,dp->foodX,dp->foodY,dp->tailX,dp->tailY);
+                Debug(FATAL,"SNAKE_EXIT_CODE_UNEXPECTED_TAIL_DATA");
+                Debug(FATAL,"[head=%bu,%bu food=%bu,%bu tail=%bu,%bu]",dp->headX,dp->headY,dp->foodX,dp->foodY,dp->tailX,dp->tailY);
                 return;
             }
         }else{
@@ -189,7 +189,7 @@ static void pause(){
 static void loadData(){
     IAPFile *file=IAPFile_new();
     unsigned char i,buffer[8];
-    Debug(DEBUG,HERE,"loadData()");
+    Debug(DEBUG,"loadData()");
 
     IAPFile_open(file,"Snake.txt");
     if(IAPFile_size(file)==0){
@@ -211,7 +211,7 @@ static void loadData(){
 static void storeData(){
     IAPFile *file=IAPFile_new();
     unsigned char i,buffer[8];
-    Debug(DEBUG,HERE,"storeData()");
+    Debug(DEBUG,"storeData()");
 
     IAPFile_open(file,"Snake.txt");
 
@@ -229,7 +229,7 @@ static void storeData(){
 
 static void generateDefaultData(IAPFile *file){
     unsigned char i;
-    Debug(DEBUG,HERE,"generateDefaultData()");
+    Debug(DEBUG,"generateDefaultData()");
 
     for(i=0;i<16;i++){
         IAPFile_write(file,"0\n",strlen("0\n"));
