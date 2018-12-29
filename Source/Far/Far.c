@@ -71,6 +71,29 @@ void *Far_calloc(unsigned int num,unsigned int size){
     return p;
 }
 
+void *Far_realloc(void *ptr,unsigned int size){
+    void *newPtr;
+
+    Debug(DEBUG,HERE,"Far_realloc p=0x%x size=%u",(unsigned int)ptr,size);
+
+    if(ptr==NULL){
+        return Far_malloc(size);
+    }
+    verifyFarMemBlock(ptr);
+
+    if(size==0){
+        Far_free(ptr);
+        return NULL;
+    }
+
+    newPtr=Far_malloc(size);
+    if(newPtr!=NULL){
+        memcpy(newPtr,ptr,size);
+        Far_free(ptr);
+    }
+    return newPtr;
+}
+
 void Far_free(void *ptr){
     FarMemBlock *p=ptr-sizeof(FarMemBlock);
 
