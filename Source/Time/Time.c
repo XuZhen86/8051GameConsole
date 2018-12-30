@@ -2,9 +2,7 @@
 #include<Time.h>
 #include<Timer.h>
 
-static unsigned long data timeDelta=0,timeElapsed=0;
-static unsigned int millisecond=0;
-static unsigned char second=0,minute=0,hour=0;
+static unsigned long data time=0,timeElapsed=0;
 
 void Time_init(){
     Timer0_setCounter(0x7e66);
@@ -18,31 +16,24 @@ bit Time_setHMS(unsigned char h,unsigned char m,unsigned char s){
         return 0;
     }
 
-    flush();
-    hour=h;
-    minute=m;
-    second=s;
+    time=(unsigned long)s*1000+m*60+h*60;
     return 1;
 }
 
 unsigned int Time_msec(){
-    flush();
-    return millisecond;
+    return time%1000;
 }
 
 unsigned char Time_second(){
-    flush();
-    return second;
+    return time/1000%60;
 }
 
 unsigned char Time_minute(){
-    flush();
-    return minute;
+    return time/60000%60;
 }
 
 unsigned char Time_hour(){
-    flush();
-    return hour;
+    return time/3600000%24;
 }
 
 unsigned long Time_restart(){
@@ -60,32 +51,6 @@ unsigned long Time_elapsed(){
 }
 
 static void tick() interrupt 1{
-    timeDelta++;
+    time++;
     timeElapsed++;
-}
-
-static void flush(){
-    unsigned long delta=timeDelta;
-    timeDelta=0;
-
-    if(delta==0){
-        return;
-    }
-
-    millisecond=(delta+millisecond)%1000;
-    delta/=1000;
-
-    if(delta){
-        second=(delta+second)%60;
-        delta/=60;
-
-        if(delta){
-            minute=(delta+minute)%60;
-            delta/=60;
-
-            if(delta){
-                hour=(delta+hour)%24;
-            }
-        }
-    }
 }

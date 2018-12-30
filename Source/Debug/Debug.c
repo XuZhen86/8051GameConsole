@@ -1,5 +1,6 @@
 #include<Debug.h>
 #include<STC15W4K48S4.h>
+#include<Time.h>
 #include<stdarg.h>
 #include<stdio.h>
 
@@ -12,6 +13,8 @@ void Debug_print(unsigned char level,char *message,...){
     if(level&debugMask){
         va_list args;
         va_start(args,message);
+
+        printf("[%02bu:%02bu:%02bu.%03u] ",Time_hour(),Time_minute(),Time_second(),Time_msec());
 
         switch(level){
             case DEBUG:
