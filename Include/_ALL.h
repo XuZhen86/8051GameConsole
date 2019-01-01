@@ -22,6 +22,7 @@
 #include<STC15W4K48S4.h>
 #include<Time.h>
 #include<Timer.h>
+#include<Vector.h>
 #include<Version.h>
 
 #endif

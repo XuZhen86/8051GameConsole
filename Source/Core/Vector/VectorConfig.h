@@ -1,0 +1,8 @@
+#ifndef VECTORCONFIG_H_
+#define VECTORCONFIG_H_
+
+enum VECTOR_CONFIG{
+    EXPAND_DEFAULT_SIZE=10,
+};
+
+#endif

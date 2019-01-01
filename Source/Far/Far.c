@@ -117,6 +117,7 @@ void Far_free(void *ptr){
 
         numFarMemBlock--;
         p=p->prev;
+        verifyFarMemBlock(p);
     }
 
     while(p->next!=NULL&&!(p->next->attr&ALLOCATED)){
@@ -130,10 +131,9 @@ void Far_free(void *ptr){
         }
 
         p->next=p->next->next;
-        p->pad=calculateFarMemBlockPad(p);
-
         numFarMemBlock--;
     }
+    p->pad=calculateFarMemBlockPad(p);
 
     Debug(DEBUG,"numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
 }
@@ -143,9 +143,9 @@ static bit verifyFarMemBlock(void *ptr){
 
     if(calculateFarMemBlockPad(ptr)!=p->pad){
         Debug(CRITICAL,"Memory Corruption p=0x%04x pad=0x%04x expect=0x%04x",(unsigned int)p,p->pad,calculateFarMemBlockPad(ptr));
-
         return 0;
     }
+
     return 1;
 }
 
