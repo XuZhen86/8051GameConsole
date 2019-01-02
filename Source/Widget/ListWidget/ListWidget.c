@@ -5,123 +5,130 @@
 #include<LCD.h>
 #include<ListWidget.h>
 #include<Pushbutton.h>
-#include<Time.h>
-#include<stdio.h>
 #include<string.h>
 
 ListWidget *ListWidget_new(){
-    return Far_calloc(1,sizeof(ListWidget));
+    ListWidget *lw=Far_calloc(1,sizeof(ListWidget));
+    lw->items=Vector_new();
+
+    return lw;
 }
 
 void ListWidget_delete(ListWidget *lw){
+    unsigned int i;
+
     Far_free(lw->title);
-    while(lw->count){
-        Far_free(lw->items[lw->count-1]);
-        lw->count--;
+
+    for(i=0;i<Vector_size(lw->items);i++){
+        ListWidgetItem_delete(Vector_get(lw->items,i));
     }
+    Vector_delete(lw->items);
 
     Far_free(lw);
 }
 
 void ListWidget_setTitle(ListWidget *lw,char *title){
-    Debug(DEBUG,"ListWidget_setTitle title=%s",title);
     Far_free(lw->title);
-    lw->title=Far_malloc(strlen(title)+1);
+    lw->title=Far_malloc(strlen(title));
     strcpy(lw->title,title);
 }
 
-void ListWidget_addItem(ListWidget *lw,char *item){
-    unsigned char len=strlen(item);
-    Debug(DEBUG,"ListWidget_addItem item=%s",item);
-
-    lw->items[lw->count]=Far_malloc(len+1);
-    strcpy(lw->items[lw->count],item);
-    lw->count++;
+void ListWidget_addItem(ListWidget *lw,ListWidgetItem *item){
+    Vector_add(lw->items,item);
 }
 
-unsigned char ListWidget_getSelection(ListWidget *lw){
-    unsigned char i,selectedRow=0,selectedItem=0;
+void ListWidget_insertItem(ListWidget *lw,unsigned int row,ListWidgetItem *item){
+    Vector_insert(lw->items,row,item);
+}
+
+void ListWidget_enableAll(ListWidget *lw){
+    unsigned int i;
+
+    for(i=0;i<Vector_size(lw->items);i++){
+        ListWidgetItem_setEnabled(Vector_get(lw->items,i),1);
+    }
+}
+
+ListWidgetItem *ListWidget_item(ListWidget *lw,unsigned int row){
+    return Vector_get(lw->items,row);
+}
+
+ListWidgetItem *ListWidget_currrentItem(ListWidget *lw){
+    return ListWidget_item(lw,lw->selected);
+}
+
+unsigned int ListWidget_count(ListWidget *lw){
+    return Vector_size(lw->items);
+}
+
+unsigned int ListWidget_getSelection(ListWidget *lw){
     LCD_clear();
 
     LCD_setChar(0,0,POINTER_CHAR_LEFT);
     LCD_setString(0,(21-strlen(lw->title))/2,lw->title);
     LCD_setHLine(7,1);
 
-    for(i=0;i<lw->count&&i<7;i++){
-        printItem(i+1,lw->items[i]);
-    }
-
-    LCD_setChar(selectedRow+1,0,POINTER_CHAR_RIGHT);
+    ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),1);
 
     while(1){
+        printItems(lw);
         LCD_flush();
 
         switch(Pushbutton_getDirectionWait()){
             case PUSHBUTTON_DIRECTION_UP:
-                if(selectedItem){   // If not reaching top of the list
-                    if(selectedRow){    // If not reaching top of the display
-                        LCD_setChar(selectedRow+1,0,' ');
-                        LCD_setChar(--selectedRow+1,0,POINTER_CHAR_RIGHT);
-                    }else{  // Reached top of the display, move items down one slot
-                        for(i=selectedItem-1;i<selectedItem+6&&i<lw->count;i++){
-                            printItem(i-selectedItem+2,lw->items[i]);
-                        }
+                if(lw->selected){
+                    ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),0);
+                    lw->selected--;
+                    ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),1);
+
+                    if(lw->itemShowStart>lw->selected){
+                        lw->itemShowStart=lw->selected;
                     }
-                    selectedItem--;
-                }else{  // Reached top of the list
-                    LCD_setChar(selectedRow+1,0,' ');
-                    if(lw->count<7){    // If have less than 7 items, no need to redraw list
-                        LCD_setChar((selectedItem=selectedRow=lw->count-1)+1,0,POINTER_CHAR_RIGHT);
-                    }else{  // Have more than 7 items, redraw list
-                        LCD_setChar((selectedRow=6)+1,0,POINTER_CHAR_RIGHT);
-                        selectedItem=lw->count-1;
-                        for(i=lw->count-7;i<lw->count;i++){
-                            printItem(i-(lw->count-8),lw->items[i]);
-                        }
+                }else{
+                    ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),0);
+                    lw->selected=ListWidget_count(lw)-1;
+                    ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),1);
+
+                    if(ListWidget_count(lw)>=7){
+                        lw->itemShowStart=ListWidget_count(lw)-7;
                     }
                 }
+
                 break;
             case PUSHBUTTON_DIRECTION_DOWN:
-                if(selectedItem!=lw->count-1){  // If not reaching end of the list
-                    if(selectedRow!=6){ // If not reaching end of the display
-                        LCD_setChar(selectedRow+1,0,' ');
-                        LCD_setChar(++selectedRow+1,0,POINTER_CHAR_RIGHT);
-                    }else{  // Reached end of the display, move items up one slot
-                        for(i=selectedItem-5;i<selectedItem+2&&i<lw->count;i++){
-                            printItem(i-selectedItem+6,lw->items[i]);
-                        }
-                    }
-                    selectedItem++;
-                }else{  // Reached end of the list
-                    LCD_setChar(selectedRow+1,0,' ');
-                    LCD_setChar((selectedRow=0)+1,0,POINTER_CHAR_RIGHT);
-                    for(i=0;i<lw->count&&i<7;i++){
-                        printItem(i+1,lw->items[i]);
-                    }
-                    selectedItem=0;
-                }
-                break;
-            case PUSHBUTTON_DIRECTION_FORWARD:  // Confirm selection
-                Pushbutton_directionReleaseWait();
-                return selectedItem;
-            case PUSHBUTTON_DIRECTION_BACK: // Cancel selection
-                Pushbutton_directionReleaseWait();
-                return lw->count;
-        }
+                if(lw->selected!=ListWidget_count(lw)-1){
+                    ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),0);
+                    lw->selected++;
+                    ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),1);
 
-        if(lw->sigCurrentItemChanged!=NULL){
-            lw->sigCurrentItemChanged(selectedItem);
+                    if(lw->selected>6&&lw->itemShowStart<lw->selected-6){
+                        lw->itemShowStart=lw->selected-6;
+                    }
+                }else{
+                    ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),0);
+                    lw->selected=0;
+                    ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),1);
+
+                    lw->itemShowStart=0;
+                }
+
+                break;
+            case PUSHBUTTON_DIRECTION_FORWARD:
+                Pushbutton_directionReleaseWait();
+                return lw->selected;
+            case PUSHBUTTON_DIRECTION_BACK:
+                Pushbutton_directionReleaseWait();
+                return ListWidget_count(lw);
         }
 
         Pushbutton_directionReleaseWait();
     }
 }
 
-void ListWidget_setSigCurrentItemChanged(ListWidget *lw,void (*sigCurrentItemChanged)(unsigned char)){
-    lw->sigCurrentItemChanged=sigCurrentItemChanged;
-}
+static void printItems(ListWidget *lw){
+    unsigned char i;
 
-static void printItem(unsigned char row,unsigned char *item){
-    LCD_setString(row,2,"                   ");
-    LCD_setString(row,2,item);
+    for(i=0;i<7;i++){
+        ListWidgetItem_show(Vector_get(lw->items,lw->itemShowStart+i),i+1);
+    }
 }

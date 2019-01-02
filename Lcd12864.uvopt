@@ -42,8 +42,8 @@
         <HexOffset>0</HexOffset>
       </OPTHX>
       <OPTLEX>
-        <PageWidth>120</PageWidth>
-        <PageLength>9999</PageLength>
+        <PageWidth>132</PageWidth>
+        <PageLength>32760</PageLength>
         <TabStop>8</TabStop>
         <ListingPath>.\Build\Listings\</ListingPath>
       </OPTLEX>
@@ -560,7 +560,7 @@
 
   <Group>
     <GroupName>Vector</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -568,11 +568,31 @@
       <GroupNumber>19</GroupNumber>
       <FileNumber>21</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Source\Core\Vector\Vector.c</PathWithFileName>
       <FilenameWithoutPath>Vector.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>ListWidgetItem</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>20</GroupNumber>
+      <FileNumber>22</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Source\Widget\ListWidgetItem\ListWidgetItem.c</PathWithFileName>
+      <FilenameWithoutPath>ListWidgetItem.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

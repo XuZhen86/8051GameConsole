@@ -29,6 +29,6 @@ unsigned int Vector_indexOf(Vector *v,void *element);
 unsigned int Vector_lastIndexOf(Vector *v,void *element);
 bit Vector_contains(Vector *v,void *element);
 
-void Vector_toString(Vector *v);
+// void Vector_toString(Vector *v);
 
 #endif

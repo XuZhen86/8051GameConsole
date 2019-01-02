@@ -314,14 +314,14 @@
             <uAregs>0</uAregs>
             <UseInterruptVector>1</UseInterruptVector>
             <Fuzzy>8</Fuzzy>
-            <Optimize>12</Optimize>
+            <Optimize>9</Optimize>
             <WarningLevel>2</WarningLevel>
             <SizeSpeed>1</SizeSpeed>
             <ObjectExtend>1</ObjectExtend>
             <ACallAJmp>1</ACallAJmp>
             <InterruptVectorAddress>0</InterruptVectorAddress>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>FARWARNING</MiscControls>
               <Define>DEBUG_OUTPUT</Define>
               <Undefine></Undefine>
               <IncludePath>Include</IncludePath>
@@ -347,7 +347,7 @@
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
             <OverlayString></OverlayString>
-            <MiscControls></MiscControls>
+            <MiscControls>REMOVEUNUSED</MiscControls>
             <DisableWarningNumbers>15,16,46,57</DisableWarningNumbers>
             <LinkerCmdFile></LinkerCmdFile>
             <Assign></Assign>
@@ -570,6 +570,16 @@
               <FileName>Vector.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Source\Core\Vector\Vector.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ListWidgetItem</GroupName>
+          <Files>
+            <File>
+              <FileName>ListWidgetItem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Widget\ListWidgetItem\ListWidgetItem.c</FilePath>
             </File>
           </Files>
         </Group>

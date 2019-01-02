@@ -14,6 +14,7 @@
 #include<InputDialog.h>
 #include<LCD.h>
 #include<ListWidget.h>
+#include<ListWidgetItem.h>
 #include<Power.h>
 #include<Pushbutton.h>
 #include<Serial.h>

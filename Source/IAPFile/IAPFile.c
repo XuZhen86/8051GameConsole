@@ -44,7 +44,7 @@ bit IAPFile_open(IAPFile *f,unsigned char *fileName){
         }
 
         if(found){   // Found existing file
-            Debug(INFO,"Open file \"%s\"",fileName);
+            // Debug(INFO,"Open file \"%s\"",fileName);
 
             f->fileId=i;
             f->position=0;
@@ -75,7 +75,7 @@ bit IAPFile_open(IAPFile *f,unsigned char *fileName){
 }
 
 void IAPFile_close(IAPFile *f){
-    Debug(INFO,"Close file \"%s\"",f->fileName);
+    // Debug(INFO,"Close file \"%s\"",f->fileName);
     IAP_flush();
     f->fileId=FILE_ID_MAX;
 }

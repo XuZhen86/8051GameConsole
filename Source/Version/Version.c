@@ -22,8 +22,9 @@ void Version_show(){
 
     ListWidget_setTitle(lw,TITLE);
     for(i=0;i<ITEM_COUNT;i++){
-        ListWidget_addItem(lw,ITEMS[i]);
+        ListWidget_addItem(lw,ListWidgetItem_new(ITEMS[i],0));
     }
+    ListWidget_enableAll(lw);
 
     ListWidget_getSelection(lw);
     ListWidget_delete(lw);

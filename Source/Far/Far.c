@@ -24,7 +24,7 @@ void Far_init(){
 void *Far_malloc(unsigned int size){
     FarMemBlock *p,*np;
 
-    Debug(DEBUG,"Far_malloc size=%u",size);
+    // Debug(DEBUG,"Far_malloc size=%u",size);
 
     for(p=&head;p!=NULL;p=p->next){
         verifyFarMemBlock(p);
@@ -49,7 +49,7 @@ void *Far_malloc(unsigned int size){
             numFarMemBlock++;
             netUsedSpace+=size;
 
-            Debug(DEBUG,"np=0x%x size=%u numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",(unsigned int)np,size,numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
+            // Debug(DEBUG,"np=0x%x size=%u numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",(unsigned int)np,size,numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
             return (void *)np+sizeof(FarMemBlock);
         }
     }
@@ -68,7 +68,7 @@ void *Far_calloc(unsigned int num,unsigned int size){
 void *Far_realloc(void *ptr,unsigned int size){
     void *newPtr;
 
-    Debug(DEBUG,"Far_realloc p=0x%x size=%u",(unsigned int)ptr,size);
+    // Debug(DEBUG,"Far_realloc p=0x%x size=%u",(unsigned int)ptr,size);
 
     if(ptr==NULL){
         return Far_malloc(size);
@@ -92,18 +92,18 @@ void Far_free(void *ptr){
     FarMemBlock *p=ptr-sizeof(FarMemBlock);
 
     if(ptr==NULL){
-        Debug(DEBUG,"Far_free p=0x%x size=%u NULL",(unsigned int)p,p->size);
+        // Debug(DEBUG,"Far_free p=0x%x size=%u NULL",(unsigned int)p,p->size);
         return;
     }
     verifyFarMemBlock(p);
 
-    Debug(DEBUG,"Far_free p=0x%x size=%u",(unsigned int)p,p->size);
+    // Debug(DEBUG,"Far_free p=0x%x size=%u",(unsigned int)p,p->size);
 
     p->attr&=~ALLOCATED;
     netUsedSpace-=p->size;
 
     while(p->prev!=NULL&&!(p->prev->attr&ALLOCATED)){
-        Debug(DEBUG,"Merge p=0x%x prev=0x%x",(unsigned int)p,(unsigned int)(p->prev));
+        // Debug(DEBUG,"Merge p=0x%x prev=0x%x",(unsigned int)p,(unsigned int)(p->prev));
 
         p->prev->size+=sizeof(FarMemBlock)+p->size;
 
@@ -121,7 +121,7 @@ void Far_free(void *ptr){
     }
 
     while(p->next!=NULL&&!(p->next->attr&ALLOCATED)){
-        Debug(DEBUG,"Merge p=0x%x next=0x%x",(unsigned int)p,(unsigned int)(p->next));
+        // Debug(DEBUG,"Merge p=0x%x next=0x%x",(unsigned int)p,(unsigned int)(p->next));
 
         p->size+=sizeof(FarMemBlock)+p->next->size;
 
@@ -135,7 +135,7 @@ void Far_free(void *ptr){
     }
     p->pad=calculateFarMemBlockPad(p);
 
-    Debug(DEBUG,"numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
+    // Debug(DEBUG,"numFarMemBlock=%u netUsedSpace=%u usedSpace=%u",numFarMemBlock,netUsedSpace,netUsedSpace+numFarMemBlock*sizeof(FarMemBlock));
 }
 
 static bit verifyFarMemBlock(void *ptr){
@@ -157,6 +157,6 @@ static unsigned int calculateFarMemBlockPad(void *ptr){
         pad1+=bytes[i];
     }
 
-    Debug(DEBUG,"p=0x%x size=%u attr=0x%bx next=0x%x prev=0x%x pad0=0x%x pad1=0x%x",(unsigned int)ptr,((FarMemBlock*)ptr)->size,((FarMemBlock*)ptr)->attr,(unsigned int)(((FarMemBlock*)ptr)->next),(unsigned int)(((FarMemBlock*)ptr)->prev),(unsigned int)pad0,(unsigned int)pad1);
+    // Debug(DEBUG,"p=0x%x size=%u attr=0x%bx next=0x%x prev=0x%x pad0=0x%x pad1=0x%x",(unsigned int)ptr,((FarMemBlock*)ptr)->size,((FarMemBlock*)ptr)->attr,(unsigned int)(((FarMemBlock*)ptr)->next),(unsigned int)(((FarMemBlock*)ptr)->prev),(unsigned int)pad0,(unsigned int)pad1);
     return ((unsigned int)pad0<<8)|pad1;
 }

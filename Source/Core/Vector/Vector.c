@@ -12,20 +12,20 @@ Vector *Vector_new(){
     v->elementCount=0;
     v->capacity=EXPAND_DEFAULT_SIZE;
 
-    Debug(DEBUG,"Vector_new() v=0x%x",(unsigned int)v);
+    // Debug(DEBUG,"Vector_new() v=0x%x",(unsigned int)v);
 
     return v;
 }
 
 void Vector_delete(Vector *v){
-    Debug(DEBUG,"Vector_delete() v=0x%x",(unsigned int)v);
+    // Debug(DEBUG,"Vector_delete() v=0x%x",(unsigned int)v);
 
     Far_free(v->elementData);
     Far_free(v);
 }
 
 bit Vector_add(Vector *v,void *element){
-    Debug(DEBUG,"Vector_add() v=0x%x element=%s",(unsigned int)v,element);
+    // Debug(DEBUG,"Vector_add() v=0x%x element=%s",(unsigned int)v,element);
 
     if(!Vector_ensureCapacity(v,v->elementCount+1)){
         return 0;
@@ -39,7 +39,7 @@ bit Vector_add(Vector *v,void *element){
 bit Vector_insert(Vector *v,unsigned int index,void *element){
     unsigned int i;
 
-    Debug(DEBUG,"Vector_insert() v=0x%x index=%u element=%s",(unsigned int)v,index,element);
+    // Debug(DEBUG,"Vector_insert() v=0x%x index=%u element=%s",(unsigned int)v,index,element);
 
     if(!Vector_ensureCapacity(v,v->elementCount+1)){
         return 0;
@@ -203,14 +203,14 @@ bit Vector_contains(Vector *v,void *element){
     return 0;
 }
 
-void Vector_toString(Vector *v){
-    unsigned int i;
+// void Vector_toString(Vector *v){
+//     unsigned int i;
 
-    Debug(DEBUG,"elementCount=%u capacity=%u",Vector_size(v),Vector_capacity(v));
-    for(i=0;i<v->elementCount;i++){
-        Debug(DEBUG,"elementData[%u]=%s",i,Vector_get(v,i));
-    }
-}
+//     Debug(DEBUG,"elementCount=%u capacity=%u",Vector_size(v),Vector_capacity(v));
+//     for(i=0;i<v->elementCount;i++){
+//         Debug(DEBUG,"elementData[%u]=%s",i,Vector_get(v,i));
+//     }
+// }
 
 static bit expandDefault(Vector *v){
     return expandN(v,EXPAND_DEFAULT_SIZE);

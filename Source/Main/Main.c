@@ -34,30 +34,29 @@ void slotUCharValueChanged(unsigned char uChar){
     Debug(DEBUG,"slotUCharValueChanged %bu",uChar);
 }
 
-ListWidget *mainListWidget;
+ListWidget *lw;
 
 void main(){
     init();
 
     Debug(INFO,"Start main()");
 
-    mainListWidget=ListWidget_new();
-    ListWidget_setTitle(mainListWidget,"Main");
-    ListWidget_addItem(mainListWidget,"Snake");
-    ListWidget_addItem(mainListWidget,"Brightness");
-    ListWidget_addItem(mainListWidget,"Version");
-    ListWidget_addItem(mainListWidget,"Input Dialog");
-    ListWidget_addItem(mainListWidget,"bead94c4-5f1f-4757-b488-b99ad8528078");
-    ListWidget_addItem(mainListWidget,"7c7811e5-89bb-4f44-8e74-cd1358cbad3c");
-    ListWidget_addItem(mainListWidget,"4522629a-0ebb-4153-9045-5d55f23aac85");
-    ListWidget_addItem(mainListWidget,"1e85499b-9108-44c8-8f71-00d073c65783");
-    ListWidget_addItem(mainListWidget,"fd0cf450-c49d-43df-8cb9-2cff7c9192e6");
-    ListWidget_addItem(mainListWidget,"be5cb133-3f62-411d-9c08-11948589c17b");
-    ListWidget_addItem(mainListWidget,"53f85aa2-5dea-4045-988d-0229b5f3ca47");
-    ListWidget_setSigCurrentItemChanged(mainListWidget,slotCurrentItemChanged);
+    lw=ListWidget_new();
+    ListWidget_setTitle(lw,"Main");
+    ListWidget_addItem(lw,ListWidgetItem_new("Snake",ITEM_SELECTABLE));
+    ListWidget_addItem(lw,ListWidgetItem_new("Brightness",ITEM_SELECTABLE));
+    ListWidget_addItem(lw,ListWidgetItem_new("Version",ITEM_SELECTABLE));
+    ListWidget_addItem(lw,ListWidgetItem_new("Input Dialog",ITEM_SELECTABLE));
+    ListWidget_addItem(lw,ListWidgetItem_new("En",0));
+    ListWidget_addItem(lw,ListWidgetItem_new("En|Se",ITEM_SELECTABLE));
+    ListWidget_addItem(lw,ListWidgetItem_new("En|Ck",ITEM_CHECKABLE));
+    ListWidget_addItem(lw,ListWidgetItem_new("En|Ck|Ckd",ITEM_CHECKABLE|ITEM_CHECKED));
+    ListWidget_addItem(lw,ListWidgetItem_new("En|Se|Ck",ITEM_SELECTABLE|ITEM_CHECKABLE));
+    ListWidget_addItem(lw,ListWidgetItem_new("En|Se|Ck|Ckd",ITEM_SELECTABLE|ITEM_CHECKABLE|ITEM_CHECKED));
+    ListWidget_enableAll(lw);
 
     while(1){
-        switch(ListWidget_getSelection(mainListWidget)){
+        switch(ListWidget_getSelection(lw)){
             case 0:
                 Snake();
                 break;
