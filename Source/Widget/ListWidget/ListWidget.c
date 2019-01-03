@@ -27,7 +27,7 @@ void ListWidget_delete(ListWidget *lw){
     Far_free(lw);
 }
 
-void ListWidget_setTitle(ListWidget *lw,char *title){
+void ListWidget_setTitle(ListWidget *lw,const char *title){
     Far_free(lw->title);
     lw->title=Far_malloc(strlen(title));
     strcpy(lw->title,title);
@@ -119,6 +119,8 @@ unsigned int ListWidget_getSelection(ListWidget *lw){
             case PUSHBUTTON_DIRECTION_BACK:
                 Pushbutton_directionReleaseWait();
                 return ListWidget_count(lw);
+            default:
+                Debug(WARNING,"Unexpected button direction");
         }
 
         Pushbutton_directionReleaseWait();

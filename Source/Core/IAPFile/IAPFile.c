@@ -30,7 +30,7 @@ void IAPFile_delete(IAPFile *f){
     Far_free(f);
 }
 
-bit IAPFile_open(IAPFile *f,unsigned char *fileName){
+bit IAPFile_open(IAPFile *f,char *fileName){
     unsigned int i;
     unsigned char j,found;
 
@@ -46,7 +46,7 @@ bit IAPFile_open(IAPFile *f,unsigned char *fileName){
         if(found){   // Found existing file
             // Debug(INFO,"Open file \"%s\"",fileName);
 
-            f->fileId=i;
+            f->fileId=(unsigned int)i;
             f->position=0;
             f->fileName=Far_malloc(strlen(fileName)+1);
             strcpy(f->fileName,fileName);
@@ -54,14 +54,14 @@ bit IAPFile_open(IAPFile *f,unsigned char *fileName){
         }else if(IAP_read(i*16)==0){    // Create new file
             Debug(WARNING,"Create new file \"%s\"",fileName);
             for(j=0;j<15&&fileName[j];j++){
-                IAP_write(i*16+j,fileName[j]);
+                IAP_write(i*16+j,(unsigned char)fileName[j]);
             }
             for(j=0;j<255;j++){
                 IAP_write((i+1)*256+j,0);
             }
             IAP_write((i+1)*256+255,0);
 
-            f->fileId=i;
+            f->fileId=(unsigned int)i;
             f->position=0;
             f->fileName=Far_malloc(strlen(fileName)+1);
             strcpy(f->fileName,fileName);
@@ -86,7 +86,7 @@ bit IAPFile_getChar(IAPFile *f,char *c){
         return 0;
     }
 
-    (*c)=IAP_read((f->fileId+1)*256+f->position);
+    (*c)=(char)IAP_read((f->fileId+1)*256+f->position);
     f->position++;
 
     return 1;
@@ -98,7 +98,7 @@ bit IAPFile_putChar(IAPFile *f,char c){
         return 0;
     }
 
-    IAP_write((f->fileId+1)*256+f->position,c);
+    IAP_write((f->fileId+1)*256+f->position,(unsigned char)c);
     f->position++;
 
     if(getFileSize(f)<f->position){  // Refresh file size
@@ -125,8 +125,9 @@ unsigned char IAPFile_pos(IAPFile *f){
     return f->position;
 }
 
-unsigned char IAPFile_read(IAPFile *f,unsigned char *dst,unsigned char maxSize){
-    unsigned char i,c;
+unsigned char IAPFile_read(IAPFile *f,char *dst,unsigned char maxSize){
+    unsigned char i;
+    char c;
 
     if(f->fileId==FILE_ID_MAX){
         return 0;
@@ -144,8 +145,9 @@ unsigned char IAPFile_read(IAPFile *f,unsigned char *dst,unsigned char maxSize){
     return i;
 }
 
-unsigned char IAPFile_readLine(IAPFile *f,unsigned char *dst,unsigned char maxSize){
-    unsigned char i,c;
+unsigned char IAPFile_readLine(IAPFile *f,char *dst,unsigned char maxSize){
+    unsigned char i;
+    char c;
 
     if(f->fileId==FILE_ID_MAX){
         return 0;
@@ -167,7 +169,7 @@ unsigned char IAPFile_readLine(IAPFile *f,unsigned char *dst,unsigned char maxSi
     return i;
 }
 
-unsigned char IAPFile_write(IAPFile *f,unsigned char *src,unsigned char maxSize){
+unsigned char IAPFile_write(IAPFile *f,char *src,unsigned char maxSize){
     unsigned char i;
 
     if(f->fileId==FILE_ID_MAX){

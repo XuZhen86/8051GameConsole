@@ -3,13 +3,13 @@
 #include<Delay.h>
 #include<Pushbutton.h>
 
-static unsigned char code numberStdVal[16]={
+static const unsigned char code numberStdVal[16]={
     241,225,210,195,
     180,168,152,137,
     120,103,87,70,
     48,32,15,0
 };
-static unsigned char code directionStdVal[6]={
+static const unsigned char code directionStdVal[6]={
     214,172,131,87,43,0
 };
 

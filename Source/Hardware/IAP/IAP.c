@@ -17,7 +17,7 @@ unsigned char IAP_read(unsigned int addr16){
     addr16%=ADDR_MAX;
 
     if(addr16/512!=currentSector){
-        return *(unsigned char code*)(addr16+MOVC_ADDR_OFFS);
+        return *(unsigned char code*)(addr16+(unsigned int)MOVC_ADDR_OFFS);
     }else{
         return sectorBuffer[addr16%512];
     }
@@ -42,7 +42,7 @@ void IAP_flush(){
 
 static void loadSector(unsigned char sector){
     sector%=SECTOR_MAX;
-    memcpy(sectorBuffer,(unsigned char code*)(sector*512+MOVC_ADDR_OFFS),512);
+    memcpy(sectorBuffer,(unsigned char code*)(sector*512+(unsigned int)MOVC_ADDR_OFFS),512);
 }
 
 static void unloadSector(unsigned char sector){

@@ -1,5 +1,8 @@
 Include/STC15W4K48S4.h linguist-language=C linguist-vendored=true
 Lcd12864.uvopt linguist-generated=true
 Lcd12864.uvproj linguist-generated=true
+Lint/File.lnt linguist-generated=true
+Lint/Include.lnt linguist-generated=true
+Lint/Report.txt linguist-generated=true
 Source/LCD/Font/ASCII6x8.h linguist-generated=true
 Source/Version/VersionNumber.h linguist-generated=true

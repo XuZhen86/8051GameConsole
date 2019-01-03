@@ -10,7 +10,7 @@ static unsigned char debugMask=0xff;
 static unsigned int currentLine;
 static char *currentFile;
 
-void Debug_print(unsigned char level,char *message,...){
+void Debug_print(unsigned char level,const char *message,...){
     if(level&debugMask){
         va_list args;
         va_start(args,message);

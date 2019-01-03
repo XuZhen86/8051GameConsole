@@ -13,7 +13,7 @@
 #include<stdlib.h>
 #include<string.h>
 
-SnakeDataPack *dp;
+static SnakeDataPack *dp;
 
 void Snake(){
     dp=Far_calloc(1,sizeof(SnakeDataPack));
@@ -29,8 +29,8 @@ void Snake(){
 }
 
 static bit selectLevel(){
-    unsigned char buffer[8],bufferLen;
-    unsigned char startGame=0;
+    char buffer[8];
+    unsigned char bufferLen,startGame=0;
 
     LCD_clear();
     LCD_setString(2,8,"Snake");
@@ -66,6 +66,8 @@ static bit selectLevel(){
                 break;
             case BACK:
                 return 0;
+            default:
+                Debug(WARNING,"Unexpected direction");
         }
 
         Pushbutton_directionReleaseWait();
@@ -115,6 +117,8 @@ static void play(){
             case RIGHT:
                 dp->headY++;
                 break;
+            default:
+                Debug(WARNING,"Unexpected direction %bu",dp->direction);
         }
 
         if(getMap(dp->headX,dp->headY)!=0){
@@ -188,7 +192,9 @@ static void pause(){
 
 static void loadData(){
     IAPFile *file=IAPFile_new();
-    unsigned char i,buffer[8];
+    unsigned char i;
+    char buffer[8];
+
     Debug(DEBUG,"loadData()");
 
     IAPFile_open(file,"Snake.txt");
@@ -202,7 +208,7 @@ static void loadData(){
     }
 
     IAPFile_readLine(file,buffer,8);
-    sscanf(buffer,"%u",&(dp->level));
+    sscanf(buffer,"%bu",&(dp->level));
 
     IAPFile_close(file);
     IAPFile_delete(file);
@@ -210,18 +216,20 @@ static void loadData(){
 
 static void storeData(){
     IAPFile *file=IAPFile_new();
-    unsigned char i,buffer[8];
+    unsigned char i;
+    char buffer[8];
+
     Debug(DEBUG,"storeData()");
 
     IAPFile_open(file,"Snake.txt");
 
     for(i=1;i<17;i++){
         sprintf(buffer,"%u\n",dp->highScore[i]);
-        IAPFile_write(file,buffer,strlen(buffer));
+        IAPFile_write(file,buffer,(unsigned char)strlen(buffer));
     }
 
-    sprintf(buffer,"%u\n",dp->level);
-    IAPFile_write(file,buffer,strlen(buffer));
+    sprintf(buffer,"%bu\n",dp->level);
+    IAPFile_write(file,buffer,(unsigned char)strlen(buffer));
 
     IAPFile_close(file);
     IAPFile_delete(file);
@@ -232,9 +240,9 @@ static void generateDefaultData(IAPFile *file){
     Debug(DEBUG,"generateDefaultData()");
 
     for(i=0;i<16;i++){
-        IAPFile_write(file,"0\n",strlen("0\n"));
+        IAPFile_write(file,"0\n",(unsigned char)strlen("0\n"));
     }
-    IAPFile_write(file,"8\n",strlen("8\n"));
+    IAPFile_write(file,"8\n",(unsigned char)strlen("8\n"));
 
     IAPFile_seek(file,0);
 }
@@ -264,7 +272,7 @@ static void initializeGame(){
     dp->length=dp->tick;
     dp->direction=LEFT;
 
-    srand(Time_elapsed());
+    srand((unsigned int)Time_elapsed());
     renewFood();
 
     drawScreen();
@@ -332,7 +340,7 @@ static void drawMap(){
 }
 
 static void drawScore(){
-    unsigned char buffer[8];
+    char buffer[8];
 
     LCD_setString(5,11,"High");
     sprintf(buffer,"%4u",dp->highScore[dp->level]);

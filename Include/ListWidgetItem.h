@@ -14,10 +14,10 @@ typedef struct ListWidgetItem_{
     unsigned char flags;
 } ListWidgetItem;
 
-ListWidgetItem *ListWidgetItem_new(char *text,unsigned char flags);
+ListWidgetItem *ListWidgetItem_new(const char *text,unsigned char flags);
 void ListWidgetItem_delete(ListWidgetItem *lwi);
 
-void ListWidgetItem_setText(ListWidgetItem *lwi,char *text);
+void ListWidgetItem_setText(ListWidgetItem *lwi,const char *text);
 void ListWidgetItem_setFlags(ListWidgetItem *lwi,unsigned char flags);
 
 char *ListWidgetItem_text(ListWidgetItem *lwi);

@@ -1,0 +1,42 @@
+
+--- Module:   .\Source\Core\Debug\Debug.c (C)
+
+--- Module:   .\Source\Core\Delay\Delay.c (C)
+
+--- Module:   .\Source\Core\Far\Far.c (C)
+
+--- Module:   .\Source\Core\IAPFile\IAPFile.c (C)
+
+--- Module:   .\Source\Core\LCD\Font\ASCII6x8.c (C)
+
+--- Module:   .\Source\Core\LCD\LCD.c (C)
+
+--- Module:   .\Source\Core\Pushbutton\Pushbutton.c (C)
+
+--- Module:   .\Source\Core\Time\Time.c (C)
+
+--- Module:   .\Source\Core\Vector\Vector.c (C)
+
+--- Module:   .\Source\Game\Snake\Snake.c (C)
+
+--- Module:   .\Source\Hardware\Analog\Analog.c (C)
+
+--- Module:   .\Source\Hardware\IAP\IAP.c (C)
+
+--- Module:   .\Source\Hardware\Power\Power.c (C)
+
+--- Module:   .\Source\Hardware\SPI\SPI.c (C)
+
+--- Module:   .\Source\Hardware\Serial\Serial.c (C)
+
+--- Module:   .\Source\Hardware\Timer\Timer.c (C)
+
+--- Module:   .\Source\Main\Main.c (C)
+
+--- Module:   .\Source\Version\Version.c (C)
+
+--- Module:   .\Source\Widget\InputDialog\InputDialog.c (C)
+
+--- Module:   .\Source\Widget\ListWidget\ListWidget.c (C)
+
+--- Module:   .\Source\Widget\ListWidgetItem\ListWidgetItem.c (C)

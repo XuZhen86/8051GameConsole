@@ -1,0 +1,15 @@
+-iC:\Keil_v5\C51\INC
+-i./Include
+-i./Source/Core/Far
+-i./Source/Core/IAPFile
+-i./Source/Core/LCD
+-i./Source/Core/LCD/Font
+-i./Source/Core/Pushbutton
+-i./Source/Core/Time
+-i./Source/Core/Vector
+-i./Source/Game/Snake
+-i./Source/Hardware/IAP
+-i./Source/Version
+-i./Source/Widget/InputDialog
+-i./Source/Widget/ListWidget
+-i./Source/Widget/ListWidgetItem

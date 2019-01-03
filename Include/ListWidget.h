@@ -13,7 +13,7 @@ typedef struct ListWidget_{
 ListWidget *ListWidget_new();
 void ListWidget_delete(ListWidget *lw);
 
-void ListWidget_setTitle(ListWidget *lw,char *title);
+void ListWidget_setTitle(ListWidget *lw,const char *title);
 void ListWidget_addItem(ListWidget *lw,ListWidgetItem *item);
 void ListWidget_insertItem(ListWidget *lw,unsigned int row,ListWidgetItem *item);
 void ListWidget_enableAll(ListWidget *lw);

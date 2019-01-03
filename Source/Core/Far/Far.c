@@ -4,7 +4,6 @@
 #include<Debug.h>
 #include<Far.h>
 #include<stdio.h>
-#include<stdlib.h>
 #include<string.h>
 
 static FarMemBlock far head _at_ 0x020000;

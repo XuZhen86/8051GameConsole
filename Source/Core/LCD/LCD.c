@@ -2,7 +2,6 @@
 #include"LCDConfig.h"
 #include"LCDStatic.h"
 #include<Analog.h>
-#include<Debug.h>
 #include<Delay.h>
 #include<IAPFile.h>
 #include<InputDialog.h>
@@ -61,14 +60,14 @@ void LCD_hwReset(){
 
 static void initAnalog(){
     IAPFile *file=IAPFile_new();
-    unsigned char buffer[8];
+    char buffer[8];
 
     IAPFile_open(file,"LCD.txt");
     if(IAPFile_readLine(file,buffer,8)){
         sscanf(buffer,"%bu",&brightness);
         // Debug(DEBUG,"buffer=[%s] brightness=%bu\n",buffer,brightness);
     }else{
-        IAPFile_write(file,"8\n",strlen("8\n"));
+        IAPFile_write(file,"8\n",(unsigned char)strlen("8\n"));
         brightness=8;
     }
     IAPFile_close(file);
@@ -84,7 +83,8 @@ void LCD_setBrightness(unsigned char b){
 
 void LCD_adjustBrightness(){
     IAPFile *file=IAPFile_new();
-    unsigned char bOld=brightness,bNew,buffer[8];
+    unsigned char bOld=brightness,bNew;
+    char buffer[8];
 
     bNew=InputDialog_getUChar("Brightness",brightness,0,16,1,LCD_setBrightness);
     if(bNew==16){
@@ -92,7 +92,7 @@ void LCD_adjustBrightness(){
     }else{
         sprintf(buffer,"%bu\n",bNew);
         IAPFile_open(file,"LCD.txt");
-        IAPFile_write(file,buffer,strlen(buffer));
+        IAPFile_write(file,buffer,(unsigned char)strlen(buffer));
     }
 
     IAPFile_close(file);
@@ -122,7 +122,7 @@ void LCD_init(){
     initAnalog();
 }
 
-void LCD_flush(){
+void LCD_flush(){ //lint -e661
     unsigned char i,j,displayDisabled=0;
 
     for(i=0;i<64;i++){
@@ -159,20 +159,20 @@ void LCD_forceFlush(){
     send(FUNCTION_SET|0x04|0x02,0);
 }
 
-void LCD_setChar(unsigned char row,unsigned char col,unsigned char c){
+void LCD_setChar(unsigned char row,unsigned char col,char c){
     unsigned char i,mask,fill;
     col=col%21*6;   // col%=128;
     row=row%8*8;    // row%=64;
     mask=(0xff>>(col%8));
 
     for(i=row;i<row+8;i++){
-        fill=ASCII6x8[c][i%8];
+        fill=ASCII6x8[(unsigned char)c][i%8];
         gdram[i][col/8+0]=gdram[i][col/8+0]&(~mask)|(fill>>(col%8));
         gdram[i][col/8+1]=gdram[i][col/8+1]&(mask)|(fill<<(8-col%8));
     }
 }
 
-void LCD_setString(unsigned char row,unsigned char col,unsigned char *str){
+void LCD_setString(unsigned char row,unsigned char col,const char *str){
     unsigned char i,j,k,mask,fill;
     col=col%21*6;
     row=row%8*8;
@@ -180,7 +180,7 @@ void LCD_setString(unsigned char row,unsigned char col,unsigned char *str){
     for(i=row;i<row+8;i++){
         for(j=0,k=col;str[j]&&k<128;j++){
             mask=(0xff>>(k%8));
-            fill=ASCII6x8[str[j]][i%8];
+            fill=ASCII6x8[(unsigned char)str[j]][i%8];
 
             if(k/8<16){
                 gdram[i][k/8+0]=gdram[i][k/8+0]&(~mask)|(fill>>(k%8));
@@ -196,9 +196,9 @@ void LCD_setString(unsigned char row,unsigned char col,unsigned char *str){
 
 void LCD_setPixel(unsigned char row,unsigned char col,unsigned char lightUp){
     if(lightUp){
-        gdram[row%64][col%128/8]|=(0x80>>col%8);
+        gdram[row%64][col%128/8]|=(0x80>>(col%8));
     }else{
-        gdram[row%64][col%128/8]&=~(0x80>>col%8);
+        gdram[row%64][col%128/8]&=~(0x80>>(col%8));
     }
 }
 

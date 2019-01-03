@@ -1,0 +1,82 @@
+-os(.\Lint\Report.txt)
+
+-format=%f:%l:%c:%t:%n:%m
+-width(0,0)
+-h1
+
+	    // while processing compiler (library) header files ...
+-wlib(1)    // sets the warning level within library headers to 1
+	    // (no warnings, just syntax errors).  Comment out if you
+	    // are actually linting library headers.  This
+	    // option makes obsolete options of the form -elib(axxx) where
+	    // xxx >= 400 which may be retained for historical reasons.
++v
+-elib(652)   // suppress message about #define of earlier declared symbols
+-elib(762)   // suppress message about multiple identical declarations and
+-elib(760)   // suppress message about multiple identical macro defs
++rw(_bit)                 // activate the _bit datatype
++rw(bool)                 // activate the bool datatype
+-dbit=bool                // #define bit as bool
++rw(_gobble)              // activate the _gobble keyword
+                          // causes _gobble token to be both ignored
+-dinterrupt=_gobble       // defines interrupt to be a _gobble
+-dusing=_gobble           // defines using to be a _gobble
+-d_at_=@                  // defines _at_ to be @
+-si2                      // integer size: 2 bytes
+-sp2                      // pointer size: 2 bytes
++rw(_ignore_init)         // activate this keyword
++rw(__declspec)           // activate this MS keyword
+
+-d"sbit=__declspec(selectany) bool" // the __declspec(selectany) has the ...
+-d"sfr=__declspec(selectany) unsigned char"     // effect of allowing ...
+-d"sfr16=__declspec(selectany) unsigned short"  // multiple definitions.
+
+-e34    // ignore complaints about non-constant initializers.
+        // this is because of things like:
+        // sbit  ResetClock = P3^3;
+-e430   // ignore complaints about @ mask for function definitions.
+-e557   // ignore complaints about not recognizing printf formats
+-sp3    // size of generic pointer is 3 bytes
+
++rw(xdata,pdata,data,bdata,idata,code)   // ignore these keywords
++rw(small,compact,large,alien)
+
+-dreentrant=    // ignore reentrant
+
++d__MODEL__=0           // set memory model to small
++d__C51__=807           // set C51 compiler version to 4.01
++d__DATE2__="09/05/95"  // set C51 compiler date macro
++d__TIME__="11:55:00"   // set C51 compiler time macro
++d__FILE__="MYFILE.C"   // set C51 compiler file macro
++d__LINE__=100          // set C51 compiler line macro
++d__STDC__=1            // set C51 compiler STDC macro
+
+-emacro(413,offsetof)  // use of NULL pointer creates a stir
+-emacro(545,offsetof)  // addressing an array member is OK
+
+-e124 // Pointer to void not allowed
+-e438 // Last value assigned to variable 'Symbol' not used
+-e507 // Size incompatibility
+-e514 // Unusual use of a Boolean
+-e522 // Highest operator or function lacks side-effects
+-e534 // Ignoring return value of function 'Symbol' (compare with Location)
+-e537 // Repeated include file 'FileName'
+-e551 // Symbol 'Symbol' (Location) not accessed
+-e552 // Symbol 'Symbol' (Location) not accessed
+-e569 // Loss of information (Context) (Integer bits to Integer bits)
+-e641 // Converting enum to int
+-e655 // bit-wise operation uses (compatible) enum's
+-e679 // Suspicious Truncation in arithmetic expression combining with pointer
+-e680 // Suspicious Truncation in arithmetic expression converted to pointer
+-e701 // Shift left of signed quantity (int)
+-e712 // Loss of precision (Context) (Type to Type)
+-e716 // while(1) ...
+-e734 // Loss of precision (Context) (Integer bits to Integer bits)
+-e746 // call to function 'Name' not made in the presence of a prototype
+-e786 // String concatenation within initializer
+-e818 // Pointer parameter 'Symbol' (Location) could be declared ptr to const
+-e830 // Location cited in prior message
+-e831 // Reference cited in prior message
+-e834 // Operator 'Name' followed by operator 'Name' is confusing
+-e835 // A zero has been given as [left/right] argument to operator 'Name'
+-e843 // Variable 'Symbol' (Location) could be declared as const

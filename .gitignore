@@ -1,4 +1,3 @@
 *.uvgui.*
 .vscode
 Build
-*.exe

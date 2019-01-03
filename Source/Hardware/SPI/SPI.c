@@ -1,7 +1,5 @@
-#include<Delay.h>
 #include<SPI.h>
 #include<STC15W4K48S4.h>
-#include<Serial.h>
 
 void SPI_init(){
     SPCTL=0xd0;
@@ -32,6 +30,6 @@ void SPI_setDataMode(unsigned char dataMode){
 unsigned char SPI_transfer(unsigned char imm8){
     SPSTAT|=0x80;
     SPDAT=imm8;
-    while((SPSTAT&0x80)==0);
+    while((SPSTAT&0x80)==0){}
     return SPDAT;
 }

@@ -3,8 +3,8 @@
 #include<Timer.h>
 
 char putchar(char c){
-    while(!TI);
-    SBUF=c;
+    while(!TI){}
+    SBUF=(unsigned char)c;
     TI=0;
     return c;
 }

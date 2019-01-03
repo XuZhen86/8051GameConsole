@@ -1,6 +1,6 @@
 #include<_ALL.h>
 
-void init(){
+static void init(){
     P0M0=0x00;
     P0M1=0x00;
     P1M0=0x00;
@@ -23,15 +23,11 @@ void init(){
     Debug(INFO,"Init complete");
 }
 
-void slotCurrentItemChanged(unsigned char item){
-    Debug(DEBUG,"slotCurrentItemChanged %bu",item);
-}
-
-void slotUCharValueChanged(unsigned char uChar){
+static void slotUCharValueChanged(unsigned char uChar){
     Debug(DEBUG,"slotUCharValueChanged %bu",uChar);
 }
 
-ListWidget *lw;
+static ListWidget *lw;
 
 void main(){
     init();
@@ -70,6 +66,8 @@ void main(){
             case 4:
                 Debug_show();
                 break;
+            default:
+                ;
         }
     }
 }

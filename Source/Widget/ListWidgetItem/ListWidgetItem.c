@@ -1,12 +1,10 @@
-#include"ListWidgetItemConfig.h"
 #include"ListWidgetItemStatic.h"
-#include<Debug.h>
 #include<Far.h>
 #include<LCD.h>
 #include<ListWidgetItem.h>
 #include<string.h>
 
-ListWidgetItem *ListWidgetItem_new(char *text,unsigned char flags){
+ListWidgetItem *ListWidgetItem_new(const char *text,unsigned char flags){
     ListWidgetItem *lwi=Far_calloc(1,sizeof(ListWidgetItem));
     ListWidgetItem_setText(lwi,text);
     ListWidgetItem_setFlags(lwi,flags);
@@ -19,7 +17,7 @@ void ListWidgetItem_delete(ListWidgetItem *lwi){
     Far_free(lwi);
 }
 
-void ListWidgetItem_setText(ListWidgetItem *lwi,char *text){
+void ListWidgetItem_setText(ListWidgetItem *lwi,const char *text){
     Far_free(lwi->text);
     lwi->text=Far_malloc(strlen(text)+1+2);
     strcpy(lwi->text+2,text);
@@ -99,7 +97,7 @@ void ListWidgetItem_setEnabled(ListWidgetItem *lwi,unsigned char enabled){
 
 bit ListWidgetItem_select(ListWidgetItem *lwi){
     if(ListWidgetItem_isSelectable(lwi)){
-        ListWidgetItem_setSelected(lwi,!ListWidgetItem_isSelected(lwi));
+        ListWidgetItem_setSelected(lwi,(unsigned char)!ListWidgetItem_isSelected(lwi));
         return ListWidgetItem_isSelected(lwi);
     }
 
@@ -108,7 +106,7 @@ bit ListWidgetItem_select(ListWidgetItem *lwi){
 
 bit ListWidgetItem_check(ListWidgetItem *lwi){
     if(ListWidgetItem_isCheckable(lwi)){
-        ListWidgetItem_setChecked(lwi,!ListWidgetItem_isChecked(lwi));
+        ListWidgetItem_setChecked(lwi,(unsigned char)!ListWidgetItem_isChecked(lwi));
         return ListWidgetItem_isChecked(lwi);
     }
 
@@ -127,25 +125,25 @@ void ListWidgetItem_show(ListWidgetItem *lwi,unsigned char row){
 static void refreshText(ListWidgetItem *lwi){
     if(lwi->flags&ITEM_SELECTABLE){
         if(lwi->flags&ITEM_SELECTED){
-            lwi->text[0]=0x10;
+            lwi->text[0]=(char)0x10;
         }else{
-            lwi->text[0]=0x20;
+            lwi->text[0]=(char)0x20;
         }
     }else{
         if(lwi->flags&ITEM_SELECTED){
-            lwi->text[0]=0xf9;
+            lwi->text[0]=(char)0xf9;
         }else{
-            lwi->text[0]=0xfa;
+            lwi->text[0]=(char)0xfa;
         }
     }
 
     if(lwi->flags&ITEM_CHECKABLE){
-        lwi->text[1]=0x09;
+        lwi->text[1]=(char)0x09;
 
         if(lwi->flags&ITEM_CHECKED){
-            lwi->text[1]=0xfe;
+            lwi->text[1]=(char)0xfe;
         }
     }else{
-        lwi->text[1]=0x20;
+        lwi->text[1]=(char)0x20;
     }
 }

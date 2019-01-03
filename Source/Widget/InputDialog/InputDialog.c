@@ -1,12 +1,13 @@
 #include"InputDialog.h"
 #include"InputDialogConfig.h"
 #include"InputDialogStatic.h"
+#include<Debug.h>
 #include<LCD.h>
 #include<Pushbutton.h>
 #include<stdio.h>
 #include<string.h>
 
-unsigned char InputDialog_getUChar(unsigned char *title,unsigned char value,unsigned char min,unsigned char max,unsigned char step,void (*sigUCharValueChanged)(unsigned char)){
+unsigned char InputDialog_getUChar(char *title,unsigned char value,unsigned char min,unsigned char max,unsigned char step,void (*sigUCharValueChanged)(unsigned char)){
     unsigned char i;
     unsigned char answerDetermined=0;
 
@@ -49,6 +50,8 @@ unsigned char InputDialog_getUChar(unsigned char *title,unsigned char value,unsi
                 value=max;
                 answerDetermined=1;
                 break;
+            default:
+                Debug(WARNING,"Unexpected button direction");
         }
         printValue(value,min,max);
 
@@ -63,7 +66,7 @@ unsigned char InputDialog_getUChar(unsigned char *title,unsigned char value,unsi
 
 static void printValue(unsigned char value,unsigned char min,unsigned char max){
     unsigned char bufferLen;
-    unsigned char xdata buffer[BUFFER_SIZE];
+    char xdata buffer[BUFFER_SIZE];
 
     bufferLen=sprintf(buffer," [ %bu ]  ",value);
 

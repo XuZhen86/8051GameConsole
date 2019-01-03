@@ -1,4 +1,5 @@
 #include<Analog.h>
+#include<Debug.h>
 #include<STC15W4K48S4.h>
 
 void Analog_init(){
@@ -17,7 +18,7 @@ unsigned int Analog_read(unsigned char channel){
 
     P1ASF|=(1<<channel);
     ADC_CONTR=0x88|channel%8;
-    while((ADC_CONTR&0x10)==0);
+    while((ADC_CONTR&0x10)==0){}
     P1ASF=0x00;
 
     result=ADC_RES;
@@ -107,5 +108,7 @@ void Analog_write(unsigned char channel,unsigned int value,unsigned char portSel
             PWMCR|=0x80;
 
             break;
+        default:
+            Debug(WARNING,"Unexpected channel %bu",channel);
     }
 }

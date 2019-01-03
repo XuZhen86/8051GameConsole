@@ -10,7 +10,7 @@ enum DEBUG_LEVEL{
     TIME_STAMP=0x20,
 };
 
-void Debug_print(unsigned char level,char *message,...);
+void Debug_print(unsigned char level,const char *message,...);
 void Debug_setCurrentFileLine(char *file,unsigned int line);
 
 void Debug_setEnable(unsigned char mask);
