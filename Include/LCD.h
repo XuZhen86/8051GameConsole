@@ -16,6 +16,7 @@ void LCD_setPixel(unsigned char row,unsigned char col,unsigned char lightUp);
 
 void LCD_setHLine(unsigned char row,unsigned char lightUp);
 void LCD_setVLine(unsigned char col,unsigned char lightUp);
+void LCD_invertHLine(unsigned char row);
 
 void LCD_clear();
 

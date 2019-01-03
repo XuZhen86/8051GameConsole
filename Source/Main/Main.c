@@ -12,9 +12,6 @@ void init(){
     P4M0=0x00;
     P4M1=0x00;
 
-    Debug_setEnable(DEBUG|INFO|WARNING|CRITICAL|FATAL);
-    // Debug_setDisable(DEBUG);
-
     Serial1_init();
     SPI_init();
     Far_init();
@@ -47,6 +44,7 @@ void main(){
     ListWidget_addItem(lw,ListWidgetItem_new("Brightness",ITEM_SELECTABLE));
     ListWidget_addItem(lw,ListWidgetItem_new("Version",ITEM_SELECTABLE));
     ListWidget_addItem(lw,ListWidgetItem_new("Input Dialog",ITEM_SELECTABLE));
+    ListWidget_addItem(lw,ListWidgetItem_new("Debug",ITEM_SELECTABLE));
     ListWidget_addItem(lw,ListWidgetItem_new("En",0));
     ListWidget_addItem(lw,ListWidgetItem_new("En|Se",ITEM_SELECTABLE));
     ListWidget_addItem(lw,ListWidgetItem_new("En|Ck",ITEM_CHECKABLE));
@@ -68,6 +66,9 @@ void main(){
                 break;
             case 3:
                 InputDialog_getUChar("Input Dialog",8,0,128,20,slotUCharValueChanged);
+                break;
+            case 4:
+                Debug_show();
                 break;
         }
     }

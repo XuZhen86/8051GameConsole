@@ -224,3 +224,12 @@ void LCD_setVLine(unsigned char col,unsigned char lightUp){
         }
     }
 }
+
+void LCD_invertHLine(unsigned char row){
+    unsigned char i;
+    row%=64;
+
+    for(i=0;i<16;i++){
+        gdram[row][i]=~gdram[row][i];
+    }
+}

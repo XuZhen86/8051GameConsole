@@ -7,6 +7,7 @@ enum DEBUG_LEVEL{
     WARNING=0x04,
     CRITICAL=0x08,
     FATAL=0x10,
+    TIME_STAMP=0x20,
 };
 
 void Debug_print(unsigned char level,char *message,...);
@@ -14,6 +15,8 @@ void Debug_setCurrentFileLine(char *file,unsigned int line);
 
 void Debug_setEnable(unsigned char mask);
 void Debug_setDisable(unsigned char mask);
+
+void Debug_show();
 
 #ifdef NO_DEBUG_OUTPUT
     #define Debug if(0)Debug_print
