@@ -137,8 +137,8 @@ void Far_dumpMemBlock(){
 
     Debug(DEBUG,"Dump Mem Block >>>>>>>");
 
-    while(p!=NULL){
-        Debug(DEBUG,"addr=%p size=%5u attr=0x%02bx next=%p prev=%p pad=0x%04x",p,p->size,p->attr,p->next,p->prev,p->pad);
+    while(p!=NULL){ //lint -e437
+        Debug(DEBUG,"addr=%p size=%5u attr=0x%02bx next=%p prev=%p pad=0x%04x",p,*p);
         p=p->next;
     }
 

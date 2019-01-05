@@ -249,9 +249,9 @@ endm
     mXramSpiSendVal 03h     ; Send read command
     mXramSpiSendReg R2      ; Send high address
     mXramSpiSendReg R1      ; Send low address
-    mXramSpiRecvReg R1      ; Receive high byte
+    mXramSpiRecvReg R3      ; Receive high byte
     mXramSpiRecvReg R2      ; Receive low byte
-    mXramSpiRecvReg R3      ; Receive low byte
+    mXramSpiRecvReg R1      ; Receive low byte
 
     setb bChipSelect
 
@@ -271,9 +271,9 @@ endm
     mXramSpiSendVal 02h     ; Send write command
     mXramSpiSendReg R2      ; Send high address
     mXramSpiSendReg R1      ; Send low address
-    mXramSpiSendReg R0      ; Send high byte
+    mXramSpiSendReg B       ; Send high byte
     mXramSpiSendReg DPH     ; Send low byte
-    mXramSpiSendReg B       ; Send low byte
+    mXramSpiSendReg R0      ; Send low byte
 
     setb bChipSelect
 
