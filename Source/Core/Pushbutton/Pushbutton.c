@@ -24,11 +24,13 @@ unsigned char Pushbutton_getNumber(){
 
     for(j=0;j<TRIAL_COUNT;j++){
         analogVals[j]=Analog_read(6)>>2;
+        delayLoop(0,4,54);
     }
 
     while(!testPassed){
         analogVals[i++]=Analog_read(6)>>2;
         i%=TRIAL_COUNT;
+        delayLoop(0,4,54);
 
         testPassed=1;
         for(j=1;j<TRIAL_COUNT;j++){
@@ -67,11 +69,13 @@ unsigned char Pushbutton_getDirection(){
 
     for(j=0;j<TRIAL_COUNT;j++){
         analogVals[j]=Analog_read(7)>>2;
+        delayLoop(0,4,54);
     }
 
     while(!testPassed){
         analogVals[i++]=Analog_read(7)>>2;
         i%=TRIAL_COUNT;
+        delayLoop(0,4,54);
 
         testPassed=1;
         for(j=1;j<TRIAL_COUNT;j++){
@@ -105,26 +109,26 @@ unsigned char Pushbutton_getDirection(){
 
 unsigned char Pushbutton_getNumberWait(){
     while(Pushbutton_getNumber()==PUSHBUTTON_NUMBER_INVALID){
-        delay(50);
+        delay(20);
     }
     return lastNumber;
 }
 
 unsigned char Pushbutton_getDirectionWait(){
     while(Pushbutton_getDirection()==PUSHBUTTON_DIRECTION_INVALID){
-        delay(50);
+        delay(20);
     }
     return lastDirection;
 }
 
 void Pushbutton_numberReleaseWait(){
     while(Pushbutton_getNumber()!=PUSHBUTTON_NUMBER_INVALID){
-        delay(50);
+        delay(20);
     }
 }
 void Pushbutton_directionReleaseWait(){
     while(Pushbutton_getDirection()!=PUSHBUTTON_DIRECTION_INVALID){
-        delay(50);
+        delay(20);
     }
 }
 

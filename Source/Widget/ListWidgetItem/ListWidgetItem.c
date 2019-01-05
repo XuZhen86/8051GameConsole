@@ -5,7 +5,7 @@
 #include<string.h>
 
 ListWidgetItem *ListWidgetItem_new(const char *text,unsigned char flags){
-    ListWidgetItem *lwi=Far_calloc(1,sizeof(ListWidgetItem));
+    ListWidgetItem *lwi=fcalloc(1,sizeof(ListWidgetItem));
     ListWidgetItem_setText(lwi,text);
     ListWidgetItem_setFlags(lwi,flags);
 
@@ -13,13 +13,13 @@ ListWidgetItem *ListWidgetItem_new(const char *text,unsigned char flags){
 }
 
 void ListWidgetItem_delete(ListWidgetItem *lwi){
-    Far_free(lwi->text);
-    Far_free(lwi);
+    ffree(lwi->text);
+    ffree(lwi);
 }
 
 void ListWidgetItem_setText(ListWidgetItem *lwi,const char *text){
-    Far_free(lwi->text);
-    lwi->text=Far_malloc(strlen(text)+1+2);
+    ffree(lwi->text);
+    lwi->text=fmalloc(strlen(text)+1+2);
     strcpy(lwi->text+2,text);
 }
 

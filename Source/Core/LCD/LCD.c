@@ -93,9 +93,9 @@ void LCD_adjustBrightness(){
         sprintf(buffer,"%bu\n",bNew);
         IAPFile_open(file,"LCD.txt");
         IAPFile_write(file,buffer,(unsigned char)strlen(buffer));
+        IAPFile_close(file);
     }
 
-    IAPFile_close(file);
     IAPFile_delete(file);
 }
 

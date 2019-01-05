@@ -61,7 +61,7 @@
 -e522 // Highest operator or function lacks side-effects
 -e534 // Ignoring return value of function 'Symbol' (compare with Location)
 -e537 // Repeated include file 'FileName'
--e551 // Symbol 'Symbol' (Location) not accessed
+// -e551 // Symbol 'Symbol' (Location) not accessed
 -e552 // Symbol 'Symbol' (Location) not accessed
 -e569 // Loss of information (Context) (Integer bits to Integer bits)
 -e641 // Converting enum to int

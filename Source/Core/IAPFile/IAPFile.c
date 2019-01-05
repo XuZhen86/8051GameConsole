@@ -7,27 +7,32 @@
 #include<stdio.h>
 #include<string.h>
 
-void IAPFile_init(){
-}
-
-void IAPFile_format(){
+void IAPFile_format(char *magicWord){
     unsigned int i;
+
+    if(strcmp(magicWord,"Glitch!")!=0){
+        Debug(WARNING,"Trying to format IAP with wrong magic word");
+        return;
+    }
+
     for(i=0;i<512;i++){
         IAP_write(i,0);
     }
     IAP_flush();
+
+    Debug(WARNING,"IAP formatted");
 }
 
 IAPFile *IAPFile_new(){
-    IAPFile *file=Far_malloc(sizeof(IAPFile));
+    IAPFile *file=fmalloc(sizeof(IAPFile));
     file->fileId=FILE_ID_MAX;
     file->fileName=NULL;
     return file;
 }
 
 void IAPFile_delete(IAPFile *f){
-    Far_free(f->fileName);
-    Far_free(f);
+    ffree(f->fileName);
+    ffree(f);
 }
 
 bit IAPFile_open(IAPFile *f,char *fileName){
@@ -44,15 +49,14 @@ bit IAPFile_open(IAPFile *f,char *fileName){
         }
 
         if(found){   // Found existing file
-            // Debug(INFO,"Open file \"%s\"",fileName);
-
-            f->fileId=(unsigned int)i;
+            f->fileId=i;
             f->position=0;
-            f->fileName=Far_malloc(strlen(fileName)+1);
+            f->fileName=fmalloc(strlen(fileName)+1);
             strcpy(f->fileName,fileName);
             return 1;
         }else if(IAP_read(i*16)==0){    // Create new file
             Debug(WARNING,"Create new file \"%s\"",fileName);
+
             for(j=0;j<15&&fileName[j];j++){
                 IAP_write(i*16+j,(unsigned char)fileName[j]);
             }
@@ -61,9 +65,9 @@ bit IAPFile_open(IAPFile *f,char *fileName){
             }
             IAP_write((i+1)*256+255,0);
 
-            f->fileId=(unsigned int)i;
+            f->fileId=i;
             f->position=0;
-            f->fileName=Far_malloc(strlen(fileName)+1);
+            f->fileName=fmalloc(strlen(fileName)+1);
             strcpy(f->fileName,fileName);
             setFileSize(f,0);
 
@@ -71,18 +75,26 @@ bit IAPFile_open(IAPFile *f,char *fileName){
         }
     }
 
+    Debug(WARNING,"Reached full IAP file capacity");
     return 0;
 }
 
 void IAPFile_close(IAPFile *f){
-    // Debug(INFO,"Close file \"%s\"",f->fileName);
+    if(f->fileId>=FILE_ID_MAX){
+        Debug(WARNING,"Trying to close File@%p with fileId %bu",f,f->fileId);
+        return;
+    }
+
     IAP_flush();
     f->fileId=FILE_ID_MAX;
 }
 
 bit IAPFile_getChar(IAPFile *f,char *c){
-    if(f->fileId==FILE_ID_MAX||f->position==getFileSize(f)){ // Reached end of file
-        Debug(WARNING,"Reached EOF \"%s\"",f->fileName);
+    if(f->fileId>=FILE_ID_MAX){
+        Debug(WARNING,"Trying to read File@%p with fileId %bu",f,f->fileId);
+        return 0;
+    }else if(f->position==getFileSize(f)){  // Reached end of file
+        Debug(WARNING,"Reached EOF of file \"%s\"",f->fileName);
         return 0;
     }
 
@@ -93,8 +105,11 @@ bit IAPFile_getChar(IAPFile *f,char *c){
 }
 
 bit IAPFile_putChar(IAPFile *f,char c){
-    if(f->fileId==FILE_ID_MAX||f->position==FILE_SIZE_MAX){  // Reached max file size
-        Debug(WARNING,"Reached max file size \"%s\"",f->fileName);
+    if(f->fileId>=FILE_ID_MAX){
+        Debug(WARNING,"Trying to write File@%p with fileId %bu",f,f->fileId);
+        return 0;
+    }else if(f->position==FILE_SIZE_MAX){   // Reached max file size
+        Debug(WARNING,"Reached max file size of file \"%s\"",f->fileName);
         return 0;
     }
 
@@ -109,7 +124,11 @@ bit IAPFile_putChar(IAPFile *f,char c){
 }
 
 bit IAPFile_seek(IAPFile *f,unsigned char pos){
-    if(f->fileId==FILE_ID_MAX||pos>getFileSize(f)){
+    if(f->fileId>=FILE_ID_MAX){
+        Debug(WARNING,"Trying to seek File@%p with fileId %bu",f,f->fileId);
+        return 0;
+    }else if(pos>getFileSize(f)){
+        Debug(WARNING,"Trying to seek outside of file \"%s\"",f->fileName);
         return 0;
     }
 
@@ -118,7 +137,8 @@ bit IAPFile_seek(IAPFile *f,unsigned char pos){
 }
 
 unsigned char IAPFile_pos(IAPFile *f){
-    if(f->fileId==FILE_ID_MAX){
+    if(f->fileId>=FILE_ID_MAX){
+        Debug(WARNING,"Trying to get pos of File@%p with fileId %bu",f,f->fileId);
         return 0;
     }
 
@@ -129,7 +149,8 @@ unsigned char IAPFile_read(IAPFile *f,char *dst,unsigned char maxSize){
     unsigned char i;
     char c;
 
-    if(f->fileId==FILE_ID_MAX){
+    if(f->fileId>=FILE_ID_MAX){
+        Debug(WARNING,"Trying to read File@%p with fileId %bu",f,f->fileId);
         return 0;
     }
 
@@ -149,7 +170,8 @@ unsigned char IAPFile_readLine(IAPFile *f,char *dst,unsigned char maxSize){
     unsigned char i;
     char c;
 
-    if(f->fileId==FILE_ID_MAX){
+    if(f->fileId>=FILE_ID_MAX){
+        Debug(WARNING,"Trying to read File@%p with fileId %bu",f,f->fileId);
         return 0;
     }
 
@@ -172,7 +194,8 @@ unsigned char IAPFile_readLine(IAPFile *f,char *dst,unsigned char maxSize){
 unsigned char IAPFile_write(IAPFile *f,char *src,unsigned char maxSize){
     unsigned char i;
 
-    if(f->fileId==FILE_ID_MAX){
+    if(f->fileId>=FILE_ID_MAX){
+        Debug(WARNING,"Trying to write File@%p with fileId %bu",f,f->fileId);
         return 0;
     }
 
@@ -186,7 +209,11 @@ unsigned char IAPFile_write(IAPFile *f,char *src,unsigned char maxSize){
 }
 
 bit IAPFile_resize(IAPFile *f,unsigned char sz){
-    if(f->fileId==FILE_ID_MAX||sz>FILE_SIZE_MAX){
+    if(f->fileId>=FILE_ID_MAX){
+        Debug(WARNING,"Trying to resize File@%p with fileId %bu",f,f->fileId);
+        return 0;
+    }else if(sz>FILE_SIZE_MAX){
+        Debug(WARNING,"Invalid new size of file \"%s\"",f->fileName);
         return 0;
     }
 

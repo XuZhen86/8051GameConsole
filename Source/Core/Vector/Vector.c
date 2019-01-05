@@ -6,27 +6,21 @@
 #include<string.h>
 
 Vector *Vector_new(){
-    Vector *v=Far_malloc(sizeof(Vector));
+    Vector *v=fmalloc(sizeof(Vector));
 
-    v->elementData=Far_calloc(EXPAND_DEFAULT_SIZE,sizeof(void *));
+    v->elementData=fcalloc(EXPAND_DEFAULT_SIZE,sizeof(void *));
     v->elementCount=0;
     v->capacity=EXPAND_DEFAULT_SIZE;
-
-    // Debug(DEBUG,"Vector_new() v=0x%x",(unsigned int)v);
 
     return v;
 }
 
 void Vector_delete(Vector *v){
-    // Debug(DEBUG,"Vector_delete() v=0x%x",(unsigned int)v);
-
-    Far_free(v->elementData);
-    Far_free(v);
+    ffree(v->elementData);
+    ffree(v);
 }
 
 bit Vector_add(Vector *v,void *element){
-    // Debug(DEBUG,"Vector_add() v=0x%x element=%s",(unsigned int)v,element);
-
     if(!Vector_ensureCapacity(v,v->elementCount+1)){
         return 0;
     }
@@ -38,8 +32,6 @@ bit Vector_add(Vector *v,void *element){
 
 bit Vector_insert(Vector *v,unsigned int index,void *element){
     unsigned int i;
-
-    // Debug(DEBUG,"Vector_insert() v=0x%x index=%u element=%s",(unsigned int)v,index,element);
 
     if(!Vector_ensureCapacity(v,v->elementCount+1)){
         return 0;
@@ -63,7 +55,7 @@ unsigned int Vector_size(Vector *v){
 
 bit Vector_setSize(Vector *v,unsigned int newSize){
     if(newSize<v->elementCount){
-        Debug(WARNING,"Truncate Vector@0x%x size from %u to %u",(unsigned int)v,v->elementCount,newSize);
+        Debug(WARNING,"Truncate Vector@%p size from %u to %u",v,v->elementCount,newSize);
         v->elementCount=newSize;
         return 1;
     }
@@ -203,14 +195,14 @@ bit Vector_contains(Vector *v,void *element){
     return 0;
 }
 
-// void Vector_toString(Vector *v){
-//     unsigned int i;
+void Vector_debug(Vector *v){
+    unsigned int i;
 
-//     Debug(DEBUG,"elementCount=%u capacity=%u",Vector_size(v),Vector_capacity(v));
-//     for(i=0;i<v->elementCount;i++){
-//         Debug(DEBUG,"elementData[%u]=%s",i,Vector_get(v,i));
-//     }
-// }
+    Debug(DEBUG,"Vector@%p elementCount=%u capacity=%u",v,Vector_size(v),Vector_capacity(v));
+    for(i=0;i<v->elementCount;i++){
+        Debug(DEBUG,"    elementData[%u]=%p",i,Vector_get(v,i));
+    }
+}
 
 static bit expandDefault(Vector *v){
     return expandN(v,EXPAND_DEFAULT_SIZE);
@@ -219,15 +211,14 @@ static bit expandDefault(Vector *v){
 static bit expandN(Vector *v,unsigned int n){
     void *newElementData;
 
-    newElementData=Far_malloc((v->capacity+n)*sizeof(void *));
-    // newElementData=Far_calloc(v->capacity+n,sizeof(void *));
-
+    newElementData=fmalloc((v->capacity+n)*sizeof(void *));
     if(newElementData==NULL){
+        Debug(WARNING,"Failed to expand Vector@%p by %u",v,n);
         return 0;
     }
 
     memcpy(newElementData,v->elementData,v->capacity*sizeof(void *));
-    Far_free(v->elementData);
+    ffree(v->elementData);
     v->elementData=newElementData;
     v->capacity+=n;
 

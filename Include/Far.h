@@ -3,9 +3,12 @@
 
 void Far_init();
 
-void *Far_malloc(unsigned int size);
-void *Far_calloc(unsigned int num,unsigned int size);
-void *Far_realloc(void *ptr,unsigned int size);
-void Far_free(void *ptr);
+void *fmalloc(unsigned int size);
+void *fcalloc(unsigned int num,unsigned int size);
+void *frealloc(void *ptr,unsigned int size);
+void ffree(void *ptr);
+
+void Far_memInfo();
+void Far_dumpMemBlock();
 
 #endif

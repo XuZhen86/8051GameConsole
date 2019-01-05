@@ -7,8 +7,7 @@ typedef struct IAPFile_{
     char *fileName;
 } IAPFile;
 
-void IAPFile_init();
-void IAPFile_format();
+void IAPFile_format(char *magicWord);
 
 IAPFile *IAPFile_new();
 void IAPFile_delete(IAPFile *f);

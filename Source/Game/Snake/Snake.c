@@ -16,7 +16,7 @@
 static SnakeDataPack *dp;
 
 void Snake(){
-    dp=Far_calloc(1,sizeof(SnakeDataPack));
+    dp=fcalloc(1,sizeof(SnakeDataPack));
     loadData();
 
     while(selectLevel()){
@@ -25,7 +25,7 @@ void Snake(){
     }
 
     storeData();
-    Far_free(dp);
+    ffree(dp);
 }
 
 static bit selectLevel(){
@@ -144,8 +144,7 @@ static void play(){
             }else if(getMap(dp->tailX,dp->tailY+1)==dp->tailVal){
                 dp->tailY++;
             }else{
-                Debug(FATAL,"SNAKE_EXIT_CODE_UNEXPECTED_TAIL_DATA");
-                Debug(FATAL,"[head=%bu,%bu food=%bu,%bu tail=%bu,%bu]",dp->headX,dp->headY,dp->foodX,dp->foodY,dp->tailX,dp->tailY);
+                Debug(FATAL,"Cannot find tail");
                 return;
             }
         }else{
@@ -195,8 +194,6 @@ static void loadData(){
     unsigned char i;
     char buffer[8];
 
-    Debug(DEBUG,"loadData()");
-
     IAPFile_open(file,"Snake.txt");
     if(IAPFile_size(file)==0){
         generateDefaultData(file);
@@ -219,8 +216,6 @@ static void storeData(){
     unsigned char i;
     char buffer[8];
 
-    Debug(DEBUG,"storeData()");
-
     IAPFile_open(file,"Snake.txt");
 
     for(i=1;i<17;i++){
@@ -237,7 +232,6 @@ static void storeData(){
 
 static void generateDefaultData(IAPFile *file){
     unsigned char i;
-    Debug(DEBUG,"generateDefaultData()");
 
     for(i=0;i<16;i++){
         IAPFile_write(file,"0\n",(unsigned char)strlen("0\n"));
