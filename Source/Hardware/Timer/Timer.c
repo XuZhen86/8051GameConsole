@@ -12,9 +12,9 @@ void Timer0_setMode(unsigned char mode){
 
 void Timer0_setX12Enabled(unsigned char x12){
     if(x12){
-        AUXR|=0x80;
-    }else{
         AUXR&=~0x80;
+    }else{
+        AUXR|=0x80;
     }
 }
 
@@ -58,9 +58,9 @@ void Timer1_setMode(unsigned char mode){
 
 void Timer1_setX12Enabled(unsigned char x12){
     if(x12){
-        AUXR|=0x40;
-    }else{
         AUXR&=~0x40;
+    }else{
+        AUXR|=0x40;
     }
 }
 
@@ -91,4 +91,38 @@ void Timer1_stop(){
 
 unsigned int Timer1_elapsed(){
     return ((unsigned int)TH1<<8)|TL1;
+}
+
+void Timer2_setCounter(unsigned int imm16){
+    T2H=imm16>>8;
+    T2L=imm16;
+}
+
+void Timer2_setX12Enabled(unsigned char x12){
+    if(x12){
+        AUXR&=~0x04;
+    }else{
+        AUXR|=0x04;
+    }
+}
+
+void Timer2_setInterruptEnabled(unsigned char enable){
+    if(enable){
+        EA=1;
+        IE2|=0x04;
+    }else{
+        IE2&=~0x04;
+    }
+}
+
+void Timer2_start(){
+    AUXR|=0x10;
+}
+
+void Timer2_stop(){
+    AUXR&=~0x10;
+}
+
+unsigned int Timer2_elapsed(){
+    return ((unsigned int)T2H<<8)|T2L;
 }

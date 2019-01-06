@@ -19,4 +19,11 @@ void Timer1_start();
 void Timer1_stop();
 unsigned int Timer1_elapsed();
 
+void Timer2_setCounter(unsigned int imm16);
+void Timer2_setX12Enabled(unsigned char x12);
+void Timer2_setInterruptEnabled(unsigned char enable);
+void Timer2_start();
+void Timer2_stop();
+unsigned int Timer2_elapsed();
+
 #endif

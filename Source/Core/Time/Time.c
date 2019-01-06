@@ -6,7 +6,7 @@ static unsigned long data time=0,timeElapsed=0;
 
 void Time_init(){
     Timer0_setCounter(0x7e66);
-    Timer0_setX12Enabled(1);
+    Timer0_setX12Enabled(0);
     Timer0_setInterruptEnabled(1);
     Timer0_start();
 }
