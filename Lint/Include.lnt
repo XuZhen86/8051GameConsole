@@ -6,7 +6,8 @@
 -i./Source/Core/LCD/Font
 -i./Source/Core/Pushbutton
 -i./Source/Core/Time
--i./Source/Core/Vector
+-i./Source/Core/Vector/Vector
+-i./Source/Core/Vector/VectorInt
 -i./Source/Game/Snake
 -i./Source/Hardware/IAP
 -i./Source/Hardware/Serial

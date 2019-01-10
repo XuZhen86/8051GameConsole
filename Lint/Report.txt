@@ -15,7 +15,9 @@
 
 --- Module:   .\Source\Core\Time\Time.c (C)
 
---- Module:   .\Source\Core\Vector\Vector.c (C)
+--- Module:   .\Source\Core\Vector\Vector\Vector.c (C)
+
+--- Module:   .\Source\Core\Vector\VectorInt\VectorInt.c (C)
 
 --- Module:   .\Source\Game\Snake\Snake.c (C)
 

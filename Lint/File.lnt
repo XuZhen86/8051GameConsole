@@ -6,7 +6,8 @@
 ./Source/Core/LCD/LCD.c
 ./Source/Core/Pushbutton/Pushbutton.c
 ./Source/Core/Time/Time.c
-./Source/Core/Vector/Vector.c
+./Source/Core/Vector/Vector/Vector.c
+./Source/Core/Vector/VectorInt/VectorInt.c
 ./Source/Game/Snake/Snake.c
 ./Source/Hardware/Analog/Analog.c
 ./Source/Hardware/IAP/IAP.c

@@ -24,6 +24,7 @@
 #include<Time.h>
 #include<Timer.h>
 #include<Vector.h>
+#include<VectorInt.h>
 #include<Version.h>
 
 #endif

@@ -412,11 +412,6 @@
               <FilePath>.\Source\Core\Time\Time.c</FilePath>
             </File>
             <File>
-              <FileName>Vector.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Source\Core\Vector\Vector.c</FilePath>
-            </File>
-            <File>
               <FileName>XBANKING.A51</FileName>
               <FileType>2</FileType>
               <FilePath>.\Source\Core\Far\XBANKING.A51</FilePath>
@@ -425,6 +420,16 @@
               <FileName>Pushbutton.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Source\Core\Pushbutton\Pushbutton.c</FilePath>
+            </File>
+            <File>
+              <FileName>Vector.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Core\Vector\Vector\Vector.c</FilePath>
+            </File>
+            <File>
+              <FileName>VectorInt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Core\Vector\VectorInt\VectorInt.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,3 +1,4 @@
 *.uvgui.*
 .vscode
 Build
+Lint/Report.txt

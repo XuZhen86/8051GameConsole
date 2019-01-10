@@ -23,7 +23,6 @@
 -dusing=_gobble           // defines using to be a _gobble
 -d_at_=@                  // defines _at_ to be @
 -si2                      // integer size: 2 bytes
--sp2                      // pointer size: 2 bytes
 +rw(_ignore_init)         // activate this keyword
 +rw(__declspec)           // activate this MS keyword
 
