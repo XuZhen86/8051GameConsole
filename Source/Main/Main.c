@@ -41,6 +41,8 @@ void main(){
     ListWidget_addItem(lw,ListWidgetItem_new("Version",ITEM_SELECTABLE));
     ListWidget_addItem(lw,ListWidgetItem_new("Input Dialog",ITEM_SELECTABLE));
     ListWidget_addItem(lw,ListWidgetItem_new("Debug",ITEM_SELECTABLE));
+    ListWidget_addItem(lw,ListWidgetItem_new("Far Speed Test",ITEM_SELECTABLE));
+
     ListWidget_addItem(lw,ListWidgetItem_new("En",0));
     ListWidget_addItem(lw,ListWidgetItem_new("En|Se",ITEM_SELECTABLE));
     ListWidget_addItem(lw,ListWidgetItem_new("En|Ck",ITEM_CHECKABLE));
@@ -65,6 +67,9 @@ void main(){
                 break;
             case 4:
                 Debug_show();
+                break;
+            case 5:
+                Far_speedTest();
                 break;
             default:
                 ;

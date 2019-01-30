@@ -130,25 +130,42 @@ ACC DATA 0E0H
 B DATA 0F0H
 DPL DATA 082H
 DPH DATA 083H
+
 bChipSelect bit 0a0h.6
+TEMP_A DATA 083h    ; Use DPH as temp storage for A
+SPSTAT data 0cdh
+SPCTL data 0ceh
+SPDAT data 0cfh
 
-extrn code (_SPI_transfer)
-
-mXramSpiSendReg macro reg
-    mov A,reg
-    mov R7,A
-    call _SPI_transfer
+mXramSpiWaitFinish macro
+local lLoop
+    lLoop:
+        mov A,SPSTAT
+        anl A,#080h
+    jz lLoop
 endm
 
-mXramSpiSendVal macro val
-    mov R7,#val
-    call _SPI_transfer
+mXramSpiSend macro val
+    mXramSpiWaitFinish
+    orl SPSTAT,#080h
+    mov SPDAT,val
 endm
 
-mXramSpiRecvReg macro reg
-    call _SPI_transfer
-    mov A,R7
-    mov reg,A
+mXramSpiRecv macro reg
+    mXramSpiWaitFinish
+    orl SPSTAT,#080h
+    mov SPDAT,A
+    mXramSpiWaitFinish
+    mov reg,SPDAT
+endm
+
+mXramSpiStart macro
+    clr bChipSelect
+endm
+
+mXramSpiEnd macro
+    mXramSpiWaitFinish
+    setb bChipSelect
 endm
 
 ;-----------------------------------------------------------------------------
@@ -156,20 +173,14 @@ endm
 ; Registers which can be used without saving:  DPTR, CY, A
 ;
 ?C?CLDXPTR:
-    mov DPL,R7  ; Save R7
-    mov DPH,A
+    mXramSpiStart
+    mXramSpiSend #03h   ; Send read command
+    mXramSpiSend R2     ; Send high address
+    mXramSpiSend R1     ; Send low address
+    mXramSpiRecv TEMP_A ; Receive byte
+    mXramSpiEnd
 
-    clr bChipSelect
-
-    mXramSpiSendVal 03h     ; Send read command
-    mXramSpiSendReg R2      ; Send high address
-    mXramSpiSendReg R1      ; Send low address
-    mXramSpiRecvReg DPH     ; Receive byte
-
-    setb bChipSelect
-
-    mov R7,DPL  ; Restore R7
-    mov A,DPH
+    mov A,TEMP_A
     ret
 
 ;-----------------------------------------------------------------------------
@@ -177,20 +188,16 @@ endm
 ; Registers which can be used without saving:  DPTR, CY
 ;
 ?C?CSTXPTR:
-    mov DPL,R7  ; Save R7
-    mov DPH,A   ; Save A
+    mov TEMP_A,A   ; Save A
 
-    clr bChipSelect
+    mXramSpiStart
+    mXramSpiSend #02h   ; Send write command
+    mXramSpiSend R2     ; Send high address
+    mXramSpiSend R1     ; Send low address
+    mXramSpiSend TEMP_A ; Send byte
+    mXramSpiEnd
 
-    mXramSpiSendVal 02h     ; Send write command
-    mXramSpiSendReg R2      ; Send high address
-    mXramSpiSendReg R1      ; Send low address
-    mXramSpiSendReg DPH     ; Send byte
-
-    setb bChipSelect
-
-    mov R7,DPL  ; Restore R7
-    mov A,DPH   ; Restore A
+    mov A,TEMP_A   ; Restore A
     ret
 
 ;-----------------------------------------------------------------------------
@@ -198,21 +205,17 @@ endm
 ; Registers which can be used without saving:  DPTR, CY, A, B
 ;
 ?C?ILDXPTR:
-    mov DPL,R7  ; Save R7
-    mov DPH,A
+    mov TEMP_A,A
 
-    clr bChipSelect
+    mXramSpiStart
+    mXramSpiSend #03h   ; Send read command
+    mXramSpiSend R2     ; Send high address
+    mXramSpiSend R1     ; Send low address
+    mXramSpiRecv B      ; Receive high byte
+    mXramSpiRecv TEMP_A ; Receive low byte
+    mXramSpiEnd
 
-    mXramSpiSendVal 03h     ; Send read command
-    mXramSpiSendReg R2      ; Send high address
-    mXramSpiSendReg R1      ; Send low address
-    mXramSpiRecvReg B       ; Receive high byte
-    mXramSpiRecvReg DPH     ; Receive low byte
-
-    setb bChipSelect
-
-    mov R7,DPL  ; Restore R7
-    mov A,DPH
+    mov A,TEMP_A
     ret
 
 ;-----------------------------------------------------------------------------
@@ -220,21 +223,16 @@ endm
 ; Registers which can be used without saving:  DPTR, CY, A
 ;
 ?C?ISTXPTR:
-    mov DPL,R7
-    mov DPH,A
+    mov TEMP_A,A
 
-    clr bChipSelect
+    mXramSpiStart
+    mXramSpiSend #02h   ; Send write command
+    mXramSpiSend R2     ; Send high address
+    mXramSpiSend R1     ; Send low address
+    mXramSpiSend TEMP_A ; Send high byte
+    mXramSpiSend B      ; Send low byte
+    mXramSpiEnd
 
-    mXramSpiSendVal 02h     ; Send write command
-    mXramSpiSendReg R2      ; Send high address
-    mXramSpiSendReg R1      ; Send low address
-    mXramSpiSendReg DPH     ; Send high byte
-    mXramSpiSendReg B       ; Send low byte
-
-    setb bChipSelect
-
-    mov R7,DPL  ; Restore R7
-    mov A,DPH   ; Restore A
     ret
 
 ;-----------------------------------------------------------------------------
@@ -242,20 +240,15 @@ endm
 ; Registers which can be used without saving:  DPTR, CY, A, R1, R2, R3
 ;
 ?C?PLDXPTR:
-    mov DPL,R7  ; Save R7
+    mXramSpiStart
+    mXramSpiSend #03h   ; Send read command
+    mXramSpiSend R2     ; Send high address
+    mXramSpiSend R1     ; Send low address
+    mXramSpiRecv R3     ; Receive high byte
+    mXramSpiRecv R2     ; Receive low byte
+    mXramSpiRecv R1     ; Receive low byte
+    mXramSpiEnd
 
-    clr bChipSelect
-
-    mXramSpiSendVal 03h     ; Send read command
-    mXramSpiSendReg R2      ; Send high address
-    mXramSpiSendReg R1      ; Send low address
-    mXramSpiRecvReg R3      ; Receive high byte
-    mXramSpiRecvReg R2      ; Receive low byte
-    mXramSpiRecvReg R1      ; Receive low byte
-
-    setb bChipSelect
-
-    mov R7,DPL  ; Restore R7
     ret
 
 ;-----------------------------------------------------------------------------
@@ -263,21 +256,17 @@ endm
 ; Registers which can be used without saving:  DPTR, CY, A
 ;
 ?C?PSTXPTR:
-    mov DPL,R7  ; Save R7
-    mov DPH,A
+    mov TEMP_A,A
 
-    clr bChipSelect
+    mXramSpiStart
+    mXramSpiSend #02h   ; Send write command
+    mXramSpiSend R2     ; Send high address
+    mXramSpiSend R1     ; Send low address
+    mXramSpiSend B      ; Send high byte
+    mXramSpiSend TEMP_A ; Send low byte
+    mXramSpiSend R0     ; Send low byte
+    mXramSpiEnd
 
-    mXramSpiSendVal 02h     ; Send write command
-    mXramSpiSendReg R2      ; Send high address
-    mXramSpiSendReg R1      ; Send low address
-    mXramSpiSendReg B       ; Send high byte
-    mXramSpiSendReg DPH     ; Send low byte
-    mXramSpiSendReg R0      ; Send low byte
-
-    setb bChipSelect
-
-    mov R7,DPL  ; Restore R7
     ret
 
 ;-----------------------------------------------------------------------------
@@ -285,17 +274,15 @@ endm
 ; Registers which can be used without saving:  DPTR, CY, A, R4, R5, R6, R7
 ;
 ?C?LLDXPTR:
-    clr bChipSelect
-
-    mXramSpiSendVal 03h     ; Send read command
-    mXramSpiSendReg R2      ; Send high address
-    mXramSpiSendReg R1      ; Send low address
-    mXramSpiRecvReg R4      ; Receive high byte
-    mXramSpiRecvReg R5      ; Receive low byte
-    mXramSpiRecvReg R6      ; Receive low byte
-    mXramSpiRecvReg R7      ; Receive low byte
-
-    setb bChipSelect
+    mXramSpiStart
+    mXramSpiSend #03h   ; Send read command
+    mXramSpiSend R2     ; Send high address
+    mXramSpiSend R1     ; Send low address
+    mXramSpiRecv R4     ; Receive high byte
+    mXramSpiRecv R5     ; Receive low byte
+    mXramSpiRecv R6     ; Receive low byte
+    mXramSpiRecv R7     ; Receive low byte
+    mXramSpiEnd
 
     ret
 
@@ -304,21 +291,16 @@ endm
 ; Registers which can be used without saving:  DPTR, CY, A
 ;
 ?C?LSTXPTR:
-    mov DPL,R7  ; Save R7
+    mXramSpiStart
+    mXramSpiSend #02h   ; Send write command
+    mXramSpiSend R2     ; Send high address
+    mXramSpiSend R1     ; Send low address
+    mXramSpiSend R4     ; Send high byte
+    mXramSpiSend R5     ; Send low byte
+    mXramSpiSend R6     ; Send low byte
+    mXramSpiSend DPL    ; Send low byte
+    mXramSpiEnd
 
-    clr bChipSelect
-
-    mXramSpiSendVal 02h     ; Send write command
-    mXramSpiSendReg R2      ; Send high address
-    mXramSpiSendReg R1      ; Send low address
-    mXramSpiSendReg R4      ; Send high byte
-    mXramSpiSendReg R5      ; Send low byte
-    mXramSpiSendReg R6      ; Send low byte
-    mXramSpiSendReg DPL     ; Send low byte
-
-    setb bChipSelect
-
-    mov R7,DPL
     ret
 
 end

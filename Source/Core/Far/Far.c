@@ -3,7 +3,9 @@
 #include"FarStatic.h"
 #include<Debug.h>
 #include<Far.h>
+#include<Time.h>
 #include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 
 static FarMemBlock far head _at_ 0x020000;
@@ -143,6 +145,32 @@ void Far_dumpMemBlock(){
     }
 
     Debug(DEBUG,"Dump Mem Block <<<<<<<");
+}
+
+void Far_speedTest(){
+    unsigned int j;
+    unsigned char i=0;
+    char *array;
+
+    Debug(DEBUG,"Far Mem Speed Test >>>>>>>");
+
+    for(j=1;j;j*=2){
+        Time_start();
+        do{
+            array=fcalloc(j,sizeof(char));
+            ffree(array);
+        }while(++i);
+        Debug(DEBUG,"fcalloc(%u): %lu",j,Time_elapsed());
+    }
+
+    array=fmalloc(32768);
+    Time_start();
+    do{
+        array[rand()]=j;
+    }while(++j);
+    Debug(DEBUG,"array[rand()] 32768: %lu",Time_elapsed());
+
+    Debug(DEBUG,"Far Mem Speed Test <<<<<<<");
 }
 
 static bit verifyFarMemBlock(FarMemBlock *p){

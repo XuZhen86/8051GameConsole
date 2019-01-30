@@ -10,5 +10,6 @@ void ffree(void *ptr);
 
 void Far_memInfo();
 void Far_dumpMemBlock();
+void Far_speedTest();
 
 #endif
