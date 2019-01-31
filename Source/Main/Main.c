@@ -23,10 +23,6 @@ static void init(){
     Debug(INFO,"Init complete");
 }
 
-static void slotUCharValueChanged(unsigned char uChar){
-    Debug(DEBUG,"slotUCharValueChanged %bu",uChar);
-}
-
 static ListWidget *lw;
 
 void main(){
@@ -63,7 +59,7 @@ void main(){
                 Version_show();
                 break;
             case 3:
-                InputDialog_getUChar("Input Dialog",8,0,128,20,slotUCharValueChanged);
+                InputDialog_test();
                 break;
             case 4:
                 Debug_show();

@@ -76,17 +76,29 @@ static void initAnalog(){
     LCD_setBrightness(brightness);
 }
 
-void LCD_setBrightness(unsigned char b){
-    brightness=b;
-    Analog_write(3,b*0x800,1);
+void LCD_setBrightness(int b){
+    brightness=(unsigned char)b;
+    Analog_write(3,(unsigned char)b*0x800,1);
 }
 
 void LCD_adjustBrightness(){
     IAPFile *file=IAPFile_new();
+    VectorInt *v=VectorInt_new();
+    InputDialog *id=InputDialog_new();
     unsigned char bOld=brightness,bNew;
     char buffer[8];
+    unsigned char i;
 
-    bNew=InputDialog_getUChar("Brightness",brightness,0,16,1,LCD_setBrightness);
+
+    for(i=0;i<16;i++){
+        VectorInt_add(v,(int)i);
+    }
+    InputDialog_setValues(id,v);
+    InputDialog_setTitle(id,"Brightness");
+    InputDialog_setSigValueChanged(id,LCD_setBrightness);
+    InputDialog_setSelected(id,(unsigned int)brightness);
+
+    bNew=(unsigned char)InputDialog_getSelection(id);
     if(bNew==16){
         LCD_setBrightness(bOld);
     }else{
@@ -96,6 +108,8 @@ void LCD_adjustBrightness(){
         IAPFile_close(file);
     }
 
+    InputDialog_delete(id);
+    VectorInt_delete(v);
     IAPFile_delete(file);
 }
 

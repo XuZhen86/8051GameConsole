@@ -1,6 +1,8 @@
 #ifndef INPUTDIALOGSTATIC_H_
 #define INPUTDIALOGSTATIC_H_
 
-static void printValue(unsigned char value,unsigned char min,unsigned char max);
+#include<InputDialog.h>
+
+static void print(InputDialog *id);
 
 #endif

@@ -4,7 +4,7 @@
 void LCD_init();
 void LCD_hwReset();
 
-void LCD_setBrightness(unsigned char b);
+void LCD_setBrightness(int b);
 void LCD_adjustBrightness();
 
 void LCD_flush();

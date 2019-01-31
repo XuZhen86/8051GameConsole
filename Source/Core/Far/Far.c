@@ -163,7 +163,7 @@ void Far_speedTest(){
         Debug(DEBUG,"fcalloc(%u): %lu",j,Time_elapsed());
     }
 
-    array=fmalloc(32768);
+    array=fmalloc((unsigned int)32768);
     Time_start();
     do{
         array[rand()]=j;
