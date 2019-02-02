@@ -22,7 +22,7 @@ void Far_init(){
     netUsedSpace=0;
 }
 
-void *fmalloc(unsigned int size){
+void *malloc(unsigned int size){
     FarMemBlock *p,*np;
 
     for(p=&head;p!=NULL;p=p->next){
@@ -56,36 +56,36 @@ void *fmalloc(unsigned int size){
     return NULL;
 }
 
-void *fcalloc(unsigned int num,unsigned int size){
-    void *p=fmalloc(num*size);
+void *calloc(unsigned int num,unsigned int size){
+    void *p=malloc(num*size);
     if(p!=NULL){
         memset(p,0x00,num*size);
     }
     return p;
 }
 
-void *frealloc(void *ptr,unsigned int size){
+void *realloc(void *ptr,unsigned int size){
     void *np;
 
     if(ptr==NULL){
-        return fmalloc(size);
+        return malloc(size);
     }
     verifyFarMemBlock(ptr);
 
     if(size==0){
-        ffree(ptr);
+        free(ptr);
         return NULL;
     }
 
-    np=fmalloc(size);
+    np=malloc(size);
     if(np!=NULL){
         memcpy(np,ptr,size);
-        ffree(ptr);
+        free(ptr);
     }
     return np;
 }
 
-void ffree(void *ptr){
+void free(void *ptr){
     FarMemBlock *p=ptr-sizeof(FarMemBlock);
 
     if(ptr==NULL){
@@ -157,18 +157,19 @@ void Far_speedTest(){
     for(j=1;j;j*=2){
         Time_start();
         do{
-            array=fcalloc(j,sizeof(char));
-            ffree(array);
+            array=calloc(j,sizeof(char));
+            free(array);
         }while(++i);
         Debug(DEBUG,"fcalloc(%u): %lu",j,Time_elapsed());
     }
 
-    array=fmalloc((unsigned int)32768);
+    array=malloc((unsigned int)32768);
     Time_start();
     do{
         array[rand()]=j;
     }while(++j);
     Debug(DEBUG,"array[rand()] 32768: %lu",Time_elapsed());
+    free(array);
 
     Debug(DEBUG,"Far Mem Speed Test <<<<<<<");
 }

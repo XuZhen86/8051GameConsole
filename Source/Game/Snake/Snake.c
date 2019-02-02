@@ -3,7 +3,6 @@
 #include"SnakeStatic.h"
 #include<Debug.h>
 #include<Delay.h>
-#include<Far.h>
 #include<IAPFile.h>
 #include<LCD.h>
 #include<Pushbutton.h>
@@ -16,7 +15,7 @@
 static SnakeDataPack *dp;
 
 void Snake(){
-    dp=fcalloc(1,sizeof(SnakeDataPack));
+    dp=calloc(1,sizeof(SnakeDataPack));
     loadData();
 
     while(selectLevel()){
@@ -25,7 +24,7 @@ void Snake(){
     }
 
     storeData();
-    ffree(dp);
+    free(dp);
 }
 
 static bit selectLevel(){

@@ -1,11 +1,11 @@
 #include"ListWidgetItemStatic.h"
-#include<Far.h>
 #include<LCD.h>
 #include<ListWidgetItem.h>
+#include<stdlib.h>
 #include<string.h>
 
 ListWidgetItem *ListWidgetItem_new(const char *text,unsigned char flags){
-    ListWidgetItem *lwi=fcalloc(1,sizeof(ListWidgetItem));
+    ListWidgetItem *lwi=calloc(1,sizeof(ListWidgetItem));
     ListWidgetItem_setText(lwi,text);
     ListWidgetItem_setFlags(lwi,flags);
 
@@ -13,13 +13,13 @@ ListWidgetItem *ListWidgetItem_new(const char *text,unsigned char flags){
 }
 
 void ListWidgetItem_delete(ListWidgetItem *lwi){
-    ffree(lwi->text);
-    ffree(lwi);
+    free(lwi->text);
+    free(lwi);
 }
 
 void ListWidgetItem_setText(ListWidgetItem *lwi,const char *text){
-    ffree(lwi->text);
-    lwi->text=fmalloc(strlen(text)+1+2);
+    free(lwi->text);
+    lwi->text=malloc(strlen(text)+1+2);
     strcpy(lwi->text+2,text);
 }
 

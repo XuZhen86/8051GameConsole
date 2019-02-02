@@ -40,6 +40,16 @@ void IAP_flush(){
     writeSector(currentSector);
 }
 
+const unsigned char *IAP_getPtr(unsigned int addr16){
+    addr16%=ADDR_MAX;
+
+    if(addr16/512!=currentSector){
+        return (const unsigned char code*)(addr16+(unsigned int)MOVC_ADDR_OFFS);
+    }else{
+        return sectorBuffer+addr16;
+    }
+}
+
 static void loadSector(unsigned char sector){
     sector%=SECTOR_MAX;
     memcpy(sectorBuffer,(unsigned char code*)(sector*512+(unsigned int)MOVC_ADDR_OFFS),512);

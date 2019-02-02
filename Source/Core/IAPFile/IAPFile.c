@@ -1,10 +1,10 @@
 #include"IAPFileConfig.h"
 #include"IAPFileStatic.h"
 #include<Debug.h>
-#include<Far.h>
 #include<IAP.h>
 #include<IAPFile.h>
 #include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 
 void IAPFile_format(char *magicWord){
@@ -24,34 +24,26 @@ void IAPFile_format(char *magicWord){
 }
 
 IAPFile *IAPFile_new(){
-    IAPFile *file=fmalloc(sizeof(IAPFile));
+    IAPFile *file=malloc(sizeof(IAPFile));
     file->fileId=FILE_ID_MAX;
     file->fileName=NULL;
     return file;
 }
 
 void IAPFile_delete(IAPFile *f){
-    ffree(f->fileName);
-    ffree(f);
+    free(f->fileName);
+    free(f);
 }
 
 bit IAPFile_open(IAPFile *f,char *fileName){
     unsigned int i;
-    unsigned char j,found;
+    unsigned char j/*,found*/;
 
     for(i=0;i<FILE_ID_MAX;i++){
-        found=1;
-        for(j=0;j<15&&fileName[j];j++){
-            if(IAP_read(i*16+j)!=fileName[j]){
-                found=0;
-                break;
-            }
-        }
-
-        if(found){   // Found existing file
+        if(!strcmp((const char *)IAP_getPtr(i*16),fileName)){   // Found existing file
             f->fileId=i;
             f->position=0;
-            f->fileName=fmalloc(strlen(fileName)+1);
+            f->fileName=malloc(strlen(fileName)+1);
             strcpy(f->fileName,fileName);
             return 1;
         }else if(IAP_read(i*16)==0){    // Create new file
@@ -67,7 +59,7 @@ bit IAPFile_open(IAPFile *f,char *fileName){
 
             f->fileId=i;
             f->position=0;
-            f->fileName=fmalloc(strlen(fileName)+1);
+            f->fileName=malloc(strlen(fileName)+1);
             strcpy(f->fileName,fileName);
             setFileSize(f,0);
 

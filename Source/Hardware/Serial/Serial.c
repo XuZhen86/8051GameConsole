@@ -10,7 +10,7 @@ char putchar(char c){
     while((unsigned char)(bufTail+1)==bufHead){}
     bufTail++;
     buf[bufTail]=c;
-    AUXR|=0x10; // Timer2_start();
+    Timer2_start();
     return c;
 }
 
@@ -44,6 +44,6 @@ static void s1SendNext() interrupt 12{
         SBUF=bufData;
         TI=0;
     }else{
-        AUXR&=~0x10;    // Timer2_stop();
+        Timer2_stop();
     }
 }

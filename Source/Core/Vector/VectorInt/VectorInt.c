@@ -1,14 +1,14 @@
 #include"VectorIntConfig.h"
 #include"VectorIntStatic.h"
 #include<Debug.h>
-#include<Far.h>
 #include<VectorInt.h>
+#include<stdlib.h>
 #include<string.h>
 
 VectorInt *VectorInt_new(){
-    VectorInt *v=fmalloc(sizeof(VectorInt));
+    VectorInt *v=malloc(sizeof(VectorInt));
 
-    v->elementData=fcalloc(EXPAND_DEFAULT_SIZE,sizeof(int));
+    v->elementData=calloc(EXPAND_DEFAULT_SIZE,sizeof(int));
     v->elementCount=0;
     v->capacity=EXPAND_DEFAULT_SIZE;
 
@@ -16,8 +16,8 @@ VectorInt *VectorInt_new(){
 }
 
 void VectorInt_delete(VectorInt *v){
-    ffree(v->elementData);
-    ffree(v);
+    free(v->elementData);
+    free(v);
 }
 
 bit VectorInt_add(VectorInt *v,int element){
@@ -211,14 +211,14 @@ static bit expandDefault(VectorInt *v){
 static bit expandN(VectorInt *v,unsigned int n){
     int *newElementData;
 
-    newElementData=fmalloc((v->capacity+n)*sizeof(int));
+    newElementData=malloc((v->capacity+n)*sizeof(int));
     if(newElementData==NULL){
         Debug(WARNING,"Failed to expand VectorInt@%p by %u",v,n);
         return 0;
     }
 
     memcpy(newElementData,v->elementData,v->capacity*sizeof(int));
-    ffree(v->elementData);
+    free(v->elementData);
     v->elementData=newElementData;
     v->capacity+=n;
 

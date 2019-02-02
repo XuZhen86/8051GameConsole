@@ -1,21 +1,21 @@
 #include"InputDialogConfig.h"
 #include"InputDialogStatic.h"
 #include<Debug.h>
-#include<Far.h>
 #include<InputDialog.h>
 #include<LCD.h>
 #include<Pushbutton.h>
 #include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 
 InputDialog *InputDialog_new(){
-    InputDialog *id=fcalloc(1,sizeof(InputDialog));
+    InputDialog *id=calloc(1,sizeof(InputDialog));
     return id;
 }
 
 void InputDialog_delete(InputDialog *id){
-    ffree(id->title);
-    ffree(id);
+    free(id->title);
+    free(id);
 }
 
 unsigned int InputDialog_getSelection(InputDialog *id){
@@ -77,8 +77,8 @@ unsigned int InputDialog_getSelection(InputDialog *id){
 }
 
 void InputDialog_setTitle(InputDialog *id,const char *title){
-    ffree(id->title);
-    id->title=fmalloc(strlen(title)+1);
+    free(id->title);
+    id->title=malloc(strlen(title)+1);
     strcpy(id->title,title);
 }
 

@@ -1,14 +1,14 @@
 #include"VectorConfig.h"
 #include"VectorStatic.h"
 #include<Debug.h>
-#include<Far.h>
 #include<Vector.h>
+#include<stdlib.h>
 #include<string.h>
 
 Vector *Vector_new(){
-    Vector *v=fmalloc(sizeof(Vector));
+    Vector *v=malloc(sizeof(Vector));
 
-    v->elementData=fcalloc(EXPAND_DEFAULT_SIZE,sizeof(void *));
+    v->elementData=calloc(EXPAND_DEFAULT_SIZE,sizeof(void *));
     v->elementCount=0;
     v->capacity=EXPAND_DEFAULT_SIZE;
 
@@ -16,8 +16,8 @@ Vector *Vector_new(){
 }
 
 void Vector_delete(Vector *v){
-    ffree(v->elementData);
-    ffree(v);
+    free(v->elementData);
+    free(v);
 }
 
 bit Vector_add(Vector *v,void *element){
@@ -211,14 +211,14 @@ static bit expandDefault(Vector *v){
 static bit expandN(Vector *v,unsigned int n){
     void *newElementData;
 
-    newElementData=fmalloc((v->capacity+n)*sizeof(void *));
+    newElementData=malloc((v->capacity+n)*sizeof(void *));
     if(newElementData==NULL){
         Debug(WARNING,"Failed to expand Vector@%p by %u",v,n);
         return 0;
     }
 
     memcpy(newElementData,v->elementData,v->capacity*sizeof(void *));
-    ffree(v->elementData);
+    free(v->elementData);
     v->elementData=newElementData;
     v->capacity+=n;
 

@@ -1,14 +1,14 @@
 #include"ListWidgetConfig.h"
 #include"ListWidgetStatic.h"
 #include<Debug.h>
-#include<Far.h>
 #include<LCD.h>
 #include<ListWidget.h>
 #include<Pushbutton.h>
+#include<stdlib.h>
 #include<string.h>
 
 ListWidget *ListWidget_new(){
-    ListWidget *lw=fcalloc(1,sizeof(ListWidget));
+    ListWidget *lw=calloc(1,sizeof(ListWidget));
     lw->items=Vector_new();
 
     return lw;
@@ -17,19 +17,19 @@ ListWidget *ListWidget_new(){
 void ListWidget_delete(ListWidget *lw){
     unsigned int i;
 
-    ffree(lw->title);
+    free(lw->title);
 
     for(i=0;i<Vector_size(lw->items);i++){
         ListWidgetItem_delete(Vector_get(lw->items,i));
     }
     Vector_delete(lw->items);
 
-    ffree(lw);
+    free(lw);
 }
 
 void ListWidget_setTitle(ListWidget *lw,const char *title){
-    ffree(lw->title);
-    lw->title=fmalloc(strlen(title));
+    free(lw->title);
+    lw->title=malloc(strlen(title));
     strcpy(lw->title,title);
 }
 
