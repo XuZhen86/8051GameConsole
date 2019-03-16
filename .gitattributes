@@ -1,4 +1,6 @@
 Include/STC15W4K48S4.h linguist-language=C linguist-vendored=true
+Include/Vector.h inguist-language=C
+Include/VectorInt.h linguist-language=C
 Lcd12864.uvopt linguist-generated=true
 Lcd12864.uvproj linguist-generated=true
 Lint/File.lnt linguist-generated=true

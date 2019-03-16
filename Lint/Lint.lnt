@@ -54,6 +54,7 @@
 -emacro(545,offsetof)  // addressing an array member is OK
 
 -e124 // Pointer to void not allowed
+-e429 // Custodial pointer 'Symbol' (Location) has not been freed or returned
 -e438 // Last value assigned to variable 'Symbol' not used
 -e507 // Size incompatibility
 -e514 // Unusual use of a Boolean
@@ -63,6 +64,7 @@
 // -e551 // Symbol 'Symbol' (Location) not accessed
 -e552 // Symbol 'Symbol' (Location) not accessed
 -e569 // Loss of information (Context) (Integer bits to Integer bits)
+-e613 // Possible use of null pointer 'Symbol' in [left/right] argument to operator 'String' Reference
 -e641 // Converting enum to int
 -e655 // bit-wise operation uses (compatible) enum's
 -e679 // Suspicious Truncation in arithmetic expression combining with pointer
@@ -73,6 +75,7 @@
 -e734 // Loss of precision (Context) (Integer bits to Integer bits)
 -e746 // call to function 'Name' not made in the presence of a prototype
 -e786 // String concatenation within initializer
+-e793 // ANSI limit of String 'String' 'Name' exceeded
 -e818 // Pointer parameter 'Symbol' (Location) could be declared ptr to const
 -e830 // Location cited in prior message
 -e831 // Reference cited in prior message

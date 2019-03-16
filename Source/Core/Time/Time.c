@@ -2,7 +2,7 @@
 #include<Time.h>
 #include<Timer.h>
 
-static unsigned long data time=0,timeElapsed=0;
+static unsigned long data time=0,timeLabel=0;
 
 void Time_init(){
     Timer0_setCounter(0x7e66);
@@ -16,7 +16,10 @@ bit Time_setHMS(unsigned char h,unsigned char m,unsigned char s){
         return 0;
     }
 
-    time=(unsigned long)s*1000+m*60+h*60;
+    Timer0_stop();
+    timeLabel=time=(unsigned long)s*1000+m*60+h*60;
+    Timer0_start();
+
     return 1;
 }
 
@@ -37,20 +40,19 @@ unsigned char Time_hour(){
 }
 
 unsigned long Time_restart(){
-    unsigned long tElapsed=timeElapsed;
-    timeElapsed=0;
+    unsigned long tElapsed=time-timeLabel;
+    timeLabel=time;
     return tElapsed;
 }
 
 void Time_start(){
-    timeElapsed=0;
+    timeLabel=time;
 }
 
 unsigned long Time_elapsed(){
-    return timeElapsed;
+    return time-timeLabel;
 }
 
-static void tick() interrupt 1{
+static void tick() interrupt 1 using 1{
     time++;
-    timeElapsed++;
 }

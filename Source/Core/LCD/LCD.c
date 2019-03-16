@@ -196,10 +196,10 @@ void LCD_setString(unsigned char row,unsigned char col,const char *str){
             mask=(0xff>>(k%8));
             fill=ASCII6x8[(unsigned char)str[j]][i%8];
 
-            if(k/8<16){
+            if(k<128){
                 gdram[i][k/8+0]=gdram[i][k/8+0]&(~mask)|(fill>>(k%8));
             }
-            if(k/8+1<16){
+            if(k<128-8){
                 gdram[i][k/8+1]=gdram[i][k/8+1]&(mask)|(fill<<(8-k%8));
             }
 

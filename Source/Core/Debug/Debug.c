@@ -11,41 +11,44 @@ static unsigned int currentLine;
 static char *currentFile;
 
 void Debug_print(unsigned char level,const char *message,...){
-    if(level&debugMask){
-        va_list args;
-        va_start(args,message);
+    va_list args;
 
-        if(debugMask&TIME_STAMP){
-            printf("[%02bu:%02bu:%02bu.%03u] ",Time_hour(),Time_minute(),Time_second(),Time_msec());
-        }
-
-        switch(level){
-            case DEBUG:
-                printf("[dbug]");
-                break;
-            case INFO:
-                printf("[info]");
-                break;
-            case WARNING:
-                printf("[warn]");
-                break;
-            case CRITICAL:
-                printf("[crit]");
-                break;
-            case FATAL:
-                printf("[ftal]");
-                break;
-            default:
-                printf("[    ]");
-        }
-
-        printf("%3bu:%s[%4u]: ",(SP-0x19)/2-5,currentFile+7,currentLine);
-
-        vprintf(message,args);
-        putchar('\n');
-
-        va_end(args);
+    if(!(level&debugMask)){
+        return;
     }
+
+    va_start(args,message);
+
+    if(debugMask&TIME_STAMP){
+        printf("[%02bu:%02bu:%02bu.%03u] ",Time_hour(),Time_minute(),Time_second(),Time_msec());
+    }
+
+    switch(level){
+        case DEBUG:
+            printf("[dbug]");
+            break;
+        case INFO:
+            printf("[info]");
+            break;
+        case WARNING:
+            printf("[warn]");
+            break;
+        case CRITICAL:
+            printf("[crit]");
+            break;
+        case FATAL:
+            printf("[ftal]");
+            break;
+        default:
+            printf("[    ]");
+    }
+
+    printf("%3bu:%s[%4u]: ",(SP-0x19)/2-5,currentFile+7,currentLine);
+
+    vprintf(message,args);
+    putchar('\n');
+
+    va_end(args);
 }
 
 void Debug_setCurrentFileLine(char *file,unsigned int line){

@@ -38,6 +38,7 @@ void main(){
     ListWidget_addItem(lw,ListWidgetItem_new("Input Dialog",ITEM_SELECTABLE));
     ListWidget_addItem(lw,ListWidgetItem_new("Debug",ITEM_SELECTABLE));
     ListWidget_addItem(lw,ListWidgetItem_new("Far Speed Test",ITEM_SELECTABLE));
+    ListWidget_addItem(lw,ListWidgetItem_new("Format IAP",ITEM_SELECTABLE));
 
     ListWidget_addItem(lw,ListWidgetItem_new("En",0));
     ListWidget_addItem(lw,ListWidgetItem_new("En|Se",ITEM_SELECTABLE));
@@ -46,6 +47,13 @@ void main(){
     ListWidget_addItem(lw,ListWidgetItem_new("En|Se|Ck",ITEM_SELECTABLE|ITEM_CHECKABLE));
     ListWidget_addItem(lw,ListWidgetItem_new("En|Se|Ck|Ckd",ITEM_SELECTABLE|ITEM_CHECKABLE|ITEM_CHECKED));
     ListWidget_enableAll(lw);
+
+    // EX0=1;
+    // IE0=1;
+    // printf("IE0=1\n");
+    // IE0=1;
+    // printf("IE0=1\n");
+    // CMPCR1|=0x60;
 
     while(1){
         switch(ListWidget_getSelection(lw)){
@@ -67,8 +75,16 @@ void main(){
             case 5:
                 Far_speedTest();
                 break;
+            case 6:
+                IAPFile_format("Glitch!");
+                break;
             default:
                 ;
         }
     }
 }
+
+// void cmpirq() interrupt 21{
+//     printf("[cmpirq()]\n");
+//     CMPCR1=0x00;
+// }
