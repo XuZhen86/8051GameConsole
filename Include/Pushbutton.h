@@ -15,15 +15,19 @@ enum PUSHBUTTON_NUMBERS{
     PUSHBUTTON_NUMBER_INVALID=255,
 };
 
+// Read button even no button is pressed
 unsigned char Pushbutton_getNumber();
 unsigned char Pushbutton_getDirection();
 
+// Block program unitl a button is pressed
 unsigned char Pushbutton_getNumberWait();
 unsigned char Pushbutton_getDirectionWait();
 
+// Block program until a button is released
 void Pushbutton_numberReleaseWait();
 void Pushbutton_directionReleaseWait();
 
+// Get last pushed button
 unsigned char Pushbutton_getLastNumber();
 unsigned char Pushbutton_getLastDirection();
 

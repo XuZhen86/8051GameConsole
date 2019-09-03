@@ -7,6 +7,9 @@ typedef struct VectorInt_{
     unsigned int capacity;
 } VectorInt;
 
+// VectorInt has the same concept of Vector
+// Except VectorInt only stores ints
+
 VectorInt *VectorInt_new();
 void VectorInt_delete(VectorInt *v);
 

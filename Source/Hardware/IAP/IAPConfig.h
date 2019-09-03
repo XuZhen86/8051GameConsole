@@ -1,6 +1,7 @@
 #ifndef IAPCONFIG_H_
 #define IAPCONFIG_H_
 
+// MCU-specific data
 enum IAP_CONFIG{
     SECTOR_MAX=20,
     SECTOR_ERASE_WAIT=0x0,

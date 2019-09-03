@@ -1,6 +1,8 @@
 #ifndef ALL_H_
 #define ALL_H_
 
+// Includes all header files
+
 #include<assert.h>
 #include<ctype.h>
 #include<float.h>

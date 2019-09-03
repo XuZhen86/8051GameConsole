@@ -64,6 +64,7 @@ unsigned int ListWidget_count(ListWidget *lw){
 unsigned int ListWidget_getSelection(ListWidget *lw){
     LCD_clear();
 
+    // Draw frame and title
     LCD_setChar(0,0,POINTER_CHAR_LEFT);
     LCD_setString(0,(21-strlen(lw->title))/2,lw->title);
     LCD_setHLine(7,1);
@@ -75,28 +76,34 @@ unsigned int ListWidget_getSelection(ListWidget *lw){
         LCD_flush();
 
         switch(Pushbutton_getDirectionWait()){
-            case PUSHBUTTON_DIRECTION_UP:
-                if(lw->selected){
+            case PUSHBUTTON_DIRECTION_UP:   // Move cursor up
+                if(lw->selected){   // Within the boundary
+                    // Deselect and select
                     ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),0);
                     lw->selected--;
                     ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),1);
 
+                    // If cursor moves up off the upper limit, reduce the upper limit
                     if(lw->itemShowStart>lw->selected){
                         lw->itemShowStart=lw->selected;
                     }
-                }else{
+                }else{  // Out of boundary
+                    // Deselect and select
                     ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),0);
+                    // Select last item
                     lw->selected=ListWidget_count(lw)-1;
                     ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),1);
 
+                    // Show last page
                     if(ListWidget_count(lw)>=7){
                         lw->itemShowStart=ListWidget_count(lw)-7;
                     }
                 }
 
                 break;
-            case PUSHBUTTON_DIRECTION_DOWN:
-                if(lw->selected!=ListWidget_count(lw)-1){
+            case PUSHBUTTON_DIRECTION_DOWN: // Move cursor down
+                if(lw->selected!=ListWidget_count(lw)-1){   // Not last item
+                    // Deselect and select
                     ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),0);
                     lw->selected++;
                     ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),1);
@@ -104,11 +111,12 @@ unsigned int ListWidget_getSelection(ListWidget *lw){
                     if(lw->selected>6&&lw->itemShowStart<lw->selected-6){
                         lw->itemShowStart=lw->selected-6;
                     }
-                }else{
+                }else{  // Last item
                     ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),0);
                     lw->selected=0;
                     ListWidgetItem_setSelected(Vector_get(lw->items,lw->selected),1);
 
+                    // Move cursor to top
                     lw->itemShowStart=0;
                 }
 
@@ -130,6 +138,7 @@ unsigned int ListWidget_getSelection(ListWidget *lw){
 static void printItems(ListWidget *lw){
     unsigned char i;
 
+    // Show 7 items
     for(i=0;i<7;i++){
         ListWidgetItem_show(Vector_get(lw->items,lw->itemShowStart+i),i+1);
     }

@@ -11,9 +11,12 @@
 #include<stdio.h>
 #include<string.h>
 
+// 2 signal lines required for LCD
 sbit chipSelect=P2^7;
 sbit resetSignal=P2^0;
 
+// Pixel buffer
+// Because of using custom font, everything must be drawn manyally
 static unsigned char xdata gdram[64][32],brightness;
 
 static void send(unsigned char c,unsigned char b){
@@ -32,6 +35,7 @@ static void send(unsigned char c,unsigned char b){
     delayLoop(0,0,50);
 }
 
+// Send 2 bytes in 1 call, slightly faster
 static void send2(unsigned char c1,unsigned char c2,unsigned char b){
     SPI_setClockDivider(SPI_CLOCK_DIV32);
     SPI_setDataMode(SPI_MODE3);
@@ -62,6 +66,7 @@ static void initAnalog(){
     IAPFile *file=IAPFile_new();
     char buffer[8];
 
+    // Get last brightness stored in file
     IAPFile_open(file,"LCD.txt");
     if(IAPFile_readLine(file,buffer,8)){
         sscanf(buffer,"%bu",&brightness);
@@ -89,7 +94,7 @@ void LCD_adjustBrightness(){
     char buffer[8];
     unsigned char i;
 
-
+    // 16 levels of brightness
     for(i=0;i<16;i++){
         VectorInt_add(v,(int)i);
     }
@@ -117,6 +122,7 @@ void LCD_init(){
     unsigned char i,j;
 
     chipSelect=0;
+    // Hardware design defect, must use high-current output
     P2M0=CHIP_SELECT_P2M0;
     P2M1=CHIP_SELECT_P2M1;
 
@@ -141,19 +147,26 @@ void LCD_flush(){ //lint -e661
 
     for(i=0;i<64;i++){
         for(j=0;j<16;j+=2){
+            // Refresh only if data is newer
             if(gdram[i][j+0]!=gdram[i][j+16]||gdram[i][j+1]!=gdram[i][j+17]){
+                // Required to disable display when refreshing GDRAM
                 if(!displayDisabled){
                     send(FUNCTION_SET|0x04,0);
                     displayDisabled=1;
                 }
+
+                // Send address
                 send2(SET_GDRAM_ADDR|(i%32),SET_GDRAM_ADDR|((j/2)+8*(i>31)),0);
+                // Send pixels
                 send2(gdram[i][j+0],gdram[i][j+1],1);
+                // Copy new data
                 gdram[i][j+16]=gdram[i][j+0];
                 gdram[i][j+17]=gdram[i][j+1];
             }
         }
     }
 
+    // Reenable display
     if(displayDisabled){
         send(FUNCTION_SET|0x04|0x02,0);
     }
@@ -166,6 +179,7 @@ void LCD_forceFlush(){
     for(i=0;i<64;i++){
         send2(SET_GDRAM_ADDR|(i%32),SET_GDRAM_ADDR|(8*(i>31)),0);
         for(j=0;j<16;j+=2){
+            // Refresh anyway
             send2(gdram[i][j+0],gdram[i][j+1],1);
         }
         memcpy(gdram[i]+16,gdram[i],16);
@@ -179,8 +193,26 @@ void LCD_setChar(unsigned char row,unsigned char col,char c){
     row=row%8*8;    // row%=64;
     mask=(0xff>>(col%8));
 
+    /*
+        // Each char will most likely affect 2 adjacent bytes
+        0        1byte
+        |--------|--------|
+         mmmMMMMM mmmMMMMM
+         000aaaaa bbb00000
+         000fffff fff00000
+
+        0: col/8+0          1: col/8+1
+        M: mask=1           m: mask=0
+        f: fill
+        a: fill>>(col%8)    b: fill<<(8-col%8)
+    */
+
     for(i=row;i<row+8;i++){
         fill=ASCII6x8[(unsigned char)c][i%8];
+
+        // Overrite the bits by:
+        // 1. Mask with & 0 bits in mask
+        // 2. Cover with | fill
         gdram[i][col/8+0]=gdram[i][col/8+0]&(~mask)|(fill>>(col%8));
         gdram[i][col/8+1]=gdram[i][col/8+1]&(mask)|(fill<<(8-col%8));
     }
@@ -193,12 +225,15 @@ void LCD_setString(unsigned char row,unsigned char col,const char *str){
 
     for(i=row;i<row+8;i++){
         for(j=0,k=col;str[j]&&k<128;j++){
+            // The same concept as LCD_setChar()
+
             mask=(0xff>>(k%8));
             fill=ASCII6x8[(unsigned char)str[j]][i%8];
 
             if(k<128){
                 gdram[i][k/8+0]=gdram[i][k/8+0]&(~mask)|(fill>>(k%8));
             }
+            // Skip the second byte if close to edge
             if(k<128-8){
                 gdram[i][k/8+1]=gdram[i][k/8+1]&(mask)|(fill<<(8-k%8));
             }

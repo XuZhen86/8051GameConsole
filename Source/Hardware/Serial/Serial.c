@@ -3,14 +3,23 @@
 #include<Serial.h>
 #include<Timer.h>
 
+// Uses a buffer to reduce blocking to main function
+// Buffer is in pdata to take advantage of 8051 pdata mechanism
 static char pdata buf[256];
+// Ring buffer
 static unsigned char data bufHead,bufTail,bufData;
 
 char putchar(char c){
+    // Have to wait until there is space for new data
     while((unsigned char)(bufTail+1)==bufHead){}
+
+    // Put in the new data
     bufTail++;
     buf[bufTail]=c;
+
+    // Start timer to periodically interrupt main function
     Timer2_start();
+
     return c;
 }
 
@@ -36,7 +45,9 @@ void Serial1_setMode(unsigned char mode){
     AUXR&=~0x01;
 }
 
+// Called by hw interruption
 static void s1SendNext() interrupt 12{
+    // If there is pending data, send it
     if(bufHead!=bufTail){
         bufHead++;
         bufData=(unsigned char)buf[bufHead];
@@ -44,6 +55,7 @@ static void s1SendNext() interrupt 12{
         SBUF=bufData;
         TI=0;
     }else{
+        // Otherwise the timer can be stopped to save energy
         Timer2_stop();
     }
 }

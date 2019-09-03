@@ -100,6 +100,7 @@ void *Vector_set(Vector *v,unsigned int index,void *element){
     return prevElement;
 }
 
+// Only the records will be removed, pointers are not freed
 void Vector_removeAllElements(Vector *v){
     v->elementCount=0;
 }

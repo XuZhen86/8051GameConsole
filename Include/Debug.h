@@ -10,14 +10,22 @@ enum DEBUG_LEVEL{
     TIME_STAMP=0x20,
 };
 
+// Print debug message, invoked by Debug() macro
 void Debug_print(unsigned char level,const char *message,...);
+
+// Set file & line for next Debug_print(). Invoked by Debug() macro
 void Debug_setCurrentFileLine(char *file,unsigned int line);
 
+// Enable certain debug level
 void Debug_setEnable(unsigned char mask);
+
+// Disable certain debug level
 void Debug_setDisable(unsigned char mask);
 
+// Show menu to select which debug levels to show
 void Debug_show();
 
+// Disable all debug output & saves code space
 #ifdef NO_DEBUG_OUTPUT
     #define Debug if(0)Debug_print
 #else

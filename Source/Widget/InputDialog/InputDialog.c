@@ -21,11 +21,15 @@ void InputDialog_delete(InputDialog *id){
 unsigned int InputDialog_getSelection(InputDialog *id){
     unsigned char i;
 
+    // Clear out space
     LCD_setString(2,2,"                 ");
     LCD_setString(3,2,"                 ");
     LCD_setString(4,2,"                 ");
+
+    // Print title
     LCD_setString(2,(21-strlen(id->title))/2,id->title);
 
+    // Draw boarder at angles
     for(i=0;i<BOARDER_SIZE;i++){
         LCD_setPixel(15,15+i,1);
         LCD_setPixel(15+i,15,1);
@@ -37,11 +41,13 @@ unsigned int InputDialog_getSelection(InputDialog *id){
         LCD_setPixel(40-i,113,1);
     }
 
+    // Print current selected
     print(id);
 
     while(1){
         LCD_flush();
 
+        // Get button and change selection
         switch(Pushbutton_getDirectionWait()){
             case PUSHBUTTON_DIRECTION_UP:
                 id->selected++;
@@ -67,6 +73,8 @@ unsigned int InputDialog_getSelection(InputDialog *id){
         print(id);
         Pushbutton_directionReleaseWait();
 
+        // Execute signal functions if specified
+        // Example: brightness changes with value even before user confirms selection
         if(id->sigValueChanged!=NULL){
             id->sigValueChanged(VectorInt_get(id->values,id->selected));
         }
@@ -102,8 +110,10 @@ static void print(InputDialog *id){
     unsigned char bufferLen;
     char buffer[BUFFER_SIZE];
 
+    // Print value
     bufferLen=sprintf(buffer," [ %d ]  ",VectorInt_get(id->values,id->selected));
 
+    // Print arrow after value
     if(id->selected==0){
         buffer[bufferLen-2]=POINTER_CHAR_UP;
     }else if(id->selected==VectorInt_size(id->values)-1){
@@ -112,6 +122,7 @@ static void print(InputDialog *id){
         buffer[bufferLen-2]=POINTER_CHAR_UP_DOWN;
     }
 
+    // Show value
     LCD_setString(4,(22-bufferLen)/2,buffer);
 }
 

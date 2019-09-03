@@ -1,16 +1,20 @@
 #!/Library/Frameworks/Python.framework/Versions/3.7/bin/python3
 
+# Read major,minor,patch,build from file
 file=open('Version/VersionNumbers.txt','r')
 major,minor,patch,build=[int(val) for val in file.readlines()]
 file.close()
 
+# Advance build and Print version on screen
 build+=1
 print('Version {:d}.{:d}.{:d}.{:d}'.format(major,minor,patch,build))
 
+# Write major,minor,patch,build to file
 file=open('Version/VersionNumbers.txt','w')
 file.write('{:d}\n{:d}\n{:d}\n{:d}\n'.format(major,minor,patch,build))
 file.close()
 
+# Generate header file containing version info to be compiled
 file=open('Source/Version/VersionNumber.h','w')
 file.write('#ifndef VERSIONNUMBER_H_\n')
 file.write('#define VERSIONNUMBER_H_\n')

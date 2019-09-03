@@ -16,13 +16,18 @@ enum SPI_CONFIG{
     SPI_MODE3=0x0c,
 };
 
+// Init SPI interface
 void SPI_init();
 
+// Set SPI parameters
 void SPI_setBitOrder(unsigned char bitOrder);
 void SPI_setClockDivider(unsigned char clockDivider);
 void SPI_setDataMode(unsigned char dataMode);
 
+// Shift data in SPI
 unsigned char SPI_transfer(unsigned char imm8);
+
+// Wait for last transmission to finish
 void SPI_waitForFinish();
 
 #endif

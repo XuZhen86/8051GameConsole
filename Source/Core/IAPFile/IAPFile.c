@@ -10,6 +10,7 @@
 void IAPFile_format(char *magicWord){
     unsigned int i;
 
+    // Format only if magicWord is correct
     if(strcmp(magicWord,"Glitch!")!=0){
         Debug(WARNING,"Trying to format IAP with wrong magic word");
         return;
@@ -46,12 +47,15 @@ bit IAPFile_open(IAPFile *f,char *fileName){
             f->fileName=malloc(strlen(fileName)+1);
             strcpy(f->fileName,fileName);
             return 1;
-        }else if(IAP_read(i*16)==0){    // Create new file
+        }else if(IAP_read(i*16)==0){                            // Create new file
             Debug(WARNING,"Create new file \"%s\"",fileName);
 
+            // Record file name in table
             for(j=0;j<15&&fileName[j];j++){
                 IAP_write(i*16+j,(unsigned char)fileName[j]);
             }
+
+            // Clear file content, 256 bytes in total
             for(j=0;j<255;j++){
                 IAP_write((i+1)*256+j,0);
             }
@@ -67,6 +71,8 @@ bit IAPFile_open(IAPFile *f,char *fileName){
         }
     }
 
+    // If no file in table has the same file name
+    // And there is no space to create a file
     Debug(WARNING,"Reached full IAP file capacity");
     return 0;
 }
@@ -90,6 +96,7 @@ bit IAPFile_getChar(IAPFile *f,char *c){
         return 0;
     }
 
+    // Get 1 char and pos++
     (*c)=(char)IAP_read((f->fileId+1)*256+f->position);
     f->position++;
 
@@ -105,10 +112,12 @@ bit IAPFile_putChar(IAPFile *f,char c){
         return 0;
     }
 
+    // Write 1 char and pos++
     IAP_write((f->fileId+1)*256+f->position,(unsigned char)c);
     f->position++;
 
-    if(getFileSize(f)<f->position){  // Refresh file size
+    // Refresh file size
+    if(getFileSize(f)<f->position){
         setFileSize(f,f->position);
     }
 
@@ -168,6 +177,7 @@ unsigned char IAPFile_readLine(IAPFile *f,char *dst,unsigned char maxSize){
     }
 
     for(i=0;i<maxSize;i++){
+        // Read until EOF or line break
         if(IAPFile_getChar(f,&c)){
             dst[i]=c;
             if(c=='\n'){
@@ -192,6 +202,7 @@ unsigned char IAPFile_write(IAPFile *f,char *src,unsigned char maxSize){
     }
 
     for(i=0;i<maxSize;i++){
+        // Put char until max file size
         if(!IAPFile_putChar(f,src[i])){
             break;
         }

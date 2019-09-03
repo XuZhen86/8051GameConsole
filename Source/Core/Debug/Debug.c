@@ -5,24 +5,29 @@
 #include<stdio.h>
 #include<ListWidget.h>
 
+// Print debug if git was set to 1
 static unsigned char debugMask=0xff;
 
+// Paired with Debug_setCurrentFileLine() and macros
 static unsigned int currentLine;
 static char *currentFile;
 
 void Debug_print(unsigned char level,const char *message,...){
     va_list args;
 
+    // Early exit if corresponding bit is 0
     if(!(level&debugMask)){
         return;
     }
 
     va_start(args,message);
 
+    // Print time
     if(debugMask&TIME_STAMP){
         printf("[%02bu:%02bu:%02bu.%03u] ",Time_hour(),Time_minute(),Time_second(),Time_msec());
     }
 
+    // Print header
     switch(level){
         case DEBUG:
             printf("[dbug]");
@@ -43,8 +48,11 @@ void Debug_print(unsigned char level,const char *message,...){
             printf("[    ]");
     }
 
+    // Print stack level, file name, line number
+    // Stack level is an approximation and may not be correct
     printf("%3bu:%s[%4u]: ",(SP-0x19)/2-5,currentFile+7,currentLine);
 
+    // Print message
     vprintf(message,args);
     putchar('\n');
 

@@ -8,7 +8,9 @@
 #include<stdlib.h>
 #include<string.h>
 
+// Abs memory addr for first block
 static FarMemBlock far head _at_ 0x020000;
+// Used for defrag tracking
 static unsigned int data numFarMemBlock,netUsedSpace;
 
 void Far_init(){
@@ -25,9 +27,13 @@ void Far_init(){
 void *malloc(unsigned int size){
     FarMemBlock *p,*np;
 
+    // Loop through blocks to find a space
     for(p=&head;p!=NULL;p=p->next){
         verifyFarMemBlock(p);
 
+        // If this block's size is larger than required size + block header size
+        // And is not allocated
+        // Then split it into 2 blocks and allocate
         if(p->size>=size+sizeof(FarMemBlock)&&!(p->attr&ALLOCATED)){
             np=(void *)p+p->size-size;
             np->attr=ALLOCATED;
@@ -77,6 +83,8 @@ void *realloc(void *ptr,unsigned int size){
         return NULL;
     }
 
+    // Find a new block and copy the content
+    // May fail to find even if there is sufficient available mem
     np=malloc(size);
     if(np!=NULL){
         memcpy(np,ptr,size);
@@ -96,6 +104,7 @@ void free(void *ptr){
     p->attr&=~ALLOCATED;
     netUsedSpace-=p->size;
 
+    // Move forward to defrag by joining adjacent blocks
     while(p->prev!=NULL&&!(p->prev->attr&ALLOCATED)){
         p->prev->size+=sizeof(FarMemBlock)+p->size;
 
@@ -112,6 +121,7 @@ void free(void *ptr){
         verifyFarMemBlock(p);
     }
 
+    // Move backward to defrag by joining adjacent blocks
     while(p->next!=NULL&&!(p->next->attr&ALLOCATED)){
         p->size+=sizeof(FarMemBlock)+p->next->size;
 
@@ -186,10 +196,12 @@ static bit verifyFarMemBlock(FarMemBlock *p){
 static unsigned int calculateFarMemBlockPad(FarMemBlock *p){
     unsigned char *bytes=(unsigned char *)p,pad0=0x00,pad1=0x00,i;
 
+    // Calculate with XOR and SUM
     for(i=0;i<sizeof(FarMemBlock)-2;i++){
         pad0^=bytes[i];
         pad1+=bytes[i];
     }
 
+    // Return 2 chars by joining them into 1 int
     return ((unsigned int)pad0<<8)|pad1;
 }

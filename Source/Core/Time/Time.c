@@ -2,8 +2,10 @@
 #include<Time.h>
 #include<Timer.h>
 
+// Time since startup in ms
 static unsigned long data time=0,timeLabel=0;
 
+// Setup timer
 void Time_init(){
     Timer0_setCounter(0x7e66);
     Timer0_setX12Enabled(0);
@@ -53,6 +55,9 @@ unsigned long Time_elapsed(){
     return time-timeLabel;
 }
 
+// Advance time by 1ms
+// Called by hw interruption
+// Using different register bank to minimize performance impact
 static void tick() interrupt 1 using 1{
     time++;
 }
